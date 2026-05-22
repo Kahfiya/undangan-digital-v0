@@ -37,10 +37,29 @@ export default function Footer() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.footer-inner > *', {
-        opacity: 0, y: 24, stagger: 0.15, duration: 0.8, ease: 'power2.out',
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 85%' },
-      })
+      // Footer items masuk dengan stagger dramatis + blur
+      gsap.fromTo('.footer-inner > *',
+        { opacity: 0, y: 50, filter: 'blur(6px)' },
+        {
+          opacity: 1, y: 0, filter: 'blur(0px)',
+          stagger: 0.2,
+          duration: 1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 85%', once: true },
+        }
+      )
+
+      // Countdown numbers: scale bounce in
+      gsap.fromTo('.countdown-unit',
+        { scale: 0, opacity: 0 },
+        {
+          scale: 1, opacity: 1,
+          stagger: 0.1,
+          duration: 0.7,
+          ease: 'back.out(1.8)',
+          scrollTrigger: { trigger: '.countdown-wrap', start: 'top 88%', once: true },
+        }
+      )
     }, sectionRef)
     return () => ctx.revert()
   }, [])
@@ -51,7 +70,7 @@ export default function Footer() {
   }
 
   const countUnit = (val, label) => (
-    <div style={{ textAlign: 'center', minWidth: 56 }}>
+    <div className="countdown-unit" style={{ textAlign: 'center', minWidth: 56 }}>
       <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.75rem, 8vw, 2.5rem)', color: 'var(--color-gold)', lineHeight: 1 }}>
         {String(val ?? 0).padStart(2, '0')}
       </p>
@@ -73,7 +92,7 @@ export default function Footer() {
         </div>
 
         {/* Countdown */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
+        <div className="countdown-wrap" style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-4)' }}>
           {countUnit(days, 'Hari')}
           <span style={{ fontFamily: 'var(--font-heading)', fontSize: '1.5rem', color: 'var(--color-gold)', marginBottom: 12 }}>:</span>
           {countUnit(hours, 'Jam')}

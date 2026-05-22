@@ -30,69 +30,83 @@ export default function Couple() {
   useEffect(() => {
     const ctx = gsap.context(() => {
 
-      // ── Card left: clip-path reveal from left ──
+      // ── Header: setiap elemen muncul dengan delay dramatis ──
+      const headerEls = sectionRef.current.querySelectorAll('.couple-header > *')
+      gsap.fromTo(headerEls,
+        { opacity: 0, y: 60, filter: 'blur(8px)' },
+        {
+          opacity: 1, y: 0, filter: 'blur(0px)',
+          stagger: 0.18,
+          duration: 1.1,
+          ease: 'power3.out',
+          scrollTrigger: { trigger: '.couple-header', start: 'top 82%', once: true },
+        }
+      )
+
+      // ── Card kiri: masuk dari kiri dengan rotation ──
       gsap.fromTo('.couple-card:nth-child(1)',
+        { opacity: 0, x: -100, rotation: -6, transformOrigin: 'left center' },
         {
-          opacity: 0,
-          x: -60,
-          clipPath: 'inset(0 100% 0 0)',
-        },
-        {
-          opacity: 1,
-          x: 0,
-          clipPath: 'inset(0 0% 0 0)',
-          duration: 1.1,
-          ease: 'power3.out',
-          scrollTrigger: { trigger: '.couple-card', start: 'top 85%', once: true },
+          opacity: 1, x: 0, rotation: 0,
+          duration: 1.2, ease: 'power4.out',
+          scrollTrigger: { trigger: '.couple-cards', start: 'top 82%', once: true },
         }
       )
 
-      // ── Card right: clip-path reveal from right ──
+      // ── Card kanan: masuk dari kanan dengan rotation ──
       gsap.fromTo('.couple-card:nth-child(2)',
+        { opacity: 0, x: 100, rotation: 6, transformOrigin: 'right center' },
         {
-          opacity: 0,
-          x: 60,
-          clipPath: 'inset(0 0 0 100%)',
-        },
-        {
-          opacity: 1,
-          x: 0,
-          clipPath: 'inset(0 0 0 0%)',
-          duration: 1.1,
-          ease: 'power3.out',
-          delay: 0.15,
-          scrollTrigger: { trigger: '.couple-card', start: 'top 85%', once: true },
+          opacity: 1, x: 0, rotation: 0,
+          duration: 1.2, ease: 'power4.out',
+          delay: 0.12,
+          scrollTrigger: { trigger: '.couple-cards', start: 'top 82%', once: true },
         }
       )
 
-      // ── Photo parallax zoom on scroll ──
-      document.querySelectorAll('.couple-photo').forEach(img => {
+      // ── Photo parallax — zoom out saat scroll ──
+      sectionRef.current.querySelectorAll('.couple-photo').forEach(img => {
         gsap.fromTo(img,
-          { scale: 1.12 },
+          { scale: 1.18, yPercent: -4 },
           {
-            scale: 1,
+            scale: 1, yPercent: 4,
             ease: 'none',
             scrollTrigger: {
               trigger: img.closest('.couple-card'),
               start: 'top bottom',
               end: 'bottom top',
-              scrub: 1.2,
+              scrub: 1.5,
             },
           }
         )
       })
 
-      // ── Info text stagger reveal ──
-      document.querySelectorAll('.couple-info').forEach(info => {
-        const children = Array.from(info.children)
-        gsap.from(children, {
-          opacity: 0,
-          y: 20,
-          stagger: 0.1,
-          duration: 0.7,
-          ease: 'power2.out',
-          scrollTrigger: { trigger: info, start: 'top 90%', once: true },
-        })
+      // ── Info text: stagger reveal per baris ──
+      sectionRef.current.querySelectorAll('.couple-info').forEach(info => {
+        gsap.fromTo(Array.from(info.children),
+          { opacity: 0, y: 24 },
+          {
+            opacity: 1, y: 0,
+            stagger: 0.12,
+            duration: 0.8,
+            ease: 'power2.out',
+            scrollTrigger: { trigger: info, start: 'top 92%', once: true },
+          }
+        )
+      })
+
+      // ── Gold shimmer sweep on cards ──
+      sectionRef.current.querySelectorAll('.couple-shimmer').forEach((el, i) => {
+        gsap.fromTo(el,
+          { x: '-100%' },
+          {
+            x: '200%',
+            duration: 1.2,
+            ease: 'power2.inOut',
+            delay: 0.8 + i * 0.15,
+            scrollTrigger: { trigger: el.closest('.couple-card'), start: 'top 85%', once: true },
+          }
+        )
       })
 
     }, sectionRef)
@@ -107,21 +121,24 @@ export default function Couple() {
       style={{ position: 'relative', overflow: 'hidden' }}
     >
       <div style={{ position: 'relative', zIndex: 1 }}>
-        <TextReveal>
+
+        {/* Header */}
+        <div className="couple-header" style={{ textAlign: 'center' }}>
           <p className="section-subtitle">Bismillahirrahmanirrahim</p>
           <h2 className="section-title">Dua Hati, Satu Janji</h2>
           <div className="gold-divider" />
           <p style={{
             fontSize: '0.8rem', color: 'var(--color-text-muted)',
-            lineHeight: 1.8, textAlign: 'center', marginTop: 'var(--space-4)',
+            lineHeight: 1.9, textAlign: 'center', marginTop: 'var(--space-4)',
+            maxWidth: 480, margin: 'var(--space-4) auto 0',
           }}>
             Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda
             untuk menyaksikan momen sakral kami.
           </p>
-        </TextReveal>
+        </div>
 
         {/* Cards */}
-        <div style={{
+        <div className="couple-cards" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
           gap: 'var(--space-4)',
@@ -131,10 +148,11 @@ export default function Couple() {
             <div key={i} className="couple-card" style={{
               borderRadius: 'var(--radius-lg)',
               overflow: 'hidden',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.12)',
+              boxShadow: '0 16px 56px rgba(0,0,0,0.14)',
               border: '1px solid rgba(212,175,55,0.25)',
               background: 'var(--color-bg-soft)',
               willChange: 'transform',
+              position: 'relative',
             }}>
               {/* Photo */}
               <div style={{ aspectRatio: p.aspectRatio, overflow: 'hidden', position: 'relative' }}>
@@ -148,11 +166,12 @@ export default function Couple() {
                     display: 'block', willChange: 'transform',
                   }}
                 />
-                {/* Subtle gold shimmer overlay */}
-                <div style={{
+                {/* Gold shimmer sweep */}
+                <div className="couple-shimmer" style={{
                   position: 'absolute', inset: 0,
-                  background: 'linear-gradient(135deg, rgba(212,175,55,0.06) 0%, transparent 60%)',
+                  background: 'linear-gradient(105deg, transparent 40%, rgba(212,175,55,0.18) 50%, transparent 60%)',
                   pointerEvents: 'none',
+                  zIndex: 1,
                 }} />
               </div>
 
