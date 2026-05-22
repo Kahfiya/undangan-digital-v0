@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import anime from 'animejs/lib/anime.es.js'
+import { supabase } from '../lib/supabase'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -10,18 +11,14 @@ const EMOJIS = ['🌸', '💐', '✨', '🤍', '💛', '🌿', '🕊️', '💍'
 
 const getInitials = (name) => name.trim().split(' ').slice(0, 2).map(w => w[0]?.toUpperCase()).join('')
 const timeAgo = (ts) => {
-  const diff = (Date.now() - ts) / 1000
+  const diff = (Date.now() - new Date(ts).getTime()) / 1000
   if (diff < 60) return 'Baru saja'
   if (diff < 3600) return `${Math.floor(diff / 60)} menit lalu`
   if (diff < 86400) return `${Math.floor(diff / 3600)} jam lalu`
   return `${Math.floor(diff / 86400)} hari lalu`
 }
 
-const SEED_DATA = [
-  { id: 1, name: 'Ahmad Fauzi', message: 'Barakallahu lakuma wa baraka alaikuma wa jama\'a bainakuma fi khair 👐', ts: Date.now() - 86400000 },
-  { id: 2, name: 'Siti Rahayu', message: 'Selamat menempuh hidup baru, semoga langgeng hingga akhir hayat 💕', ts: Date.now() - 18000000 },
-  { id: 3, name: 'Budi Santoso', message: 'Semoga menjadi keluarga yang sakinah, mawaddah, warahmah. Barakallah! 🌸', ts: Date.now() - 7200000 },
-]
+const SEED_DATA = []
 
 function FloatingParticle({ x, y, emoji, onDone }) {
   const ref = useRef(null)
@@ -55,13 +52,29 @@ export default function Ucapan() {
   const particlesRef = useRef([])
 
   const [form, setForm] = useState({ name: '', message: '' })
-  const [ucapan, setUcapan] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || SEED_DATA }
-    catch { return SEED_DATA }
-  })
+  const [ucapan, setUcapan] = useState([])
   const [particles, setParticles] = useState([])
   const [submitted, setSubmitted] = useState(false)
   const [charCount, setCharCount] = useState(0)
+
+  // ── Fetch from Supabase ───────────────────────────────────────────
+  useEffect(() => {
+    supabase
+      .from('ucapan')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => { if (data) setUcapan(data) })
+
+    // Realtime subscription
+    const channel = supabase
+      .channel('ucapan-realtime')
+      .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'ucapan' }, (payload) => {
+        setUcapan(prev => [payload.new, ...prev])
+      })
+      .subscribe()
+
+    return () => supabase.removeChannel(channel)
+  }, [])
 
   // ── Scroll entrance ──────────────────────────────────────────────
   useEffect(() => {
@@ -148,14 +161,16 @@ export default function Ucapan() {
       setParticles(p => [...p, ...newParticles])
     }
 
-    const entry = { id: Date.now(), name: form.name.trim(), message: form.message.trim(), ts: Date.now() }
-    const updated = [entry, ...ucapan]
-    setUcapan(updated)
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(updated))
-    setForm({ name: '', message: '' })
-    setCharCount(0)
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
+    const entry = { name: form.name.trim(), message: form.message.trim() }
+    supabase.from('ucapan').insert(entry).select().single().then(({ data, error }) => {
+      if (!error && data) {
+        setUcapan(prev => [data, ...prev])
+        setForm({ name: '', message: '' })
+        setCharCount(0)
+        setSubmitted(true)
+        setTimeout(() => setSubmitted(false), 3000)
+      }
+    })
   }, [form, ucapan])
 
   const removeParticle = useCallback((id) => {
@@ -340,7 +355,7 @@ export default function Ucapan() {
                       {item.name}
                     </p>
                     <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', margin: 0 }}>
-                      {timeAgo(item.ts)}
+                      {timeAgo(item.created_at)}
                     </p>
                   </div>
                 </div>
