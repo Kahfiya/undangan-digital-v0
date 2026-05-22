@@ -133,7 +133,7 @@ export default function Hero() {
           if (!el) return
           // Pilih source berdasarkan lebar layar — media attribute tidak support di video
           const isMobile = window.innerWidth <= 768
-          el.src = isMobile ? '/hero/Hero-bg2-mobile.mp4' : '/hero/Hero-bg2.mp4'
+          el.src = isMobile ? '/hero/Hero-bg.mp4' : '/hero/Hero-bg.mp4'
         }}
         style={{
           position: 'absolute', inset: 0,
