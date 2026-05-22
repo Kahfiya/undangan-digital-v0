@@ -12,7 +12,11 @@ export default function EntranceAnimation({ onComplete }) {
   const dateRef    = useRef(null)
 
   useEffect(() => {
-    videoRef.current?.play().catch(() => {})
+    const video = videoRef.current
+    if (!video) return
+    video.src = window.innerWidth <= 768 ? '/hero/Hero-bg.mp4' : '/hero/Hero-bg2.mp4'
+    video.load()
+    video.play().catch(() => {})
 
     const draw = (el, dur = 0.6) => {
       if (!el) return
@@ -49,11 +53,7 @@ export default function EntranceAnimation({ onComplete }) {
       style={{ position: 'fixed', inset: 0, zIndex: 9998, overflow: 'hidden' }}
     >
       <video
-        ref={el => {
-          if (!el) return
-          videoRef.current = el
-          el.src = window.innerWidth <= 768 ? '/hero/Hero-bg.mp4' : '/hero/Hero-bg2.mp4'
-        }}
+        ref={videoRef}
         muted playsInline loop
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
       />
