@@ -1,0 +1,183 @@
+/* ── Theme Variables ── */
+:root {
+  --color-bg: #ffffff;
+  --color-bg-soft: #fcfcfc;
+  --color-bg-dark: #1a1209;
+  --color-gold: #d4af37;
+  --color-gold-light: #e8cc6a;
+  --color-gold-dark: #b8962e;
+  --color-gold-gradient: linear-gradient(135deg, #d4af37, #e8cc6a, #b8962e);
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b6b6b;
+  --color-text-light: #ffffff;
+  --color-overlay: rgba(0, 0, 0, 0.45);
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-full: 9999px;
+
+  --shadow-gold: 0 4px 24px rgba(212, 175, 55, 0.25);
+  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.08);
+
+  --transition-fast: 150ms ease;
+  --transition-smooth: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-slow: 600ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  --nav-height: 64px;
+}
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-heading);
+  font-weight: 400;
+}
+
+img { display: block; max-width: 100%; }
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* ── Utility ── */
+.gold-text { color: var(--color-gold); }
+
+.section {
+  padding: var(--space-20) var(--space-6);
+  max-width: 480px;
+  margin: 0 auto;
+  /* Ensure content not hidden behind bottom nav */
+  padding-bottom: calc(var(--space-20) + var(--nav-height));
+}
+
+/* Tablet */
+@media (min-width: 640px) {
+  .section {
+    max-width: 640px;
+    padding-left: var(--space-10);
+    padding-right: var(--space-10);
+  }
+}
+
+/* Desktop */
+@media (min-width: 1024px) {
+  .section {
+    max-width: 1100px;
+    padding-left: var(--space-16);
+    padding-right: var(--space-16);
+  }
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+  text-align: center;
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.section-subtitle {
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-gold);
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.gold-divider {
+  width: 48px;
+  height: 1px;
+  background: var(--color-gold-gradient);
+  margin: var(--space-4) auto;
+}
+
+/* ── Button ── */
+.btn-gold {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-8);
+  background: var(--color-gold-gradient);
+  color: var(--color-bg-dark);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-gold);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-gold:active {
+  transform: scale(0.97);
+  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.2);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 48px;
+  padding: 0 var(--space-8);
+  border: 1px solid var(--color-gold);
+  color: var(--color-gold);
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.1em;
+  border-radius: var(--radius-full);
+  transition: background var(--transition-fast), color var(--transition-fast);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn-outline:active {
+  background: var(--color-gold);
+  color: var(--color-bg-dark);
+}
+
+/* ── Floral ornament (reusable) ── */
+.floral-ornament {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0 auto;
+  opacity: 0.35;
+}
