@@ -123,10 +123,12 @@ export default function Hero() {
         perspective: 800,
       }}
     >
-      {/* Video */}
+      {/* Video — compressed untuk mobile, original untuk desktop */}
       <video
         className="hero-video"
-        autoPlay muted loop playsInline aria-hidden="true"
+        autoPlay muted loop playsInline
+        aria-hidden="true"
+        poster="/backgrounds/Background.jpg"
         style={{
           position: 'absolute', inset: 0,
           width: '100%', height: '100%',
@@ -134,8 +136,21 @@ export default function Hero() {
           willChange: 'transform', transformOrigin: 'center center',
         }}
       >
+        {/* Mobile: versi kecil ~500KB */}
+        <source media="(max-width: 768px)" src="/hero/Hero-bg2-mobile.mp4" type="video/mp4" />
+        {/* Desktop: versi original */}
         <source src="/hero/Hero-bg2.mp4" type="video/mp4" />
       </video>
+
+      {/* Fallback background image — tampil jika video gagal load */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'url(/backgrounds/Background.jpg)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        opacity: 0.4,
+        zIndex: -1,
+      }} />
 
       {/* Overlay */}
       <div aria-hidden="true" style={{
