@@ -12,6 +12,7 @@ import Hero from './sections/Hero'
 import Couple from './sections/Couple'
 import HorizontalGallery from './sections/HorizontalGallery'
 import RSVP from './sections/RSVP'
+import Ucapan from './sections/Ucapan'
 import Maps from './sections/Maps'
 import Gift from './sections/Gift'
 import Footer from './sections/Footer'
@@ -44,7 +45,7 @@ export default function App() {
         <main>
           <Hero />
 
-          {/* Single wrapper: Couple → Footer, background fixed */}
+          {/* Light wrapper: Couple */}
           <div style={{
             position: 'relative',
             backgroundImage: 'url(/backgrounds/Background2.jpg)',
@@ -52,22 +53,35 @@ export default function App() {
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}>
-            {/* Global light overlay */}
             <div style={{
               position: 'absolute', inset: 0,
               background: 'rgba(255,255,255,0.82)',
               pointerEvents: 'none', zIndex: 0,
             }} />
-
             <div style={{ position: 'relative', zIndex: 1 }}>
               <Couple />
+            </div>
+          </div>
 
-              {/* Gallery overrides background to dark, fades in/out */}
-              <div style={{ position: 'relative', zIndex: 2 }}>
-                <HorizontalGallery />
-              </div>
+          {/* Dark section: Gallery — standalone */}
+          <HorizontalGallery />
 
+          {/* Light wrapper: RSVP → Footer */}
+          <div style={{
+            position: 'relative',
+            backgroundImage: 'url(/backgrounds/Background2.jpg)',
+            backgroundAttachment: 'fixed',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}>
+            <div style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(255,255,255,0.82)',
+              pointerEvents: 'none', zIndex: 0,
+            }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
               <RSVP />
+              <Ucapan />
               <Maps />
               <Gift />
               <Footer />
