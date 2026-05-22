@@ -3,12 +3,6 @@ import gsap from 'gsap'
 
 const PLAYLIST = [
   {
-    src: '/audio/SpotiDown.App - Risk It All - Bruno Mars.mp3',
-    cover: '/audio/SpotiDown.App - Risk It All - Bruno Mars.jpeg',
-    title: 'Risk It All',
-    artist: 'Bruno Mars',
-  },
-  {
     src: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.mp3',
     cover: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.jpeg',
     title: 'Beautiful In White',
