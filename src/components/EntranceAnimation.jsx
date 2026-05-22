@@ -100,23 +100,33 @@ export default function EntranceAnimation({ onComplete }) {
           </text>
 
           <text ref={name2Ref}
-            x="180" y="158"
+            x="180" y="148"
+            textAnchor="middle"
+            fontFamily="'Playfair Display', serif"
+            fontSize="26" fontWeight="400" fontStyle="italic"
+            fill="#fad96a"
+          >
+            &amp;
+          </text>
+
+          <text
+            x="180" y="178"
             textAnchor="middle"
             fontFamily="'Playfair Display', serif"
             fontSize="38" fontWeight="400" fontStyle="italic"
             fill="#fad96a"
           >
-            &amp; Siti Arbayah
+            Siti Arbayah
           </text>
 
           {/* Bottom line */}
           <line ref={lineBotRef}
-            x1="100" y1="178" x2="260" y2="178"
+            x1="100" y1="198" x2="260" y2="198"
             stroke="#f5c842" strokeWidth="0.8" opacity="0.7"
           />
 
           <text ref={dateRef}
-            x="180" y="200"
+            x="180" y="218"
             textAnchor="middle"
             fontFamily="'Montserrat', sans-serif"
             fontSize="8" letterSpacing="3"

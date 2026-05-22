@@ -8,23 +8,25 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
-// ── Lenis smooth scroll + GSAP ScrollTrigger integration ──
+// ── World-level Lenis smooth scroll ──
 const lenis = new Lenis({
-  duration: 1.4,           // scroll duration — lebih tinggi = lebih smooth
-  easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // expo ease
+  duration: 1.6,
+  easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)), // expo ease out
   orientation: 'vertical',
   smoothWheel: true,
-  wheelMultiplier: 0.9,
-  touchMultiplier: 1.5,    // mobile touch feel
+  wheelMultiplier: 0.85,
+  touchMultiplier: 1.8,
+  infinite: false,
 })
 
-// Sync Lenis dengan GSAP ticker
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000)
-})
+// Expose globally so BottomNav scrollTo can use Lenis
+window.__lenis = lenis
+
+// Sync Lenis → GSAP ticker
+gsap.ticker.add((time) => lenis.raf(time * 1000))
 gsap.ticker.lagSmoothing(0)
 
-// Sync ScrollTrigger dengan Lenis scroll position
+// Sync ScrollTrigger with Lenis
 lenis.on('scroll', ScrollTrigger.update)
 
 ReactDOM.createRoot(document.getElementById('root')).render(

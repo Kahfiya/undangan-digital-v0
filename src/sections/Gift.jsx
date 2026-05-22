@@ -11,9 +11,11 @@ export default function Gift() {
   const sectionRef = useRef(null)
   const [copied, setCopied] = useState(null)
 
+  const cardsRef = useRef(null)
+
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from('.gift-card', {
+      gsap.from(cardsRef.current.children, {
         opacity: 0, y: 32, stagger: 0.15, duration: 0.8, ease: 'power2.out',
         scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
       })
@@ -40,11 +42,10 @@ export default function Gift() {
           </p>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
+        <div ref={cardsRef} style={{ display: 'flex', flexDirection: 'column', gap: 'var(--space-4)' }}>
           {ACCOUNTS.map((acc) => (
             <div
               key={acc.bank}
-              className="gift-card"
               style={{
                 padding: 'var(--space-5) var(--space-6)',
                 background: 'var(--color-bg-soft)',
@@ -95,8 +96,8 @@ export default function Gift() {
               <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1.4rem', letterSpacing: '0.05em', marginBottom: 'var(--space-1)' }}>
                 {acc.number}
               </p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)' }}>
-                a.n. {acc.name}
+              <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: 'var(--space-4)', whiteSpace: 'nowrap' }}>
+                 {acc.name}
               </p>
               <button
                 onClick={() => handleCopy(acc.number, acc.bank)}

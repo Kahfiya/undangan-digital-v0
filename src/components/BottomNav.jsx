@@ -42,6 +42,15 @@ const NAV_ITEMS = [
     ),
   },
   {
+    id: 'ucapan',
+    label: 'Ucapan',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
     id: 'maps',
     label: 'Lokasi',
     icon: (
@@ -73,7 +82,10 @@ export default function BottomNav() {
   }, [])
 
   const scrollTo = (id) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
+    const el = document.getElementById(id)
+    if (!el) return
+    if (window.__lenis) window.__lenis.scrollTo(el, { offset: 0, duration: 1.6, easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)) })
+    else el.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (

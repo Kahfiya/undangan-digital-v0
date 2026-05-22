@@ -1,12 +1,18 @@
 import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useClipReveal } from './hooks/useClipReveal'
 
 import EnvelopeGate from './components/EnvelopeGate'
 import EntranceAnimation from './components/EntranceAnimation'
+import LoadingScreen from './components/LoadingScreen'
 import AudioPlayer from './components/AudioPlayer'
 import BottomNav from './components/BottomNav'
 import FallingPetals from './components/FallingPetals'
+import FloatingElements from './components/FloatingElements'
+import MagneticCursor from './components/MagneticCursor'
+import MicroInteractions from './components/MicroInteractions'
+import ScrollProgress from './components/ScrollProgress'
 
 import Hero from './sections/Hero'
 import Couple from './sections/Couple'
@@ -21,6 +27,7 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function App() {
   const [phase, setPhase] = useState('envelope')
+  useClipReveal(phase === 'open')
 
   useEffect(() => {
     if (phase !== 'open') return
@@ -32,6 +39,8 @@ export default function App() {
 
   return (
     <>
+      <MagneticCursor />
+      
       {phase === 'envelope' && (
         <EnvelopeGate onOpen={() => setPhase('entrance')} />
       )}
@@ -55,7 +64,7 @@ export default function App() {
           }}>
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'rgba(255,255,255,0.82)',
+              background: 'rgba(255,255,255,0.85)',
               pointerEvents: 'none', zIndex: 0,
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
@@ -74,7 +83,7 @@ export default function App() {
           }}>
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'rgba(255,255,255,0.82)',
+              background: 'rgba(255,255,255,0.85)',
               pointerEvents: 'none', zIndex: 0,
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
@@ -93,6 +102,9 @@ export default function App() {
           <BottomNav />
           <AudioPlayer visible />
           <FallingPetals />
+          <FloatingElements count={6} size="medium" />
+          <MicroInteractions />
+          <ScrollProgress />
         </>
       )}
     </>

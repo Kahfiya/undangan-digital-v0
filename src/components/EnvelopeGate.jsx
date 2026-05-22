@@ -41,6 +41,7 @@ export default function EnvelopeGate({ onOpen }) {
   const eyebrowRef  = useRef(null)
   const name1Ref    = useRef(null)
   const name2Ref    = useRef(null)
+  const name3Ref    = useRef(null)
   const dateRef     = useRef(null)
   const btnRef      = useRef(null)
 
@@ -68,10 +69,11 @@ export default function EnvelopeGate({ onOpen }) {
       diamondRef.current,
     ].forEach(hide)
 
-    // Init text hidden
-    gsap.set([eyebrowRef.current, name1Ref.current, name2Ref.current, dateRef.current, btnRef.current], {
-      opacity: 0, y: 16,
+    // Init text hidden — SVG text hanya support opacity, bukan CSS y
+    gsap.set([eyebrowRef.current, name1Ref.current, name2Ref.current, name3Ref.current, dateRef.current], {
+      opacity: 0,
     })
+    gsap.set(btnRef.current, { opacity: 0 })
 
     const tl = gsap.timeline({ delay: 0.3 })
 
@@ -93,20 +95,21 @@ export default function EnvelopeGate({ onOpen }) {
     .add(draw(divTop.current, { duration: 0.5 }), '-=0.2')
 
     // 5. Eyebrow text
-    .to(eyebrowRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }, '-=0.1')
+    .to(eyebrowRef.current, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.1')
 
     // 6. Names
-    .to(name1Ref.current, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.2')
-    .to(name2Ref.current, { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4')
+    .to(name1Ref.current, { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.2')
+    .to(name2Ref.current, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+    .to(name3Ref.current, { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.3')
 
     // 7. Bottom divider
     .add(draw(divBot.current, { duration: 0.5 }), '-=0.3')
 
     // 8. Date
-    .to(dateRef.current, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, '-=0.2')
+    .to(dateRef.current, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '-=0.2')
 
     // 9. Button
-    .to(btnRef.current, { opacity: 1, y: 0, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1')
+    .to(btnRef.current, { opacity: 1, duration: 0.6, ease: 'back.out(1.4)' }, '-=0.1')
 
     return () => tl.kill()
   }, [])
@@ -222,7 +225,7 @@ export default function EnvelopeGate({ onOpen }) {
 
         {/* ── Names ── */}
         <text ref={name1Ref}
-          x={W / 2} y={232}
+          x={W / 2} y={222}
           textAnchor="middle"
           fontFamily="'Playfair Display', serif"
           fontSize="38"
@@ -232,7 +235,19 @@ export default function EnvelopeGate({ onOpen }) {
           M. Riyan
         </text>
         <text ref={name2Ref}
-          x={W / 2} y={282}
+          x={W / 2} y={268}
+          textAnchor="middle"
+          fontFamily="'Playfair Display', serif"
+          fontSize="26"
+          fill="#2a1c08"
+          fontStyle="italic"
+          fontWeight="400"
+        >
+          &amp;
+        </text>
+        <text
+          ref={name3Ref}
+          x={W / 2} y={308}
           textAnchor="middle"
           fontFamily="'Playfair Display', serif"
           fontSize="34"
@@ -240,19 +255,19 @@ export default function EnvelopeGate({ onOpen }) {
           fontStyle="italic"
           fontWeight="400"
         >
-          &amp; Siti Arbayah
+          Siti Arbayah
         </text>
 
         {/* ── Bottom divider ── */}
         <line ref={divBot}
-          x1={W / 2 - 60} y1={308}
-          x2={W / 2 + 60} y2={308}
+          x1={W / 2 - 60} y1={328}
+          x2={W / 2 + 60} y2={328}
           stroke={stroke} strokeWidth="0.8" opacity="0.6"
         />
 
         {/* ── Date ── */}
         <text ref={dateRef}
-          x={W / 2} y={334}
+          x={W / 2} y={354}
           textAnchor="middle"
           fontFamily="'Montserrat', sans-serif"
           fontSize="11"
@@ -264,10 +279,10 @@ export default function EnvelopeGate({ onOpen }) {
 
         {/* ── Guest name ── */}
         {guestName && <>
-          <text x={W / 2} y={368} textAnchor="middle" fontFamily="'Montserrat', sans-serif" fontSize="9" letterSpacing="2" fill="rgba(42,28,8,0.5)">
+          <text x={W / 2} y={388} textAnchor="middle" fontFamily="'Montserrat', sans-serif" fontSize="9" letterSpacing="2" fill="rgba(42,28,8,0.5)">
             KEPADA YTH.
           </text>
-          <text x={W / 2} y={386} textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#2a1c08" fontStyle="italic">
+          <text x={W / 2} y={406} textAnchor="middle" fontFamily="'Playfair Display', serif" fontSize="16" fill="#2a1c08" fontStyle="italic">
             {guestName}
           </text>
         </>}
@@ -276,7 +291,6 @@ export default function EnvelopeGate({ onOpen }) {
         <foreignObject ref={btnRef} x={W / 2 - 90} y={390} width="180" height="52">
           <button
             onClick={handleOpen}
-            xmlns="http://www.w3.org/1999/xhtml"
             style={{
               width: '100%',
               height: '100%',
