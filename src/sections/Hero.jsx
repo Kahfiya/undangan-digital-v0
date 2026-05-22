@@ -129,18 +129,19 @@ export default function Hero() {
         autoPlay muted loop playsInline
         aria-hidden="true"
         poster="/backgrounds/Background.jpg"
+        ref={el => {
+          if (!el) return
+          // Pilih source berdasarkan lebar layar — media attribute tidak support di video
+          const isMobile = window.innerWidth <= 768
+          el.src = isMobile ? '/hero/Hero-bg2-mobile.mp4' : '/hero/Hero-bg2.mp4'
+        }}
         style={{
           position: 'absolute', inset: 0,
           width: '100%', height: '100%',
           objectFit: 'cover', opacity: 0.5,
           willChange: 'transform', transformOrigin: 'center center',
         }}
-      >
-        {/* Mobile: versi kecil ~500KB */}
-        <source media="(max-width: 768px)" src="/hero/Hero-bg2-mobile.mp4" type="video/mp4" />
-        {/* Desktop: versi original */}
-        <source src="/hero/Hero-bg2.mp4" type="video/mp4" />
-      </video>
+      />
 
       {/* Fallback background image — tampil jika video gagal load */}
       <div aria-hidden="true" style={{
