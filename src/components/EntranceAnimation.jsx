@@ -49,12 +49,14 @@ export default function EntranceAnimation({ onComplete }) {
       style={{ position: 'fixed', inset: 0, zIndex: 9998, overflow: 'hidden' }}
     >
       <video
-        ref={videoRef}
+        ref={el => {
+          if (!el) return
+          videoRef.current = el
+          el.src = window.innerWidth <= 768 ? '/hero/Hero-bg.mp4' : '/hero/Hero-bg2.mp4'
+        }}
         muted playsInline loop
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-      >
-        <source src="/hero/Hero-bg2.mp4" type="video/mp4" />
-      </video>
+      />
 
       <div style={{
         position: 'absolute', inset: 0,
