@@ -88,22 +88,9 @@ export default function HorizontalGallery() {
     <section
       ref={sectionRef}
       id="horizontal-gallery"
-      style={{ position: 'relative', background: 'var(--color-bg-dark)', overflow: 'hidden' }}
+      style={{ position: 'relative', overflow: 'hidden' }}
     >
-      {/* Fade top */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', top: 0, left: 0, right: 0, height: 90,
-        background: 'linear-gradient(to bottom, rgba(255,255,255,0.88), transparent)',
-        zIndex: 3, pointerEvents: 'none',
-      }} />
-      {/* Fade bottom */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: 90,
-        background: 'linear-gradient(to top, rgba(255,255,255,0.88), transparent)',
-        zIndex: 3, pointerEvents: 'none',
-      }} />
-
-      {/* ── Header ── */}
+      {/* Header */}
       <div className="hg-header" style={{
         textAlign: 'center',
         padding: 'clamp(56px, 9vw, 100px) var(--space-6) clamp(32px, 5vw, 56px)',

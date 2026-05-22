@@ -45,7 +45,7 @@ export default function App() {
         <main>
           <Hero />
 
-          {/* Light wrapper: Couple */}
+          {/* Light wrapper: Couple + Gallery */}
           <div style={{
             position: 'relative',
             backgroundImage: 'url(/backgrounds/Background2.jpg)',
@@ -60,11 +60,9 @@ export default function App() {
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <Couple />
+              <HorizontalGallery />
             </div>
           </div>
-
-          {/* Dark section: Gallery — standalone */}
-          <HorizontalGallery />
 
           {/* Light wrapper: RSVP → Footer */}
           <div style={{
