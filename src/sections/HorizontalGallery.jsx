@@ -110,20 +110,10 @@ export default function HorizontalGallery() {
         position: 'relative', zIndex: 2,
       }}>
         <p style={{
-          fontSize: '0.65rem', letterSpacing: '0.4em',
+          fontSize: '1.5rem', letterSpacing: '0.4em',
           textTransform: 'uppercase', color: 'var(--color-gold)',
           marginBottom: 'var(--space-3)',
-        }}>Pre-Wedding</p>
-        <h2 style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(2rem, 5vw, 3.5rem)',
-          color: '#fff', fontWeight: 400,
-          lineHeight: 1.1,
-        }}>
-          {'Galeri Kenangan'.split(' ').map((w, i) => (
-            <span key={i} className="hg-word" style={{ display: 'inline-block', marginRight: '0.3em' }}>{w}</span>
-          ))}
-        </h2>
+        }}>Albums</p>
         <div className="hg-divider" style={{
           width: 56, height: 1,
           background: 'var(--color-gold-gradient)',
