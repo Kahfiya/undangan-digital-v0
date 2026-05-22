@@ -3,10 +3,10 @@
   --color-bg: #ffffff;
   --color-bg-soft: #fcfcfc;
   --color-bg-dark: #1a1209;
-  --color-gold: #d4af37;
-  --color-gold-light: #e8cc6a;
-  --color-gold-dark: #b8962e;
-  --color-gold-gradient: linear-gradient(135deg, #d4af37, #e8cc6a, #b8962e);
+  --color-gold: #f5c842;
+  --color-gold-light: #fad96a;
+  --color-gold-dark: #d4a017;
+  --color-gold-gradient: linear-gradient(135deg, #f5c842, #fad96a, #d4a017);
   --color-text: #1a1a1a;
   --color-text-muted: #6b6b6b;
   --color-text-light: #ffffff;

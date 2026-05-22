@@ -3,7 +3,7 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 // ⚙️ GANTI dengan nomor WhatsApp yang benar (format: 628xxx)
-const WA_NUMBER = '628123456789'
+const WA_NUMBER = '6285931457921'
 
 export default function RSVP() {
   const sectionRef = useRef(null)

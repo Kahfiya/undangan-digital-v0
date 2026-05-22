@@ -1,19 +1,57 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 
-const AUDIO_SRC = '/audio/SpotiDown.App - Risk It All - Bruno Mars.mp3'
-const COVER_SRC = '/audio/SpotiDown.App - Risk It All - Bruno Mars.jpeg'
-const SONG_TITLE = 'Risk It All'
-const SONG_ARTIST = 'Bruno Mars'
+const PLAYLIST = [
+  {
+    src: '/audio/SpotiDown.App - Risk It All - Bruno Mars.mp3',
+    cover: '/audio/SpotiDown.App - Risk It All - Bruno Mars.jpeg',
+    title: 'Risk It All',
+    artist: 'Bruno Mars',
+  },
+  {
+    src: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.mp3',
+    cover: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.jpeg',
+    title: 'Beautiful In White',
+    artist: 'Shane Filan',
+  },
+]
 
 export default function AudioPlayer({ visible = false }) {
   const audioRef = useRef(null)
   const wrapRef = useRef(null)
   const discRef = useRef(null)
   const spinAnim = useRef(null)
+  const [trackIdx, setTrackIdx] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
   const [expanded, setExpanded] = useState(false)
+
+  const track = PLAYLIST[trackIdx]
+  const trackIdxRef = useRef(trackIdx)
+
+  // Auto-advance to next track
+  useEffect(() => {
+    trackIdxRef.current = trackIdx
+    const audio = audioRef.current
+    if (!audio) return
+    const onEnded = () => {
+      const next = (trackIdxRef.current + 1) % PLAYLIST.length
+      setTrackIdx(next)
+    }
+    audio.addEventListener('ended', onEnded)
+    return () => audio.removeEventListener('ended', onEnded)
+  }, [trackIdx])
+
+  // Load new track when trackIdx changes (skip on mount, handled by visible effect)
+  const mountedRef = useRef(false)
+  useEffect(() => {
+    if (!mountedRef.current) { mountedRef.current = true; return }
+    const audio = audioRef.current
+    if (!audio) return
+    audio.src = PLAYLIST[trackIdx].src
+    audio.load()
+    audio.play().then(() => setPlaying(true)).catch(() => {})
+  }, [trackIdx])
 
   useEffect(() => {
     if (!visible) return
@@ -54,7 +92,7 @@ export default function AudioPlayer({ visible = false }) {
 
   return (
     <>
-      <audio ref={audioRef} src={AUDIO_SRC} loop preload="auto" />
+      <audio ref={audioRef} src={PLAYLIST[0].src} preload="auto" />
 
       <div ref={wrapRef} style={{
         position: 'fixed',
@@ -103,7 +141,7 @@ export default function AudioPlayer({ visible = false }) {
                 overflow: 'hidden',
                 border: '1px solid rgba(212,175,55,0.5)',
               }}>
-                <img src={COVER_SRC} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                <img src={track.cover} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
               {/* Center hole */}
               <div style={{
@@ -126,13 +164,13 @@ export default function AudioPlayer({ visible = false }) {
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
                 lineHeight: 1.3,
-              }}>{SONG_TITLE}</p>
+              }}>{track.title}</p>
               <p style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '0.7rem',
                 color: 'var(--color-gold-light)',
                 lineHeight: 1.3,
-              }}>{SONG_ARTIST}</p>
+              }}>{track.artist}</p>
             </div>
 
             {/* Mute */}

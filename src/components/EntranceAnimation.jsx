@@ -74,7 +74,7 @@ export default function EntranceAnimation({ onComplete }) {
           {/* Top line */}
           <line ref={lineTopRef}
             x1="100" y1="28" x2="260" y2="28"
-            stroke="#d4af37" strokeWidth="0.8" opacity="0.7"
+            stroke="#f5c842" strokeWidth="0.8" opacity="0.7"
           />
 
           <text ref={eyebrowRef}
@@ -102,7 +102,7 @@ export default function EntranceAnimation({ onComplete }) {
             textAnchor="middle"
             fontFamily="'Playfair Display', serif"
             fontSize="38" fontWeight="400" fontStyle="italic"
-            fill="#e8cc6a"
+            fill="#fad96a"
           >
             &amp; Siti Arbayah
           </text>
@@ -110,7 +110,7 @@ export default function EntranceAnimation({ onComplete }) {
           {/* Bottom line */}
           <line ref={lineBotRef}
             x1="100" y1="178" x2="260" y2="178"
-            stroke="#d4af37" strokeWidth="0.8" opacity="0.7"
+            stroke="#f5c842" strokeWidth="0.8" opacity="0.7"
           />
 
           <text ref={dateRef}

@@ -7,7 +7,7 @@ import FloralSVG from '../components/FloralSVG'
 const WEDDING_DATE = new Date('2026-07-05T08:00:00')
 
 // ⚙️ GANTI dengan nomor WhatsApp dan pesan share
-const WA_SHARE_NUMBER = '628123456789'
+const WA_SHARE_NUMBER = '6285931457921'
 
 function useCountdown(targetDate) {
   const [timeLeft, setTimeLeft] = useState({})
