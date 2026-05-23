@@ -1,173 +1,113 @@
-import { useEffect, useRef } from 'react'
-import gsap from 'gsap'
+import { motion } from 'framer-motion'
 
-/**
- * FloatingElements — World-class floating particles with physics
- * Creates ambient floating elements with realistic movement
- */
-export default function FloatingElements({ count = 8, size = 'medium' }) {
-  const containerRef = useRef(null)
+const spring = { type: 'spring', stiffness: 40, damping: 25 }
 
-  useEffect(() => {
-    const container = containerRef.current
-    if (!container) return
-
-    // Create floating elements
-    const elements = []
-    for (let i = 0; i < count; i++) {
-      const element = document.createElement('div')
-      element.className = 'floating-element'
-      
-      // Random size based on size prop
-      let elementSize
-      switch (size) {
-        case 'small':
-          elementSize = gsap.utils.random(2, 6)
-          break
-        case 'large':
-          elementSize = gsap.utils.random(8, 16)
-          break
-        default:
-          elementSize = gsap.utils.random(4, 10)
-      }
-
-      // Style the element
-      Object.assign(element.style, {
-        position: 'absolute',
-        width: `${elementSize}px`,
-        height: `${elementSize}px`,
-        borderRadius: '50%',
-        background: `radial-gradient(circle, rgba(212,175,55,${gsap.utils.random(0.1, 0.3)}) 0%, transparent 70%)`,
-        pointerEvents: 'none',
-        willChange: 'transform',
-        filter: 'blur(0.5px)',
-      })
-
-      // Random initial position
-      gsap.set(element, {
-        x: gsap.utils.random(0, window.innerWidth),
-        y: gsap.utils.random(0, window.innerHeight),
-        scale: gsap.utils.random(0.5, 1.5),
-        opacity: gsap.utils.random(0.3, 0.8),
-      })
-
-      container.appendChild(element)
-      elements.push(element)
-
-      // Create floating animation with physics
-      const duration = gsap.utils.random(8, 15)
-      const amplitude = gsap.utils.random(30, 80)
-      
-      // Vertical floating
-      gsap.to(element, {
-        y: `+=${gsap.utils.random(-amplitude, amplitude)}`,
-        duration: duration,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: gsap.utils.random(0, 2),
-      })
-
-      // Horizontal drift
-      gsap.to(element, {
-        x: `+=${gsap.utils.random(-amplitude * 0.5, amplitude * 0.5)}`,
-        duration: duration * 1.5,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: gsap.utils.random(0, 3),
-      })
-
-      // Scale pulsing
-      gsap.to(element, {
-        scale: `+=${gsap.utils.random(0.2, 0.5)}`,
-        duration: gsap.utils.random(3, 6),
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: gsap.utils.random(0, 2),
-      })
-
-      // Opacity breathing
-      gsap.to(element, {
-        opacity: `+=${gsap.utils.random(0.2, 0.4)}`,
-        duration: gsap.utils.random(4, 8),
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        delay: gsap.utils.random(0, 4),
-      })
-
-      // Rotation
-      gsap.to(element, {
-        rotation: 360,
-        duration: gsap.utils.random(20, 40),
-        ease: 'none',
-        repeat: -1,
-      })
-    }
-
-    // Mouse interaction - elements are attracted to cursor
-    const handleMouseMove = (e) => {
-      elements.forEach((element, i) => {
-        const rect = element.getBoundingClientRect()
-        const centerX = rect.left + rect.width / 2
-        const centerY = rect.top + rect.height / 2
-        
-        const deltaX = e.clientX - centerX
-        const deltaY = e.clientY - centerY
-        const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
-        
-        // Attraction within 200px radius
-        if (distance < 200) {
-          const force = (200 - distance) / 200
-          const pullX = deltaX * force * 0.1
-          const pullY = deltaY * force * 0.1
-          
-          gsap.to(element, {
-            x: `+=${pullX}`,
-            y: `+=${pullY}`,
-            duration: 2,
-            ease: 'power2.out',
-          })
-        }
-      })
-    }
-
-    // Resize handler
-    const handleResize = () => {
-      elements.forEach(element => {
-        // Keep elements within viewport
-        const rect = element.getBoundingClientRect()
-        if (rect.left < 0 || rect.left > window.innerWidth) {
-          gsap.set(element, { x: gsap.utils.random(0, window.innerWidth) })
-        }
-        if (rect.top < 0 || rect.top > window.innerHeight) {
-          gsap.set(element, { y: gsap.utils.random(0, window.innerHeight) })
-        }
-      })
-    }
-
-    document.addEventListener('mousemove', handleMouseMove)
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove)
-      window.removeEventListener('resize', handleResize)
-      elements.forEach(element => element.remove())
-    }
-  }, [count, size])
-
+/* Merak terbang dengan path kurva */
+function Merak({ startX, startY, delay = 0, flip = false, size = 64 }) {
   return (
-    <div
-      ref={containerRef}
+    <motion.img
+      src="/magic-garden/Merak.svg"
+      alt=""
+      aria-hidden="true"
+      initial={{ x: startX, y: startY, opacity: 0 }}
+      animate={{
+        x: [startX, startX + 140, startX + 80, startX + 220],
+        y: [startY, startY - 70, startY - 30, startY - 110],
+        opacity: [0, 1, 1, 0],
+      }}
+      transition={{ duration: 9, delay, repeat: Infinity, repeatDelay: 5, ease: 'easeInOut' }}
       style={{
-        position: 'fixed',
-        inset: 0,
+        position: 'absolute',
+        width: size,
+        height: 'auto',
+        transform: flip ? 'scaleX(-1)' : 'none',
         pointerEvents: 'none',
-        zIndex: 1,
-        overflow: 'hidden',
+        zIndex: 4,
       }}
     />
+  )
+}
+
+/* Bunga melayang dengan rotasi lambat */
+function FloatingFlower({ src, style, delay = 0, rotateRange = 8 }) {
+  return (
+    <motion.img
+      src={src}
+      alt=""
+      aria-hidden="true"
+      animate={{
+        y: [0, -12, 0],
+        rotate: [-rotateRange / 2, rotateRange / 2, -rotateRange / 2],
+        opacity: [0.85, 1, 0.85],
+      }}
+      transition={{ duration: 5 + delay, delay, repeat: Infinity, ease: 'easeInOut' }}
+      style={{ position: 'absolute', pointerEvents: 'none', ...style }}
+    />
+  )
+}
+
+/* Papper/kertas jatuh berputar */
+function Papper({ style, delay = 0 }) {
+  return (
+    <motion.img
+      src="/magic-garden/Papper.svg"
+      alt=""
+      aria-hidden="true"
+      animate={{
+        y: [0, -8, 0],
+        rotate: [0, 5, 0],
+        opacity: [0.7, 0.9, 0.7],
+      }}
+      transition={{ duration: 6, delay, repeat: Infinity, ease: 'easeInOut' }}
+      style={{ position: 'absolute', pointerEvents: 'none', ...style }}
+    />
+  )
+}
+
+export default function FloatingElements() {
+  return (
+    <>
+      {/* Merak kiri → kanan */}
+      <Merak startX={-90} startY={100} delay={1.5} size={60} />
+      {/* Merak kanan → kiri (flip) */}
+      <Merak startX={-50} startY={160} delay={4} flip size={48} />
+
+      {/* Bunga pojok kiri bawah */}
+      <FloatingFlower
+        src="/magic-garden/Bunga1.svg"
+        style={{ bottom: '6%', left: '2%', width: 140, zIndex: 3 }}
+        delay={0}
+      />
+      {/* Bunga pojok kanan bawah */}
+      <FloatingFlower
+        src="/magic-garden/Bunga2.svg"
+        style={{ bottom: '4%', right: '2%', width: 160, zIndex: 3, transform: 'scaleX(-1)' }}
+        delay={1}
+      />
+      {/* Bunga kiri tengah */}
+      <FloatingFlower
+        src="/magic-garden/Bunga3.svg"
+        style={{ top: '30%', left: '-2%', width: 120, zIndex: 3 }}
+        delay={2}
+        rotateRange={6}
+      />
+      {/* Bunga kanan tengah */}
+      <FloatingFlower
+        src="/magic-garden/Bunga4.svg"
+        style={{ top: '25%', right: '-2%', width: 120, zIndex: 3, transform: 'scaleX(-1)' }}
+        delay={1.5}
+        rotateRange={6}
+      />
+
+      {/* Papper dekoratif */}
+      <Papper
+        style={{ bottom: '18%', left: '8%', width: 80, zIndex: 3, opacity: 0.6 }}
+        delay={0.5}
+      />
+      <Papper
+        style={{ bottom: '22%', right: '8%', width: 70, zIndex: 3, opacity: 0.5, transform: 'scaleX(-1)' }}
+        delay={2}
+      />
+    </>
   )
 }

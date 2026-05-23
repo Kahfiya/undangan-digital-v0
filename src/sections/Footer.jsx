@@ -64,9 +64,18 @@ export default function Footer() {
     return () => ctx.revert()
   }, [])
 
-  const handleShare = () => {
-    const msg = `Assalamu'alaikum! Kami mengundang Anda ke pernikahan M. Riyan & Siti Arbayah pada Minggu, 05 Juli 2026. Lihat undangan digital kami di: ${window.location.href}`
+  const [showModal, setShowModal] = useState(false)
+  const [inputName, setInputName] = useState('')
+
+  const handleShare = () => setShowModal(true)
+
+  const doShare = () => {
+    const base = `${window.location.origin}${window.location.pathname}`
+    const url = inputName.trim() ? `${base}?to=${encodeURIComponent(inputName.trim())}` : base
+    const msg = `Assalamu'alaikum! Kami mengundang Anda ke pernikahan M. Riyan & Siti Arbayah pada Minggu, 05 Juli 2026. Lihat undangan digital kami di: ${url}`
     window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank')
+    setShowModal(false)
+    setInputName('')
   }
 
   const countUnit = (val, label) => (
@@ -145,6 +154,58 @@ export default function Footer() {
           Made with ♥ · M. Riyan & Siti Arbayah 2026
         </p>
       </div>
+
+      {/* Modal input nama tamu */}
+      {showModal && (
+        <div onClick={() => setShowModal(false)} style={{
+          position: 'fixed', inset: 0, zIndex: 9999,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: '0 24px',
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            background: '#fff',
+            borderRadius: 'var(--radius-lg)',
+            padding: '32px 24px',
+            width: '100%', maxWidth: 360,
+            textAlign: 'center',
+            boxShadow: 'var(--shadow-gold)',
+          }}>
+            <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1.1rem', marginBottom: 8 }}>
+              Bagikan ke Siapa?
+            </p>
+            <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: 20 }}>
+              Masukkan nama tamu agar undangan terasa personal
+            </p>
+            <input
+              autoFocus
+              value={inputName}
+              onChange={e => setInputName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && doShare()}
+              placeholder="Contoh: Budi Santoso"
+              style={{
+                width: '100%', padding: '10px 14px',
+                border: '1px solid rgba(212,175,55,0.5)',
+                borderRadius: 'var(--radius-full)',
+                fontFamily: 'var(--font-body)', fontSize: '0.9rem',
+                outline: 'none', marginBottom: 16,
+                textAlign: 'center',
+              }}
+            />
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button onClick={() => setShowModal(false)} style={{
+                flex: 1, padding: '10px',
+                border: '1px solid #ddd', borderRadius: 'var(--radius-full)',
+                background: 'transparent', cursor: 'pointer',
+                fontSize: '0.8rem', color: 'var(--color-text-muted)',
+              }}>Batal</button>
+              <button onClick={doShare} className="btn-gold" style={{ flex: 1, padding: '10px' }}>
+                Kirim
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   )
 }

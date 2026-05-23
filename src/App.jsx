@@ -4,12 +4,10 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useClipReveal } from './hooks/useClipReveal'
 
 import EnvelopeGate from './components/EnvelopeGate'
-import EntranceAnimation from './components/EntranceAnimation'
 import LoadingScreen from './components/LoadingScreen'
 import AudioPlayer from './components/AudioPlayer'
 import BottomNav from './components/BottomNav'
 import FallingPetals from './components/FallingPetals'
-import FloatingElements from './components/FloatingElements'
 import MagneticCursor from './components/MagneticCursor'
 import MicroInteractions from './components/MicroInteractions'
 import ScrollProgress from './components/ScrollProgress'
@@ -31,7 +29,6 @@ export default function App() {
 
   useEffect(() => {
     if (phase !== 'open') return
-    // Wait for paint then refresh so ScrollTrigger measures correctly
     requestAnimationFrame(() => {
       requestAnimationFrame(() => ScrollTrigger.refresh())
     })
@@ -40,13 +37,10 @@ export default function App() {
   return (
     <>
       <MagneticCursor />
-      
-      {phase === 'envelope' && (
-        <EnvelopeGate onOpen={() => setPhase('entrance')} />
-      )}
 
-      {phase === 'entrance' && (
-        <EntranceAnimation onComplete={() => setPhase('open')} />
+      {/* EnvelopeGate — wekita.id style cover page */}
+      {phase === 'envelope' && (
+        <EnvelopeGate onOpen={() => setPhase('open')} />
       )}
 
       {/* Only mount main after open so ScrollTrigger measures real dimensions */}
@@ -102,7 +96,6 @@ export default function App() {
           <BottomNav />
           <AudioPlayer visible />
           <FallingPetals />
-          <FloatingElements count={6} size="medium" />
           <MicroInteractions />
           <ScrollProgress />
         </>

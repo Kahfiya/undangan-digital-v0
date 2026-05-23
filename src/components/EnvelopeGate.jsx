@@ -1,334 +1,347 @@
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 
-/* ── Floral corner ornament ── */
-function FloralCorner({ rotate = 0, x = 0, y = 0, size = 80 }) {
+/* ── Falling Petals ── */
+const PETAL_COLORS = ['#f9c6d0', '#f7b8c4', '#fad4bb', '#f5c842', '#e8a0b0']
+const PETAL_COUNT = typeof window !== 'undefined' && window.innerWidth <= 768 ? 8 : 18
+
+function usePetals() {
+  const [petals] = useState(() =>
+    Array.from({ length: PETAL_COUNT }, (_, i) => ({
+      id: i,
+      left: Math.random() * 100,
+      size: 8 + Math.random() * 10,
+      duration: 6 + Math.random() * 8,
+      delay: Math.random() * 10,
+      color: PETAL_COLORS[Math.floor(Math.random() * PETAL_COLORS.length)],
+      rotate: Math.random() * 360,
+      drift: (Math.random() - 0.5) * 120,
+    }))
+  )
+  return petals
+}
+
+function FallingPetals() {
+  const petals = usePetals()
   return (
-    <g transform={`translate(${x},${y}) rotate(${rotate})`} opacity="0.22">
-      <line x1="0" y1="0" x2="0" y2={size * 0.7} stroke="#c8a84b" strokeWidth="0.9" />
-      <line x1="0" y1="0" x2={size * 0.7} y2="0" stroke="#c8a84b" strokeWidth="0.9" />
-      <line x1="0" y1={size * 0.28} x2={size * 0.22} y2={size * 0.16} stroke="#c8a84b" strokeWidth="0.7" />
-      <line x1={size * 0.28} y1="0" x2={size * 0.16} y2={size * 0.22} stroke="#c8a84b" strokeWidth="0.7" />
-      <ellipse cx={size*0.12} cy={size*0.09} rx={size*0.08} ry={size*0.045} fill="#c8a84b" transform={`rotate(-45 ${size*0.12} ${size*0.09})`} />
-      <ellipse cx={size*0.09} cy={size*0.12} rx={size*0.08} ry={size*0.045} fill="#c8a84b" transform={`rotate(-135 ${size*0.09} ${size*0.12})`} />
-      <ellipse cx={size*0.22} cy={size*0.16} rx={size*0.06} ry={size*0.035} fill="#c8a84b" transform={`rotate(-60 ${size*0.22} ${size*0.16})`} />
-      <ellipse cx={size*0.16} cy={size*0.22} rx={size*0.06} ry={size*0.035} fill="#c8a84b" transform={`rotate(-150 ${size*0.16} ${size*0.22})`} />
-      <circle cx="0" cy={size*0.7} r={size*0.035} fill="#c8a84b" />
-      <circle cx={size*0.7} cy="0" r={size*0.035} fill="#c8a84b" />
-      <circle cx={size*0.36} cy={size*0.04} r={size*0.022} fill="#c8a84b" opacity="0.6" />
-      <circle cx={size*0.04} cy={size*0.36} r={size*0.022} fill="#c8a84b" opacity="0.6" />
-    </g>
+    <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 4, overflow: 'hidden' }}>
+      {petals.map(p => (
+        <div
+          key={p.id}
+          style={{
+            position: 'absolute',
+            left: `${p.left}%`,
+            top: '-20px',
+            width: p.size,
+            height: p.size * 0.7,
+            borderRadius: '50% 0 50% 0',
+            background: p.color,
+            opacity: 0.75,
+            animation: `petalFall ${p.duration}s ${p.delay}s linear infinite`,
+            '--drift': `${p.drift}px`,
+            '--rotate': `${p.rotate}deg`,
+          }}
+        />
+      ))}
+      <style>{`
+        @keyframes petalFall {
+          0%   { transform: translateY(-20px) translateX(0) rotate(0deg); opacity: 0; }
+          10%  { opacity: 0.75; }
+          90%  { opacity: 0.5; }
+          100% { transform: translateY(105vh) translateX(var(--drift)) rotate(var(--rotate)); opacity: 0; }
+        }
+      `}</style>
+    </div>
   )
 }
 
-export default function EnvelopeGate({ onOpen }) {
-  const overlayRef  = useRef(null)
-  const guestName   = new URLSearchParams(window.location.search).get('to') || ''
+/* ── Butterfly ── */
+function Butterfly({ id, initialX, initialY }) {
+  const wrapRef = useRef(null)
+  const posRef = useRef({ x: 0, y: 0 })
+  const tlRef = useRef(null)
+  const fleeing = useRef(false)
 
-  const frameRef    = useRef(null)
-  const frame2Ref   = useRef(null)
-  const cornerTLRef = useRef(null)
-  const cornerTRRef = useRef(null)
-  const cornerBLRef = useRef(null)
-  const cornerBRRef = useRef(null)
-  const divTopRef   = useRef(null)
-  const divBotRef   = useRef(null)
-  const diamondRef  = useRef(null)
-  const eyebrowRef  = useRef(null)
-  const name1Ref    = useRef(null)
-  const name2Ref    = useRef(null)
-  const name3Ref    = useRef(null)
-  const dateRef     = useRef(null)
-  const guestRef    = useRef(null)
-  const btnGroupRef = useRef(null)
+  const wings = [
+    { body: '#d4a017', wing: '#f5c842' },
+    { body: '#c4960a', wing: '#fad96a' },
+    { body: '#b8860b', wing: '#fffacd' },
+    { body: '#d4a843', wing: '#fff8dc' },
+  ][id % 4]
 
-  // Fixed viewBox — all elements must fit inside
-  const W = 400
-  const H = guestName ? 510 : 450
-  const pad = 28
-  const cSize = 22
-  const gold = '#d4a843'
+  const nextPos = () => ({
+    x: 60 + Math.random() * (window.innerWidth - 120),
+    y: 60 + Math.random() * (window.innerHeight - 120),
+  })
 
-  // Button sits 24px below the date/guest block
-  const btnY = guestName ? 414 : 345
-  const btnW = 220
-  const btnH = 46
-  const btnX = W / 2 - btnW / 2   // = 90, centered on W=400
+  // Buat path bergelombang antara dua titik dengan waypoint acak di tengah
+  const flyTo = useCallback((tx, ty, onDone) => {
+    const el = wrapRef.current
+    if (!el) return
+    const { x: sx, y: sy } = posRef.current
+    // Waypoint acak di tengah untuk kurva natural
+    const mx = (sx + tx) / 2 + (Math.random() - 0.5) * 200
+    const my = (sy + ty) / 2 + (Math.random() - 0.5) * 150
+    const dist = Math.hypot(tx - sx, ty - sy)
+    const dur = 1.8 + dist / 300
 
-  useEffect(() => {
-    const hide = (el) => {
-      if (!el) return
-      const len = el.getTotalLength?.() ?? 200
-      gsap.set(el, { strokeDasharray: len, strokeDashoffset: len })
-    }
-    const draw = (el, opts = {}) => {
-      if (!el) return null
-      const len = el.getTotalLength?.() ?? 200
-      gsap.set(el, { strokeDasharray: len })
-      return gsap.to(el, { strokeDashoffset: 0, ease: 'power2.inOut', ...opts })
-    }
+    tlRef.current?.kill()
+    tlRef.current = gsap.timeline({ onComplete: onDone })
+      .to(el, { x: mx, y: my, duration: dur * 0.5, ease: 'sine.inOut' })
+      .to(el, { x: tx, y: ty, duration: dur * 0.5, ease: 'sine.inOut' })
 
-    ;[frameRef.current, frame2Ref.current,
-      cornerTLRef.current, cornerTRRef.current,
-      cornerBLRef.current, cornerBRRef.current,
-      divTopRef.current, divBotRef.current,
-      diamondRef.current,
-    ].forEach(hide)
-
-    gsap.set([eyebrowRef.current, name1Ref.current, name2Ref.current,
-              name3Ref.current, dateRef.current, guestRef.current], { opacity: 0 })
-    gsap.set(btnGroupRef.current, { opacity: 0, scale: 0.9, transformOrigin: `${W/2}px ${btnY + btnH/2}px` })
-
-    const tl = gsap.timeline({ delay: 0.4 })
-
-    tl.add(draw(frameRef.current,  { duration: 1.5, ease: 'power1.inOut' }))
-      .add(draw(frame2Ref.current, { duration: 1.1, ease: 'power1.inOut' }), '-=0.9')
-      .add([
-        draw(cornerTLRef.current, { duration: 0.5 }),
-        draw(cornerTRRef.current, { duration: 0.5 }),
-        draw(cornerBLRef.current, { duration: 0.5 }),
-        draw(cornerBRRef.current, { duration: 0.5 }),
-      ], '-=0.4')
-      .add(draw(diamondRef.current, { duration: 0.6, ease: 'power2.out' }), '-=0.15')
-      .add(draw(divTopRef.current,  { duration: 0.45 }), '-=0.1')
-      .to(eyebrowRef.current, { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.05')
-      .to(name1Ref.current,   { opacity: 1, duration: 0.75, ease: 'power3.out' }, '-=0.25')
-      .to(name2Ref.current,   { opacity: 1, duration: 0.55, ease: 'power3.out' }, '-=0.35')
-      .to(name3Ref.current,   { opacity: 1, duration: 0.75, ease: 'power3.out' }, '-=0.35')
-      .add(draw(divBotRef.current, { duration: 0.45 }), '-=0.25')
-      .to(dateRef.current,  { opacity: 1, duration: 0.55, ease: 'power2.out' }, '-=0.15')
-      .to(guestRef.current, { opacity: 1, duration: 0.45, ease: 'power2.out' }, '-=0.05')
-      .to(btnGroupRef.current, { opacity: 1, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }, '-=0.05')
-
-    return () => tl.kill()
+    posRef.current = { x: tx, y: ty }
   }, [])
 
-  const handleOpen = () => {
-    gsap.to(overlayRef.current, { opacity: 0, duration: 0.85, ease: 'power3.inOut', onComplete: onOpen })
+  const wander = useCallback(() => {
+    if (fleeing.current) return
+    const t = nextPos()
+    flyTo(t.x, t.y, () => setTimeout(wander, 200 + Math.random() * 500))
+  }, [flyTo])
+
+  useEffect(() => {
+    const sx = initialX / 100 * window.innerWidth
+    const sy = initialY / 100 * window.innerHeight
+    posRef.current = { x: sx, y: sy }
+    gsap.set(wrapRef.current, { x: sx, y: sy })
+    const t = setTimeout(wander, id * 300 + 200)
+    return () => { clearTimeout(t); tlRef.current?.kill() }
+  }, [])
+
+  const flee = (cx, cy) => {
+    fleeing.current = true
+    tlRef.current?.kill()
+    const { x: bx, y: by } = posRef.current
+    const dx = bx - cx, dy = by - cy
+    const len = Math.hypot(dx, dy) || 1
+    const tx = Math.max(30, Math.min(window.innerWidth - 30, bx + (dx / len) * 220))
+    const ty = Math.max(30, Math.min(window.innerHeight - 30, by + (dy / len) * 220))
+    posRef.current = { x: tx, y: ty }
+    gsap.to(wrapRef.current, {
+      x: tx, y: ty, duration: 0.35, ease: 'power4.out',
+      onComplete() {
+        fleeing.current = false
+        setTimeout(wander, 300)
+      },
+    })
   }
 
   return (
     <div
-      ref={overlayRef}
+      ref={wrapRef}
+      onMouseEnter={e => flee(e.clientX, e.clientY)}
+      onTouchStart={e => { e.preventDefault(); flee(e.touches[0].clientX, e.touches[0].clientY) }}
       style={{
-        position: 'fixed', inset: 0, zIndex: 9999,
-        background: 'radial-gradient(ellipse at 50% 42%, #fffef8 0%, #fdf6e3 55%, #f0e0b0 100%)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'fixed', top: 0, left: 0, zIndex: 5,
+        pointerEvents: 'auto', cursor: 'default',
+        transform: 'translate(-50%,-50%)',
+        willChange: 'transform',
       }}
     >
-      {/* Ambient glow — HTML div, not SVG, so no overflow issue */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', top: '42%', left: '50%',
-        transform: 'translate(-50%,-50%)',
-        width: 480, height: 480,
-        borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(212,175,55,0.22) 0%, transparent 68%)',
-        pointerEvents: 'none',
-        animation: 'glowPulse 4s ease-in-out infinite',
-      }} />
-
-      {/* SVG — overflow hidden so nothing bleeds out */}
-      <svg
-        viewBox={`0 0 ${W} ${H}`}
-        style={{
-          width: 'min(calc(100vw - 48px), 400px)',
-          height: 'auto',
-          overflow: 'hidden',
-          display: 'block',
-          margin: '0 auto',
-          position: 'relative',
-          zIndex: 1,
-        }}
-        aria-label="Undangan pernikahan M. Riyan dan Siti Arbayah"
-      >
-        <defs>
-          <clipPath id="btnClip">
-            <rect x={btnX} y={btnY} width={btnW} height={btnH} rx={btnH / 2} />
-          </clipPath>
-        </defs>
-
-        {/* ── Floating dust particles ── */}
-        {[
-          { cx: 70,  cy: 380, r: 1.4, d: 0,   t: 4.2 },
-          { cx: 130, cy: 410, r: 1.0, d: 0.9, t: 3.8 },
-          { cx: 200, cy: 420, r: 1.7, d: 1.6, t: 5.0 },
-          { cx: 270, cy: 405, r: 1.1, d: 0.4, t: 4.5 },
-          { cx: 330, cy: 390, r: 0.9, d: 1.2, t: 3.6 },
-        ].map((p, i) => (
-          <circle key={i} cx={p.cx} cy={p.cy} r={p.r} fill="#f5c842">
-            <animate attributeName="opacity" values="0;0.5;0"
-              dur={`${p.t}s`} begin={`${p.d}s`} repeatCount="indefinite" />
-            <animateTransform attributeName="transform" type="translate"
-              values={`0 0; 0 -18; 0 0`}
-              dur={`${p.t}s`} begin={`${p.d}s`} repeatCount="indefinite" />
-          </circle>
-        ))}
-
-        {/* ── Floral corners ── */}
-        <FloralCorner x={pad+2}   y={pad+2}   rotate={0}   size={72} />
-        <FloralCorner x={W-pad-2} y={pad+2}   rotate={90}  size={72} />
-        <FloralCorner x={pad+2}   y={H-pad-2} rotate={270} size={72} />
-        <FloralCorner x={W-pad-2} y={H-pad-2} rotate={180} size={72} />
-
-        {/* ── Outer frame ── */}
-        <rect ref={frameRef}
-          x={pad} y={pad} width={W-pad*2} height={H-pad*2}
-          rx="3" fill="none" stroke={gold} strokeWidth="1" opacity="0.35"
-        />
-
-        {/* ── Inner frame ── */}
-        <rect ref={frame2Ref}
-          x={pad+9} y={pad+9} width={W-pad*2-18} height={H-pad*2-18}
-          rx="2" fill="none" stroke={gold} strokeWidth="0.5" opacity="0.2"
-        />
-
-        {/* ── Corner L-brackets ── */}
-        <path ref={cornerTLRef}
-          d={`M ${pad+2} ${pad+cSize+10} L ${pad+2} ${pad+2} L ${pad+cSize+10} ${pad+2}`}
-          fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round"
-        />
-        <path ref={cornerTRRef}
-          d={`M ${W-pad-cSize-10} ${pad+2} L ${W-pad-2} ${pad+2} L ${W-pad-2} ${pad+cSize+10}`}
-          fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round"
-        />
-        <path ref={cornerBLRef}
-          d={`M ${pad+2} ${H-pad-cSize-10} L ${pad+2} ${H-pad-2} L ${pad+cSize+10} ${H-pad-2}`}
-          fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round"
-        />
-        <path ref={cornerBRRef}
-          d={`M ${W-pad-cSize-10} ${H-pad-2} L ${W-pad-2} ${H-pad-2} L ${W-pad-2} ${H-pad-cSize-10}`}
-          fill="none" stroke={gold} strokeWidth="2" strokeLinecap="round"
-        />
-
-        {/* ── Diamond ornament ── */}
-        <circle cx={W/2} cy={82} r="2.5" fill={gold} opacity="0.45" />
-        <path ref={diamondRef}
-          d={`M ${W/2} 90 L ${W/2+11} 105 L ${W/2} 120 L ${W/2-11} 105 Z`}
-          fill="none" stroke={gold} strokeWidth="1.3" strokeLinejoin="round"
-        />
-
-        {/* ── Top divider ── */}
-        <circle cx={W/2-76} cy={138} r="2" fill={gold} opacity="0.4" />
-        <line ref={divTopRef}
-          x1={W/2-72} y1={138} x2={W/2+72} y2={138}
-          stroke={gold} strokeWidth="0.8" opacity="0.5"
-        />
-        <circle cx={W/2+76} cy={138} r="2" fill={gold} opacity="0.4" />
-
-        {/* ── Eyebrow ── */}
-        <text ref={eyebrowRef}
-          x={W/2} y={160}
-          textAnchor="middle"
-          fontFamily="'Montserrat', sans-serif"
-          fontSize="10" letterSpacing="4.5"
-          textLength="148" lengthAdjust="spacing"
-          fill="rgba(160,110,10,0.85)"
-        >THE WEDDING OF</text>
-
-        {/* ── Names ── */}
-        <text ref={name1Ref}
-          x={W/2} y={206}
-          textAnchor="middle"
-          fontFamily="'Playfair Display', serif"
-          fontSize="40" fontWeight="400"
-          fill="#2a1c08"
-        >M. Riyan</text>
-
-        <text ref={name2Ref}
-          x={W/2} y={244}
-          textAnchor="middle"
-          fontFamily="'Playfair Display', serif"
-          fontSize="22" fontStyle="italic" fontWeight="400"
-          fill="rgba(160,110,10,0.8)"
-        >&amp;</text>
-
-        <text ref={name3Ref}
-          x={W/2} y={284}
-          textAnchor="middle"
-          fontFamily="'Playfair Display', serif"
-          fontSize="36" fontStyle="italic" fontWeight="400"
-          fill="#2a1c08"
-        >Siti Arbayah</text>
-
-        {/* ── Bottom divider ── */}
-        <circle cx={W/2-76} cy={304} r="2" fill={gold} opacity="0.4" />
-        <line ref={divBotRef}
-          x1={W/2-72} y1={304} x2={W/2+72} y2={304}
-          stroke={gold} strokeWidth="0.8" opacity="0.5"
-        />
-        <circle cx={W/2+76} cy={304} r="2" fill={gold} opacity="0.4" />
-
-        {/* ── Date ── */}
-        <text ref={dateRef}
-          x={W/2} y={328}
-          textAnchor="middle"
-          fontFamily="'Montserrat', sans-serif"
-          fontSize="10" letterSpacing="3.5"
-          textLength="168" lengthAdjust="spacing"
-          fill="rgba(42,28,8,0.6)"
-        >MINGGU · 05 JULI 2026</text>
-
-        {/* ── Guest name ── */}
-        <g ref={guestRef} opacity="0">
-          {guestName && <>
-            <text x={W/2} y={358} textAnchor="middle"
-              fontFamily="'Montserrat', sans-serif" fontSize="9" letterSpacing="2.5"
-              fill="rgba(42,28,8,0.45)">KEPADA YTH.</text>
-            <text x={W/2} y={378} textAnchor="middle"
-              fontFamily="'Playfair Display', serif" fontSize="17" fontStyle="italic"
-              fill="#2a1c08">{guestName}</text>
-          </>}
-        </g>
-
-        {/* ── Button ── */}
-        <foreignObject x={btnX} y={btnY} width={btnW} height={btnH} ref={btnGroupRef}>
-          <button
-            onClick={handleOpen}
-            style={{
-              width: '100%', height: '100%',
-              background: 'transparent',
-              border: `1.2px solid ${gold}`,
-              borderRadius: btnH / 2,
-              cursor: 'pointer',
-              fontFamily: "'Montserrat', sans-serif",
-              fontSize: 10,
-              letterSpacing: '4px',
-              color: gold,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-          >BUKA UNDANGAN</button>
-        </foreignObject>
-
-        {/* ── Bottom dot trio ── */}
-        <g opacity="0.28">
-          <circle cx={W/2-18} cy={H-pad-10} r="1.4" fill={gold} />
-          <circle cx={W/2}    cy={H-pad-10} r="2.0" fill={gold} />
-          <circle cx={W/2+18} cy={H-pad-10} r="1.4" fill={gold} />
-        </g>
-      </svg>
-
-      {/* Scroll hint */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', bottom: 20, left: '50%',
-        transform: 'translateX(-50%)',
-        animation: 'bounceHint 2s ease-in-out infinite',
-        opacity: 0.4,
+      {/* Inner: wing flap CSS — tidak konflik dengan GSAP karena parent pakai x/y matrix */}
+      <div style={{
+        animation: `wingFlap ${0.22 + id * 0.03}s ease-in-out infinite alternate`,
+        transformOrigin: 'center center',
       }}>
-        <svg width="14" height="9" viewBox="0 0 14 9" fill="none">
-          <path d="M1 1l6 6 6-6" stroke="#c8a84b" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+        <svg width="32" height="26" viewBox="0 0 32 26" fill="none" style={{ filter: `drop-shadow(0 1px 4px rgba(180,130,0,0.45))` }}>
+          <path d="M15 12 Q7 3 1 7 Q-1 13 6 15 Q11 16 15 12Z" fill={wings.wing} opacity="0.95"/>
+          <path d="M17 12 Q25 3 31 7 Q33 13 26 15 Q21 16 17 12Z" fill={wings.wing} opacity="0.95"/>
+          <path d="M15 14 Q8 15 5 21 Q7 25 12 23 Q15 21 15 14Z" fill={wings.body} opacity="0.85"/>
+          <path d="M17 14 Q24 15 27 21 Q25 25 20 23 Q17 21 17 14Z" fill={wings.body} opacity="0.85"/>
+          <ellipse cx="16" cy="13" rx="1.3" ry="6.5" fill="#6b4800" opacity="0.9"/>
+          <line x1="15.2" y1="7" x2="11" y2="2" stroke="#6b4800" strokeWidth="0.9" strokeLinecap="round"/>
+          <circle cx="10.5" cy="1.5" r="1.1" fill={wings.body}/>
+          <line x1="16.8" y1="7" x2="21" y2="2" stroke="#6b4800" strokeWidth="0.9" strokeLinecap="round"/>
+          <circle cx="21.5" cy="1.5" r="1.1" fill={wings.body}/>
         </svg>
       </div>
-
-      <style>{`
-        @keyframes bounceHint {
-          0%,100% { transform: translateX(-50%) translateY(0); }
-          50%      { transform: translateX(-50%) translateY(7px); }
-        }
-        @keyframes glowPulse {
-          0%,100% { opacity: 1;   transform: translate(-50%,-50%) scale(1); }
-          50%      { opacity: 0.7; transform: translate(-50%,-50%) scale(1.1); }
-        }
-      `}</style>
     </div>
+  )
+}
+
+/* ── Main ── */
+export default function EnvelopeGate({ onOpen }) {
+  const guestName = new URLSearchParams(window.location.search).get('to') || ''
+  const [visible, setVisible] = useState(true)
+  const btnRef = useRef(null)
+
+  useEffect(() => {
+    const btn = btnRef.current
+    if (!btn) return
+    const shimmer = btn.querySelector('.btn-shimmer')
+    if (!shimmer) return
+    const anim = gsap.fromTo(shimmer,
+      { x: '-120%' },
+      { x: '220%', duration: 2.2, ease: 'power1.inOut', repeat: -1, repeatDelay: 2.5, delay: 2 }
+    )
+    return () => anim.kill()
+  }, [])
+
+  const handleOpen = () => {
+    setVisible(false)
+    setTimeout(onOpen, 700)
+  }
+
+  const isMobile = window.innerWidth <= 768
+  const butterflies = [
+    { id: 0, initialX: 15, initialY: 20 },
+    { id: 1, initialX: 70, initialY: 15 },
+    ...(!isMobile ? [
+      { id: 2, initialX: 40, initialY: 60 },
+      { id: 3, initialX: 80, initialY: 55 },
+    ] : []),
+  ]
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.div
+          key="gate"
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.65, ease: 'easeInOut' }}
+          style={{ position: 'fixed', inset: 0, zIndex: 9999, overflowY: 'auto', overflowX: 'hidden', background: '#f5ede0' }}
+        >
+          {/* Background — video desktop, image mobile */}
+          {typeof window !== 'undefined' && window.innerWidth > 768 ? (
+            <video
+              autoPlay muted loop playsInline
+              style={{ position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%', objectFit: 'cover' }}
+              src="/backgrounds/Background EnvelopeGate.mp4"
+            />
+          ) : (
+            <div style={{
+              position: 'fixed', inset: 0, zIndex: 0,
+              backgroundImage: 'url(/backgrounds/Background2.jpg)',
+              backgroundSize: 'cover', backgroundPosition: 'center',
+            }} />
+          )}
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(248,242,228,0.35)', zIndex: 0 }} />
+
+          {/* Bunga jatuh */}
+          <FallingPetals />
+
+          {/* Kupu-kupu */}
+          {butterflies.map(b => <Butterfly key={b.id} {...b} />)}
+
+          <style>{`
+            @keyframes wingFlap {
+              from { transform: scaleX(1) scaleY(1); }
+              to   { transform: scaleX(0.3) scaleY(0.85); }
+            }
+          `}</style>
+
+          {/* Content */}
+          <div style={{
+            position: 'relative', zIndex: 3,
+            minHeight: '100dvh',
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            padding: '48px 24px 80px', textAlign: 'center',
+          }}>
+            {/* Eyebrow */}
+            <motion.p
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.4 }}
+              style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.6rem, 2.5vw, 0.72rem)', letterSpacing: '0.15em', color: '#c4960a', marginBottom: '1rem' }}
+            >The Wedding of</motion.p>
+
+            {/* Couple photo — arch frame premium */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.5, type: 'spring', stiffness: 60, damping: 16 }}
+              style={{ position: 'relative', width: 'clamp(160px, 52vw, 210px)', marginBottom: '1.6rem' }}
+            >
+              {/* Arch photo container */}
+              <div style={{
+                width: '100%', aspectRatio: '3/4',
+                borderRadius: '50% 50% 8px 8px / 40% 40% 8px 8px',
+                overflow: 'hidden',
+                boxShadow: '0 0 0 3px rgba(212,175,55,0.7), 0 0 0 6px rgba(212,175,55,0.2), 0 12px 48px rgba(0,0,0,0.18)',
+                background: '#f5f0e8',
+              }}>
+                <div style={{ display: 'flex', width: '100%', height: '100%' }}>
+                  <img src="/couple/Mempelai%20Wanita.jpg" alt="Mempelai Wanita"
+                    style={{ width: '50%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+                  <img src="/couple/Mempelai%20Pria.jpg" alt="Mempelai Pria"
+                    style={{ width: '50%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }} />
+                </div>
+              </div>
+              {/* Gold ornament top */}
+              <div style={{
+                position: 'absolute', top: -10, left: '50%', transform: 'translateX(-50%)',
+                width: 20, height: 20, borderRadius: '50%',
+                background: 'radial-gradient(circle, #f5c842, #c4960a)',
+                boxShadow: '0 0 8px rgba(212,175,55,0.8)',
+              }} />
+            </motion.div>
+
+            {/* Names */}
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.7 }}
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.8rem, 8vw, 2.8rem)', fontWeight: 400, color: '#1a1209', lineHeight: 1.15, margin: '0 0 0.5rem' }}
+            >M. Riyan</motion.h1>
+            <motion.p
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1rem, 4vw, 1.3rem)', fontStyle: 'italic', color: '#c4960a', margin: '0 0 0.5rem' }}
+            >&amp;</motion.p>
+            <motion.h1
+              initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.9 }}
+              style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(1.6rem, 7vw, 2.4rem)', fontWeight: 400, fontStyle: 'italic', color: '#1a1209', lineHeight: 1.15, margin: '0 0 0.4rem' }}
+            >Siti Arbayah</motion.h1>
+
+            {/* Gold divider */}
+            <motion.div
+              initial={{ scaleX: 0 }} animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 1.0 }}
+              style={{ width: 60, height: 1.5, background: 'linear-gradient(90deg, transparent, #c4960a, transparent)', margin: '0.6rem auto 1rem', transformOrigin: 'center' }}
+            />
+
+            {/* Date */}
+            <motion.p
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 1.05 }}
+              style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.55rem, 2vw, 0.65rem)', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(26,18,9,0.55)', marginBottom: '1rem' }}
+            >Minggu · 05 Juli 2026</motion.p>
+
+            {/* Guest name */}
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+              transition={{ duration: 0.7, delay: 0.9 }}
+              style={{ marginBottom: '1.8rem' }}
+            >
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.55rem, 2vw, 0.65rem)', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c4960a', marginBottom: '0.3rem' }}>Dear</p>
+              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: guestName ? 'clamp(0.95rem, 4vw, 1.1rem)' : '0.9rem', color: '#1a1209', fontStyle: guestName ? 'italic' : 'normal' }}>
+                {guestName || 'Nama Tamu'}
+              </p>
+            </motion.div>
+
+            {/* Button */}
+            <motion.button
+              ref={btnRef} onClick={handleOpen}
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 1.1 }}
+              whileHover={{ scale: 1.04, boxShadow: '0 8px 28px rgba(212,175,55,0.5)' }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                position: 'relative', overflow: 'hidden', display: 'inline-flex', alignItems: 'center',
+                padding: 'clamp(0.7rem, 3vw, 0.8rem) clamp(1.8rem, 6vw, 2.4rem)',
+                background: 'linear-gradient(135deg, #c4960a 0%, #c4960a 50%, #c4960a 100%)',
+                color: '#fff', border: 'none', borderRadius: 999,
+                fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.7rem, 2.5vw, 0.78rem)',
+                fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase',
+                cursor: 'pointer', boxShadow: '0 4px 20px rgba(212,175,55,0.4)', touchAction: 'manipulation',
+              }}
+            >
+              <span className="btn-shimmer" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.28) 50%, transparent 62%)', pointerEvents: 'none' }} />
+              Buka Undangan
+            </motion.button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   )
 }

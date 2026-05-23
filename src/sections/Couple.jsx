@@ -1,116 +1,85 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import anime from 'animejs/lib/anime.es.js'
 import SplitTextReveal from '../components/SplitTextReveal'
 
 gsap.registerPlugin(ScrollTrigger)
 
 const COUPLE = [
   {
+    id: 'pria',
+    src: '/couple/Mempelai%20Pria.jpg',
+    alt: 'Mempelai Pria',
     label: 'Mempelai Pria',
     name: 'M. Riyan',
     subtitle: 'Putra ke-3 dari\nBpk. Saiful & Ibu Maimunah',
-    src: '/couple/Mempelai-Pria.jpg',
-    alt: 'Foto mempelai pria M. Riyan',
-    objectPosition: 'top center',
-    nudgeUp: '0%',
-    offsetY: '0px',   // ← atur posisi vertikal card pria
+    imgPos: 'center top',
   },
   {
+    id: 'wanita',
+    src: '/couple/Mempelai%20Wanita.jpg',
+    alt: 'Mempelai Wanita',
     label: 'Mempelai Wanita',
     name: 'Siti Arbayah',
     subtitle: 'Putri ke-2 dari\nBpk. H. Nordin & Ibu Hj. Siti Asyiah',
-    src: '/couple/Mempelai-Wanita.jpg',
-    alt: 'Foto mempelai wanita Siti Arbayah',
-    objectPosition: 'center center',
-    nudgeUp: '0%',
-    offsetY: '0px',
-    scale: '1',
+    imgPos: 'center top',
   },
 ]
 
+/* ── Gold corner ornament ── */
+function GoldCorner({ size = 36, rotate = 0 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 36 36" fill="none"
+      aria-hidden="true"
+      style={{ display: 'block', transform: `rotate(${rotate}deg)` }}
+    >
+      <path d="M2 34 L2 2 L34 2" stroke="#d4a843" strokeWidth="1.5"
+        fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
+      <circle cx="2" cy="2" r="2.5" fill="#d4a843" opacity="0.7"/>
+      <circle cx="34" cy="2" r="1.5" fill="#d4a843" opacity="0.5"/>
+      <circle cx="2" cy="34" r="1.5" fill="#d4a843" opacity="0.5"/>
+    </svg>
+  )
+}
+
 export default function Couple() {
   const sectionRef = useRef(null)
-  const photoRefs  = useRef([])
-  const overlayRefs = useRef([])
-  const detailRefs  = useRef([])
-
-  const handleEnter = (i) => {
-    const nudge = COUPLE[i].nudgeUp !== '0%' ? 1.22 : 1
-    gsap.to(photoRefs.current[i], {
-      scale: nudge * 1.06,
-      transformOrigin: 'top center',
-      duration: 0.8, ease: 'power2.out'
-    })
-    gsap.to(overlayRefs.current[i], { opacity: 1, duration: 0.5, ease: 'power2.out' })
-    anime({
-      targets: detailRefs.current[i]?.querySelectorAll('.detail-line'),
-      translateY: [12, 0],
-      opacity:    [0, 1],
-      delay: anime.stagger(55, { start: 80 }),
-      duration: 380,
-      easing: 'easeOutExpo',
-    })
-  }
-
-  const handleLeave = (i) => {
-    const nudge = COUPLE[i].nudgeUp !== '0%' ? 1.22 : 1
-    gsap.to(photoRefs.current[i], {
-      scale: nudge,
-      transformOrigin: 'top center',
-      duration: 0.7, ease: 'power2.inOut'
-    })
-    gsap.to(overlayRefs.current[i], { opacity: 0, duration: 0.4, ease: 'power2.in' })
-  }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-
       // Header reveal
-      gsap.fromTo(
-        sectionRef.current.querySelectorAll('.couple-header > *'),
-        { opacity: 0, y: 50, filter: 'blur(6px)' },
-        {
-          opacity: 1, y: 0, filter: 'blur(0px)',
-          stagger: 0.16, duration: 1, ease: 'power3.out',
-          scrollTrigger: { trigger: '.couple-header', start: 'top 82%', once: true },
-        }
+      gsap.fromTo('.couple-header > *',
+        { opacity: 0, y: 40, filter: 'blur(6px)' },
+        { opacity: 1, y: 0, filter: 'blur(0px)', stagger: 0.15, duration: 1, ease: 'power3.out',
+          scrollTrigger: { trigger: '.couple-header', start: 'top 82%', once: true } }
       )
 
-      // Cards entrance — left rotates in from left, right from right
-      gsap.fromTo('.couple-card:nth-child(1)',
-        { opacity: 0, x: -80, rotation: -5, transformOrigin: 'left center' },
-        { opacity: 1, x: 0,  rotation: 0,
-          duration: 1.3, ease: 'power4.out',
+      // Cards — left from left, right from right
+      gsap.fromTo('.couple-card-left',
+        { opacity: 0, x: -60, rotation: -4 },
+        { opacity: 1, x: 0, rotation: 0, duration: 1.2, ease: 'power4.out',
           scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
       )
-      gsap.fromTo('.couple-card:nth-child(2)',
-        { opacity: 0, x: 80, rotation: 5, transformOrigin: 'right center' },
-        { opacity: 1, x: 0, rotation: 0,
-          duration: 1.3, ease: 'power4.out', delay: 0.1,
+      gsap.fromTo('.couple-card-right',
+        { opacity: 0, x: 60, rotation: 4 },
+        { opacity: 1, x: 0, rotation: 0, duration: 1.2, ease: 'power4.out', delay: 0.1,
           scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
       )
 
-      // Photo parallax
-      sectionRef.current.querySelectorAll('.couple-photo').forEach(img => {
-        gsap.fromTo(img,
-          { yPercent: -6 },
-          { yPercent: 6, ease: 'none',
-            scrollTrigger: {
-              trigger: img.closest('.couple-card'),
-              start: 'top bottom', end: 'bottom top', scrub: 1.5,
-            } }
-        )
-      })
+      // Info text stagger
+      gsap.fromTo('.couple-info',
+        { opacity: 0, y: 20 },
+        { opacity: 1, y: 0, stagger: 0.15, duration: 0.8, ease: 'power3.out', delay: 0.4,
+          scrollTrigger: { trigger: '.couple-cards', start: 'top 78%', once: true } }
+      )
 
-      // Gold shimmer sweep
-      sectionRef.current.querySelectorAll('.couple-shimmer').forEach((el, i) => {
+      // Gold shimmer on cards
+      sectionRef.current.querySelectorAll('.card-shimmer').forEach((el, i) => {
         gsap.fromTo(el,
           { x: '-110%' },
           { x: '210%', duration: 1.4, ease: 'power2.inOut',
-            delay: 0.9 + i * 0.15,
-            scrollTrigger: { trigger: el.closest('.couple-card'), start: 'top 85%', once: true } }
+            delay: 0.8 + i * 0.2,
+            scrollTrigger: { trigger: el.closest('.couple-card-wrap'), start: 'top 85%', once: true } }
         )
       })
 
@@ -118,175 +87,150 @@ export default function Couple() {
     return () => ctx.revert()
   }, [])
 
+  const handleEnter = (e) => {
+    const card = e.currentTarget.querySelector('.couple-card-img')
+    gsap.to(card, { scale: 1.06, duration: 0.7, ease: 'power2.out' })
+    gsap.to(e.currentTarget.querySelector('.card-overlay'), { opacity: 1, duration: 0.4 })
+  }
+  const handleLeave = (e) => {
+    const card = e.currentTarget.querySelector('.couple-card-img')
+    gsap.to(card, { scale: 1, duration: 0.6, ease: 'power2.inOut' })
+    gsap.to(e.currentTarget.querySelector('.card-overlay'), { opacity: 0, duration: 0.4 })
+  }
+
   return (
-    <section
-      ref={sectionRef}
-      className="section"
-      id="couple"
-      style={{ position: 'relative', overflow: 'hidden' }}
-    >
-      <div style={{ position: 'relative', zIndex: 1 }}>
+    <section ref={sectionRef} className="section" id="couple" style={{ position: 'relative' }}>
 
-        {/* ── Header ── */}
-        <div className="couple-header" style={{ textAlign: 'center' }}>
-          <SplitTextReveal type="fade" className="section-subtitle" style={{ display: 'block' }}>
-            Bismillahirrahmanirrahim
-          </SplitTextReveal>
-          <SplitTextReveal type="slide" className="section-title" style={{ display: 'block' }}>
-            Dua Hati, Satu Janji
-          </SplitTextReveal>
-          <div className="gold-divider" />
-          <SplitTextReveal
-            type="blur" stagger={0.018}
-            style={{
-              display: 'block',
-              fontSize: '0.95rem',
-              color: 'var(--color-text-muted)',
-              lineHeight: 2,
-              maxWidth: 460,
-              margin: 'var(--space-4) auto 0',
-            }}
-          >
-            Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral kami.
-          </SplitTextReveal>
-        </div>
-
-        {/* ── Portrait cards ── */}
-        <div className="couple-cards" style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 'clamp(12px, 3vw, 28px)',
-          marginTop: 'var(--space-10)',
-          alignItems: 'start',
+      {/* Header */}
+      <div className="couple-header" style={{ textAlign: 'center' }}>
+        <SplitTextReveal type="fade" className="section-subtitle" style={{ display: 'block' }}>
+          Bismillahirrahmanirrahim
+        </SplitTextReveal>
+        <SplitTextReveal type="slide" className="section-title" style={{ display: 'block' }}>
+          Dua Hati, Satu Janji
+        </SplitTextReveal>
+        <div className="gold-divider" />
+        <SplitTextReveal type="blur" stagger={0.018} style={{
+          display: 'block', fontSize: '0.95rem',
+          color: 'var(--color-text-muted)', lineHeight: 2,
+          maxWidth: 460, margin: 'var(--space-4) auto 0',
         }}>
-          {COUPLE.map((p, i) => (
+          Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral kami.
+        </SplitTextReveal>
+      </div>
+
+      {/* Cards */}
+      <div className="couple-cards" style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr',
+        gap: 'clamp(16px, 4vw, 32px)',
+        marginTop: 'var(--space-10)',
+        alignItems: 'start',
+      }}>
+        {COUPLE.map((p, i) => (
+          <div key={p.id} className={`couple-card-wrap couple-card-${i === 0 ? 'left' : 'right'}`}
+            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-5)' }}
+          >
+            {/* ── Photo card with gold frame ── */}
             <div
-              key={i}
-              className="couple-card"
-              onMouseEnter={() => handleEnter(i)}
-              onMouseLeave={() => handleLeave(i)}
-              onTouchStart={() => handleEnter(i)}
-              onTouchEnd={() => handleLeave(i)}
+              onMouseEnter={handleEnter}
+              onMouseLeave={handleLeave}
               style={{
                 position: 'relative',
-                marginTop: p.offsetY,
-                /* Elegant oval/arch top — portrait shape */
-                borderRadius: '999px 999px 40px 40px',
-                overflow: 'hidden',
-                /* Tall portrait ratio */
-                aspectRatio: '2/3',
-                boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 6px 20px rgba(212,175,55,0.12)',
-                border: '1px solid rgba(212,175,55,0.25)',
+                width: '100%',
                 cursor: 'default',
-                willChange: 'transform',
               }}
             >
-              {/* Photo */}
-              <img
-                ref={el => photoRefs.current[i] = el}
-                className="couple-photo"
-                src={p.src}
-                alt={p.alt}
-                style={{
-                  position: 'absolute', inset: 0,
-                  width: '100%', height: '100%',
-                  objectFit: 'cover',
-                  objectPosition: p.objectPosition,
-                  willChange: 'transform',
-                  transformOrigin: 'top center',
-                  // nudgeUp shifts the image upward; scale compensates so bottom doesn't gap
-                  transform: `translateY(${p.nudgeUp}) scale(${p.scale || (p.nudgeUp !== '0%' ? 1.22 : 1)})`,
-                }}
-              />
-
-              {/* Gold shimmer sweep */}
-              <div className="couple-shimmer" style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(110deg, transparent 38%, rgba(212,175,55,0.22) 50%, transparent 62%)',
+              {/* Outer gold border frame */}
+              <div style={{
+                position: 'absolute', inset: -6,
+                borderRadius: 'calc(var(--radius-lg) + 6px)',
+                border: '1px solid rgba(212,175,55,0.35)',
                 pointerEvents: 'none', zIndex: 2,
               }} />
 
-              {/* Permanent soft gradient at bottom — only covers lower 40% */}
+              {/* Inner card */}
               <div style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(to top, rgba(15,10,5,0.92) 0%, rgba(15,10,5,0.6) 28%, rgba(15,10,5,0.1) 48%, transparent 58%)',
-                zIndex: 3,
-                pointerEvents: 'none',
-              }} />
-
-              {/* Hover deepening overlay */}
-              <div
-                ref={el => overlayRefs.current[i] = el}
-                style={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(to top, rgba(15,10,5,0.55) 0%, rgba(15,10,5,0.2) 60%, transparent 100%)',
-                  opacity: 0,
-                  zIndex: 4,
-                  pointerEvents: 'none',
-                }}
-              />
-
-              {/* Info — floats over photo, compact to avoid covering face */}
-              <div
-                ref={el => detailRefs.current[i] = el}
-                style={{
-                  position: 'absolute',
-                  bottom: 0, left: 0, right: 0,
-                  padding: 'clamp(10px, 3vw, 22px)',
-                  zIndex: 5,
-                  textAlign: 'center',
-                }}
-              >
-                {/* Label */}
-                <p className="detail-line" style={{
-                  fontSize: 'clamp(0.6rem, 2vw, 0.7rem)',
-                  letterSpacing: '0.2em',
-                  textTransform: 'uppercase',
-                  color: 'var(--color-gold-light)',
-                  marginBottom: 4,
-                  fontWeight: 700,
-                  textShadow: '0 1px 6px rgba(0,0,0,0.8)',
-                }}>
-                  {p.label}
-                </p>
-
-                {/* Gold thin line */}
-                <div className="detail-line" style={{
-                  width: 28, height: 1,
-                  background: 'var(--color-gold-gradient)',
-                  margin: '0 auto 8px',
-                  borderRadius: '1px',
-                  opacity: 0.8,
+                position: 'relative',
+                aspectRatio: '3/4',
+                borderRadius: 'var(--radius-lg)',
+                overflow: 'hidden',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(212,175,55,0.12)',
+                border: '1px solid rgba(212,175,55,0.4)',
+              }}>
+                {/* Photo */}
+                <div className="couple-card-img" style={{
+                  width: '100%', height: '100%',
+                  backgroundImage: `url(${p.src})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: p.imgPos,
+                  willChange: 'transform',
                 }} />
 
-                {/* Name */}
-                <p className="detail-line" style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1.1rem, 3.5vw, 1.45rem)',
-                  color: '#fff',
-                  lineHeight: 1.15,
-                  marginBottom: 6,
-                  fontWeight: 400,
-                  textShadow: '0 2px 10px rgba(0,0,0,0.9)',
-                }}>
-                  {p.name}
-                </p>
+                {/* Gold shimmer sweep */}
+                <div className="card-shimmer" style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(110deg, transparent 38%, rgba(212,175,55,0.2) 50%, transparent 62%)',
+                  pointerEvents: 'none', zIndex: 1,
+                }} />
 
-                {/* Subtitle — hidden on very small screens to avoid covering face */}
-                <p className="detail-line couple-subtitle" style={{
-                  fontSize: 'clamp(0.7rem, 1.8vw, 0.78rem)',
-                  color: 'rgba(255,255,255,0.9)',
-                  lineHeight: 1.65,
-                  whiteSpace: 'pre-line',
-                  textShadow: '0 1px 6px rgba(0,0,0,0.8)',
-                }}>
-                  {p.subtitle}
-                </p>
+                {/* Hover overlay */}
+                <div className="card-overlay" style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to top, rgba(26,18,9,0.7) 0%, transparent 55%)',
+                  opacity: 0, zIndex: 2, pointerEvents: 'none',
+                }} />
+              </div>
+
+              {/* Gold corner ornaments */}
+              <div style={{ position: 'absolute', top: -2, left: -2, zIndex: 3 }}>
+                <GoldCorner size={28} rotate={0} />
+              </div>
+              <div style={{ position: 'absolute', top: -2, right: -2, zIndex: 3 }}>
+                <GoldCorner size={28} rotate={90} />
+              </div>
+              <div style={{ position: 'absolute', bottom: -2, left: -2, zIndex: 3 }}>
+                <GoldCorner size={28} rotate={270} />
+              </div>
+              <div style={{ position: 'absolute', bottom: -2, right: -2, zIndex: 3 }}>
+                <GoldCorner size={28} rotate={180} />
               </div>
             </div>
-          ))}
-        </div>
 
+            {/* ── Info below card ── */}
+            <div className="couple-info" style={{ textAlign: 'center', width: '100%' }}>
+              {/* Gold line top */}
+              <div style={{
+                width: 40, height: 1,
+                background: 'var(--color-gold-gradient)',
+                margin: '0 auto var(--space-3)',
+                borderRadius: '1px',
+              }} />
+
+              <p style={{
+                fontSize: '0.62rem', letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'var(--color-gold-dark)', fontWeight: 700,
+                marginBottom: 'var(--space-2)',
+              }}>{p.label}</p>
+
+              <h3 style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(1.15rem, 3vw, 1.5rem)',
+                fontWeight: 400, color: 'var(--color-text)',
+                marginBottom: 'var(--space-3)',
+                lineHeight: 1.2,
+              }}>{p.name}</h3>
+
+              {p.subtitle.split('\n').map((line, j) => (
+                <p key={j} style={{
+                  fontSize: '0.78rem', color: 'var(--color-text-muted)',
+                  lineHeight: 1.75, letterSpacing: '0.01em',
+                }}>{line}</p>
+              ))}
+            </div>
+          </div>
+        ))}
       </div>
     </section>
   )

@@ -4,10 +4,12 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import SplitTextReveal from '../components/SplitTextReveal'
 
 const SLIDES = [
-  { src: '/gallery/Albums1.jpg', caption: 'Momen Pertama' },
+  { src: '/gallery/Albums1.jpg', caption: 'Selamanya' },
   { src: '/gallery/Albums2.jpg', caption: 'Bersama Selalu' },
   { src: '/gallery/Albums3.jpg', caption: 'Penuh Cinta' },
   { src: '/gallery/Albums4.jpg', caption: 'Satu Hati' },
+  { src: '/gallery/Albums5.jpg', caption: 'Kenangan Indah' },
+  { src: '/gallery/Albums6.jpg', caption: 'Momen Pertama' },
 ]
 
 export default function HorizontalGallery() {
@@ -82,8 +84,8 @@ export default function HorizontalGallery() {
     return () => ctx.revert()
   }, [])
 
-  const col1 = [SLIDES[0], SLIDES[2]]
-  const col2 = [SLIDES[1], SLIDES[3]]
+  const col1 = [SLIDES[0], SLIDES[2], SLIDES[4]]
+  const col2 = [SLIDES[1], SLIDES[3], SLIDES[5]]
 
   return (
     <section
