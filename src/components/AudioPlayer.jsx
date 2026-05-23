@@ -86,7 +86,7 @@ export default function AudioPlayer({ visible = false }) {
 
   return (
     <>
-      <audio ref={audioRef} src={PLAYLIST[0].src} preload="auto" />
+      <audio ref={audioRef} src={PLAYLIST[0].src} preload="auto" loop />
 
       <div ref={wrapRef} style={{
         position: 'fixed',

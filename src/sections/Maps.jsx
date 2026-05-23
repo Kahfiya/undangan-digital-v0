@@ -71,7 +71,6 @@ export default function Maps() {
                 <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem' }}>Minggu, 05 Juli 2026</p>
               </div>
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', paddingLeft: 48 }}>Setelah Akad — selesai</p>
             <p style={{ fontSize: '0.85rem', fontWeight: 500, paddingLeft: 48, marginTop: 'var(--space-1)' }}>
               Komplek Nusantara Griya Permai Blok E
             </p>

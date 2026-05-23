@@ -307,18 +307,6 @@ export default function EnvelopeGate({ onOpen }) {
               style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.55rem, 2vw, 0.65rem)', letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(26,18,9,0.55)', marginBottom: '1rem' }}
             >Minggu · 05 Juli 2026</motion.p>
 
-            {/* Guest name */}
-            <motion.div
-              initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.9 }}
-              style={{ marginBottom: '1.8rem' }}
-            >
-              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.55rem, 2vw, 0.65rem)', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c4960a', marginBottom: '0.3rem' }}>Dear</p>
-              <p style={{ fontFamily: "'Playfair Display', serif", fontSize: guestName ? 'clamp(0.95rem, 4vw, 1.1rem)' : '0.9rem', color: '#1a1209', fontStyle: guestName ? 'italic' : 'normal' }}>
-                {guestName || 'Kahfiya Nur Gunami'}
-              </p>
-            </motion.div>
-
             {/* Button */}
             <motion.button
               ref={btnRef} onClick={handleOpen}
