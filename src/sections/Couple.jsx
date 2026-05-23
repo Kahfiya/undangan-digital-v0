@@ -239,12 +239,13 @@ export default function Couple() {
               >
                 {/* Label */}
                 <p className="detail-line" style={{
-                  fontSize: 'clamp(0.5rem, 1.4vw, 0.6rem)',
-                  letterSpacing: '0.25em',
+                  fontSize: 'clamp(0.6rem, 2vw, 0.7rem)',
+                  letterSpacing: '0.2em',
                   textTransform: 'uppercase',
                   color: 'var(--color-gold-light)',
                   marginBottom: 4,
-                  fontWeight: 600,
+                  fontWeight: 700,
+                  textShadow: '0 1px 6px rgba(0,0,0,0.8)',
                 }}>
                   {p.label}
                 </p>
@@ -261,22 +262,23 @@ export default function Couple() {
                 {/* Name */}
                 <p className="detail-line" style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1rem, 3.2vw, 1.45rem)',
+                  fontSize: 'clamp(1.1rem, 3.5vw, 1.45rem)',
                   color: '#fff',
                   lineHeight: 1.15,
                   marginBottom: 6,
                   fontWeight: 400,
-                  textShadow: '0 2px 12px rgba(0,0,0,0.6)',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.9)',
                 }}>
                   {p.name}
                 </p>
 
                 {/* Subtitle — hidden on very small screens to avoid covering face */}
                 <p className="detail-line couple-subtitle" style={{
-                  fontSize: 'clamp(0.65rem, 1.6vw, 0.78rem)',
-                  color: 'rgba(255,255,255,0.75)',
+                  fontSize: 'clamp(0.7rem, 1.8vw, 0.78rem)',
+                  color: 'rgba(255,255,255,0.9)',
                   lineHeight: 1.65,
                   whiteSpace: 'pre-line',
+                  textShadow: '0 1px 6px rgba(0,0,0,0.8)',
                 }}>
                   {p.subtitle}
                 </p>

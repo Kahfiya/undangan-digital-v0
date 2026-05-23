@@ -184,7 +184,15 @@ a { text-decoration: none; color: inherit; }
   opacity: 0.35;
 }
 
-/* Hide couple subtitle on narrow mobile to prevent face overlap */
-@media (max-width: 400px) {
-  .couple-subtitle { display: none; }
+/* Couple text readability on mobile */
+@media (max-width: 480px) {
+  .couple-subtitle {
+    display: block !important;
+    font-size: 0.72rem !important;
+    color: rgba(255,255,255,0.9) !important;
+    text-shadow: 0 1px 6px rgba(0,0,0,0.8);
+  }
+  .detail-line {
+    text-shadow: 0 1px 8px rgba(0,0,0,0.9);
+  }
 }
