@@ -15,7 +15,7 @@ const COUPLE = [
     alt: 'Foto mempelai pria M. Riyan',
     objectPosition: 'top center',
     nudgeUp: '0%',
-    offsetY: '90px',   // ← atur posisi vertikal card pria
+    offsetY: '0px',   // ← atur posisi vertikal card pria
   },
   {
     label: 'Mempelai Wanita',
