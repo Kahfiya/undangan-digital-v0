@@ -53,9 +53,9 @@ export default function EnvelopeGate({ onOpen }) {
 
   // Button sits 24px below the date/guest block
   const btnY = guestName ? 414 : 345
-  const btnW = 200
-  const btnH = 44
-  const btnX = W /2 - btnW / 2 - 18
+  const btnW = 220
+  const btnH = 46
+  const btnX = W / 2 - btnW / 2   // = 90, centered on W=400
 
   useEffect(() => {
     const hide = (el) => {
@@ -130,7 +130,7 @@ export default function EnvelopeGate({ onOpen }) {
     >
       {/* Ambient glow — HTML div, not SVG, so no overflow issue */}
       <div aria-hidden="true" style={{
-        position: 'absolute', top: '30%', left: '40%',
+        position: 'absolute', top: '42%', left: '50%',
         transform: 'translate(-50%,-50%)',
         width: 480, height: 480,
         borderRadius: '50%',
@@ -147,6 +147,7 @@ export default function EnvelopeGate({ onOpen }) {
           height: 'auto',
           overflow: 'hidden',
           display: 'block',
+          margin: '0 auto',
           position: 'relative',
           zIndex: 1,
         }}
@@ -322,15 +323,15 @@ export default function EnvelopeGate({ onOpen }) {
             clipPath="url(#btnClip)"
           />
 
-          {/* Label */}
+          {/* Label — perfectly centered */}
           <text
-            x={btnX + btnW / 2} y={btnY + btnH / 2 + 4}
+            x={W / 2} y={btnY + btnH / 2 + 3.5}
             textAnchor="middle"
+            dominantBaseline="auto"
             fontFamily="'Montserrat', sans-serif"
-            fontSize="10" letterSpacing="3"
-            textLength="140" lengthAdjust="spacing"
+            fontSize="9.5" letterSpacing="4"
             fill={gold}
-            style={{ userSelect: 'none' }}
+            style={{ userSelect: 'none', pointerEvents: 'none' }}
           >BUKA UNDANGAN</text>
 
           {/* Hover fill — toggled via onMouseEnter/Leave */}
