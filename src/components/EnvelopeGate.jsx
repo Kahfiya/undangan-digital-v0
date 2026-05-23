@@ -41,8 +41,6 @@ export default function EnvelopeGate({ onOpen }) {
   const dateRef     = useRef(null)
   const guestRef    = useRef(null)
   const btnGroupRef = useRef(null)
-  const btnBgRef    = useRef(null)
-  const shimmerRef  = useRef(null)
 
   // Fixed viewBox — all elements must fit inside
   const W = 400
@@ -102,21 +100,11 @@ export default function EnvelopeGate({ onOpen }) {
       .to(guestRef.current, { opacity: 1, duration: 0.45, ease: 'power2.out' }, '-=0.05')
       .to(btnGroupRef.current, { opacity: 1, scale: 1, duration: 0.65, ease: 'back.out(1.5)' }, '-=0.05')
 
-    // Repeating shimmer sweep on button
-    gsap.fromTo(shimmerRef.current,
-      { x: -btnW },
-      { x: btnW * 1.5, duration: 2, ease: 'power1.inOut', repeat: -1, repeatDelay: 2, delay: 2.8 }
-    )
-
     return () => tl.kill()
   }, [])
 
   const handleOpen = () => {
-    const tl = gsap.timeline({ onComplete: onOpen })
-    tl.to(btnGroupRef.current, { scale: 0.95, duration: 0.1, ease: 'power2.in',
-        transformOrigin: `${W/2}px ${btnY + btnH/2}px` })
-      .to(btnGroupRef.current, { scale: 1.04, duration: 0.15, ease: 'power2.out' })
-      .to(overlayRef.current,  { opacity: 0, duration: 0.85, ease: 'power3.inOut' }, '-=0.05')
+    gsap.to(overlayRef.current, { opacity: 0, duration: 0.85, ease: 'power3.inOut', onComplete: onOpen })
   }
 
   return (
@@ -154,18 +142,9 @@ export default function EnvelopeGate({ onOpen }) {
         aria-label="Undangan pernikahan M. Riyan dan Siti Arbayah"
       >
         <defs>
-          {/* Clip button shimmer to pill shape */}
           <clipPath id="btnClip">
             <rect x={btnX} y={btnY} width={btnW} height={btnH} rx={btnH / 2} />
           </clipPath>
-          {/* Shimmer gradient */}
-          <linearGradient id="shimmerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%"   stopColor="white" stopOpacity="0" />
-            <stop offset="40%"  stopColor="white" stopOpacity="0" />
-            <stop offset="50%"  stopColor="white" stopOpacity="0.4" />
-            <stop offset="60%"  stopColor="white" stopOpacity="0" />
-            <stop offset="100%" stopColor="white" stopOpacity="0" />
-          </linearGradient>
         </defs>
 
         {/* ── Floating dust particles ── */}
@@ -301,49 +280,24 @@ export default function EnvelopeGate({ onOpen }) {
           </>}
         </g>
 
-        {/* ── Button group ── */}
-        <g ref={btnGroupRef} style={{ cursor: 'pointer' }} onClick={handleOpen}>
-          {/* Pill border */}
-          <rect
-            x={btnX} y={btnY}
-            width={btnW} height={btnH}
-            rx={btnH / 2}
-            fill="rgba(212,168,67,0.07)"
-            ref={btnBgRef}
-            stroke={gold}
-            strokeWidth="1.2"
-          />
-
-          {/* Shimmer sweep — clipped to pill */}
-          <rect
-            ref={shimmerRef}
-            x={btnX - btnW} y={btnY}
-            width={btnW} height={btnH}
-            fill="url(#shimmerGrad)"
-            clipPath="url(#btnClip)"
-          />
-
-          {/* Label — perfectly centered */}
-          <text
-            x={W / 2} y={btnY + btnH / 2 + 3.5}
-            textAnchor="middle"
-            dominantBaseline="auto"
-            fontFamily="'Montserrat', sans-serif"
-            fontSize="9.5" letterSpacing="4"
-            fill={gold}
-            style={{ userSelect: 'none', pointerEvents: 'none' }}
-          >BUKA UNDANGAN</text>
-
-          {/* Hover fill — toggled via onMouseEnter/Leave */}
-          <rect
-            x={btnX} y={btnY}
-            width={btnW} height={btnH}
-            rx={btnH / 2}
-            fill="transparent"
-            onMouseEnter={e => gsap.to(btnBgRef.current, { attr: { fill: 'rgba(212,168,67,0.16)' }, duration: 0.3 })}
-            onMouseLeave={e => gsap.to(btnBgRef.current, { attr: { fill: 'rgba(212,168,67,0.07)' }, duration: 0.3 })}
-          />
-        </g>
+        {/* ── Button ── */}
+        <foreignObject x={btnX} y={btnY} width={btnW} height={btnH} ref={btnGroupRef}>
+          <button
+            onClick={handleOpen}
+            style={{
+              width: '100%', height: '100%',
+              background: 'transparent',
+              border: `1.2px solid ${gold}`,
+              borderRadius: btnH / 2,
+              cursor: 'pointer',
+              fontFamily: "'Montserrat', sans-serif",
+              fontSize: 10,
+              letterSpacing: '4px',
+              color: gold,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >BUKA UNDANGAN</button>
+        </foreignObject>
 
         {/* ── Bottom dot trio ── */}
         <g opacity="0.28">

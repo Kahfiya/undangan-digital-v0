@@ -14,6 +14,8 @@ const COUPLE = [
     src: '/couple/Mempelai-Pria.jpg',
     alt: 'Foto mempelai pria M. Riyan',
     objectPosition: 'top center',
+    nudgeUp: '0%',
+    offsetY: '90px',   // ← atur posisi vertikal card pria
   },
   {
     label: 'Mempelai Wanita',
@@ -22,6 +24,9 @@ const COUPLE = [
     src: '/couple/Mempelai-Wanita.jpg',
     alt: 'Foto mempelai wanita Siti Arbayah',
     objectPosition: 'center center',
+    nudgeUp: '0%',
+    offsetY: '0px',
+    scale: '1',
   },
 ]
 
@@ -32,8 +37,13 @@ export default function Couple() {
   const detailRefs  = useRef([])
 
   const handleEnter = (i) => {
-    gsap.to(photoRefs.current[i],  { scale: 1.07, duration: 0.8, ease: 'power2.out' })
-    gsap.to(overlayRefs.current[i], { opacity: 1,  duration: 0.5, ease: 'power2.out' })
+    const nudge = COUPLE[i].nudgeUp !== '0%' ? 1.22 : 1
+    gsap.to(photoRefs.current[i], {
+      scale: nudge * 1.06,
+      transformOrigin: 'top center',
+      duration: 0.8, ease: 'power2.out'
+    })
+    gsap.to(overlayRefs.current[i], { opacity: 1, duration: 0.5, ease: 'power2.out' })
     anime({
       targets: detailRefs.current[i]?.querySelectorAll('.detail-line'),
       translateY: [12, 0],
@@ -45,7 +55,12 @@ export default function Couple() {
   }
 
   const handleLeave = (i) => {
-    gsap.to(photoRefs.current[i],  { scale: 1,   duration: 0.7, ease: 'power2.inOut' })
+    const nudge = COUPLE[i].nudgeUp !== '0%' ? 1.22 : 1
+    gsap.to(photoRefs.current[i], {
+      scale: nudge,
+      transformOrigin: 'top center',
+      duration: 0.7, ease: 'power2.inOut'
+    })
     gsap.to(overlayRefs.current[i], { opacity: 0, duration: 0.4, ease: 'power2.in' })
   }
 
@@ -154,6 +169,7 @@ export default function Couple() {
               onTouchEnd={() => handleLeave(i)}
               style={{
                 position: 'relative',
+                marginTop: p.offsetY,
                 /* Elegant oval/arch top — portrait shape */
                 borderRadius: '999px 999px 40px 40px',
                 overflow: 'hidden',
@@ -177,7 +193,9 @@ export default function Couple() {
                   objectFit: 'cover',
                   objectPosition: p.objectPosition,
                   willChange: 'transform',
-                  transformOrigin: 'center center',
+                  transformOrigin: 'top center',
+                  // nudgeUp shifts the image upward; scale compensates so bottom doesn't gap
+                  transform: `translateY(${p.nudgeUp}) scale(${p.scale || (p.nudgeUp !== '0%' ? 1.22 : 1)})`,
                 }}
               />
 
@@ -188,10 +206,10 @@ export default function Couple() {
                 pointerEvents: 'none', zIndex: 2,
               }} />
 
-              {/* Permanent soft gradient at bottom — always readable */}
+              {/* Permanent soft gradient at bottom — only covers lower 40% */}
               <div style={{
                 position: 'absolute', inset: 0,
-                background: 'linear-gradient(to top, rgba(15,10,5,0.88) 0%, rgba(15,10,5,0.45) 38%, transparent 65%)',
+                background: 'linear-gradient(to top, rgba(15,10,5,0.92) 0%, rgba(15,10,5,0.6) 28%, rgba(15,10,5,0.1) 48%, transparent 58%)',
                 zIndex: 3,
                 pointerEvents: 'none',
               }} />
@@ -208,24 +226,24 @@ export default function Couple() {
                 }}
               />
 
-              {/* Info — always visible, floats over photo */}
+              {/* Info — floats over photo, compact to avoid covering face */}
               <div
                 ref={el => detailRefs.current[i] = el}
                 style={{
                   position: 'absolute',
                   bottom: 0, left: 0, right: 0,
-                  padding: 'clamp(16px, 4vw, 28px)',
+                  padding: 'clamp(10px, 3vw, 22px)',
                   zIndex: 5,
                   textAlign: 'center',
                 }}
               >
                 {/* Label */}
                 <p className="detail-line" style={{
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.28em',
+                  fontSize: 'clamp(0.5rem, 1.4vw, 0.6rem)',
+                  letterSpacing: '0.25em',
                   textTransform: 'uppercase',
                   color: 'var(--color-gold-light)',
-                  marginBottom: 6,
+                  marginBottom: 4,
                   fontWeight: 600,
                 }}>
                   {p.label}
@@ -233,9 +251,9 @@ export default function Couple() {
 
                 {/* Gold thin line */}
                 <div className="detail-line" style={{
-                  width: 32, height: 1,
+                  width: 28, height: 1,
                   background: 'var(--color-gold-gradient)',
-                  margin: '0 auto 10px',
+                  margin: '0 auto 8px',
                   borderRadius: '1px',
                   opacity: 0.8,
                 }} />
@@ -243,21 +261,21 @@ export default function Couple() {
                 {/* Name */}
                 <p className="detail-line" style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1.15rem, 3.5vw, 1.55rem)',
+                  fontSize: 'clamp(1rem, 3.2vw, 1.45rem)',
                   color: '#fff',
                   lineHeight: 1.15,
-                  marginBottom: 8,
+                  marginBottom: 6,
                   fontWeight: 400,
-                  textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+                  textShadow: '0 2px 12px rgba(0,0,0,0.6)',
                 }}>
                   {p.name}
                 </p>
 
-                {/* Subtitle */}
-                <p className="detail-line" style={{
-                  fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)',
-                  color: 'rgba(255,255,255,0.78)',
-                  lineHeight: 1.75,
+                {/* Subtitle — hidden on very small screens to avoid covering face */}
+                <p className="detail-line couple-subtitle" style={{
+                  fontSize: 'clamp(0.65rem, 1.6vw, 0.78rem)',
+                  color: 'rgba(255,255,255,0.75)',
+                  lineHeight: 1.65,
                   whiteSpace: 'pre-line',
                 }}>
                   {p.subtitle}
