@@ -315,7 +315,7 @@ export default function EnvelopeGate({ onOpen }) {
             >
               <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: 'clamp(0.55rem, 2vw, 0.65rem)', letterSpacing: '0.2em', textTransform: 'uppercase', color: '#c4960a', marginBottom: '0.3rem' }}>Dear</p>
               <p style={{ fontFamily: "'Playfair Display', serif", fontSize: guestName ? 'clamp(0.95rem, 4vw, 1.1rem)' : '0.9rem', color: '#1a1209', fontStyle: guestName ? 'italic' : 'normal' }}>
-                {guestName || 'Nama Tamu'}
+                {guestName || 'Kahfiya Nur Gunami'}
               </p>
             </motion.div>
 

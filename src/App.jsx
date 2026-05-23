@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useClipReveal } from './hooks/useClipReveal'
+import { useAutoScroll } from './hooks/useAutoScroll'
 
 import EnvelopeGate from './components/EnvelopeGate'
 import LoadingScreen from './components/LoadingScreen'
@@ -26,6 +27,7 @@ gsap.registerPlugin(ScrollTrigger)
 export default function App() {
   const [phase, setPhase] = useState('envelope')
   useClipReveal(phase === 'open')
+  useAutoScroll(phase === 'open', 3000, 0.6)
 
   useEffect(() => {
     if (phase !== 'open') return
