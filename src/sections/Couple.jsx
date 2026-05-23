@@ -2,8 +2,9 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import anime from 'animejs/lib/anime.es.js'
-import TextReveal from '../components/TextReveal'
 import SplitTextReveal from '../components/SplitTextReveal'
+
+gsap.registerPlugin(ScrollTrigger)
 
 const COUPLE = [
   {
@@ -13,7 +14,6 @@ const COUPLE = [
     src: '/couple/Mempelai-Pria.jpg',
     alt: 'Foto mempelai pria M. Riyan',
     objectPosition: 'top center',
-    aspectRatio: '3/4',
   },
   {
     label: 'Mempelai Wanita',
@@ -22,121 +22,80 @@ const COUPLE = [
     src: '/couple/Mempelai-Wanita.jpg',
     alt: 'Foto mempelai wanita Siti Arbayah',
     objectPosition: 'center center',
-    aspectRatio: '3/4',
   },
 ]
 
 export default function Couple() {
   const sectionRef = useRef(null)
-  const [hovered, setHovered] = useState(null)
-
-  // Per-card refs for GSAP micro-interactions
-  const photoRefs = useRef([])
+  const photoRefs  = useRef([])
   const overlayRefs = useRef([])
-  const overlayTextRefs = useRef([])
+  const detailRefs  = useRef([])
 
   const handleEnter = (i) => {
-    setHovered(i)
-    // Photo zoom
-    gsap.to(photoRefs.current[i], { scale: 1.08, duration: 0.7, ease: 'power2.out' })
-    // Overlay slide up
-    gsap.to(overlayRefs.current[i], { yPercent: 0, duration: 0.55, ease: 'power3.out' })
-    // Text stagger in
+    gsap.to(photoRefs.current[i],  { scale: 1.07, duration: 0.8, ease: 'power2.out' })
+    gsap.to(overlayRefs.current[i], { opacity: 1,  duration: 0.5, ease: 'power2.out' })
     anime({
-      targets: overlayTextRefs.current[i]?.children,
-      translateY: [20, 0],
-      opacity: [0, 1],
-      delay: anime.stagger(60, { start: 120 }),
-      duration: 400,
+      targets: detailRefs.current[i]?.querySelectorAll('.detail-line'),
+      translateY: [12, 0],
+      opacity:    [0, 1],
+      delay: anime.stagger(55, { start: 80 }),
+      duration: 380,
       easing: 'easeOutExpo',
     })
   }
 
   const handleLeave = (i) => {
-    setHovered(null)
-    gsap.to(photoRefs.current[i], { scale: 1, duration: 0.6, ease: 'power2.inOut' })
-    gsap.to(overlayRefs.current[i], { yPercent: 100, duration: 0.45, ease: 'power3.in' })
+    gsap.to(photoRefs.current[i],  { scale: 1,   duration: 0.7, ease: 'power2.inOut' })
+    gsap.to(overlayRefs.current[i], { opacity: 0, duration: 0.4, ease: 'power2.in' })
   }
 
   useEffect(() => {
     const ctx = gsap.context(() => {
 
-      // ── Header: setiap elemen muncul dengan delay dramatis ──
-      const headerEls = sectionRef.current.querySelectorAll('.couple-header > *')
-      gsap.fromTo(headerEls,
-        { opacity: 0, y: 60, filter: 'blur(8px)' },
+      // Header reveal
+      gsap.fromTo(
+        sectionRef.current.querySelectorAll('.couple-header > *'),
+        { opacity: 0, y: 50, filter: 'blur(6px)' },
         {
           opacity: 1, y: 0, filter: 'blur(0px)',
-          stagger: 0.18,
-          duration: 1.1,
-          ease: 'power3.out',
+          stagger: 0.16, duration: 1, ease: 'power3.out',
           scrollTrigger: { trigger: '.couple-header', start: 'top 82%', once: true },
         }
       )
 
-      // ── Card kiri: masuk dari kiri dengan rotation ──
+      // Cards entrance — left rotates in from left, right from right
       gsap.fromTo('.couple-card:nth-child(1)',
-        { opacity: 0, x: -100, rotation: -6, transformOrigin: 'left center' },
-        {
-          opacity: 1, x: 0, rotation: 0,
-          duration: 1.2, ease: 'power4.out',
-          scrollTrigger: { trigger: '.couple-cards', start: 'top 82%', once: true },
-        }
+        { opacity: 0, x: -80, rotation: -5, transformOrigin: 'left center' },
+        { opacity: 1, x: 0,  rotation: 0,
+          duration: 1.3, ease: 'power4.out',
+          scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
       )
-
-      // ── Card kanan: masuk dari kanan dengan rotation ──
       gsap.fromTo('.couple-card:nth-child(2)',
-        { opacity: 0, x: 100, rotation: 6, transformOrigin: 'right center' },
-        {
-          opacity: 1, x: 0, rotation: 0,
-          duration: 1.2, ease: 'power4.out',
-          delay: 0.12,
-          scrollTrigger: { trigger: '.couple-cards', start: 'top 82%', once: true },
-        }
+        { opacity: 0, x: 80, rotation: 5, transformOrigin: 'right center' },
+        { opacity: 1, x: 0, rotation: 0,
+          duration: 1.3, ease: 'power4.out', delay: 0.1,
+          scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
       )
 
-      // ── Photo parallax — zoom out saat scroll ──
+      // Photo parallax
       sectionRef.current.querySelectorAll('.couple-photo').forEach(img => {
         gsap.fromTo(img,
-          { scale: 1.18, yPercent: -4 },
-          {
-            scale: 1, yPercent: 4,
-            ease: 'none',
+          { yPercent: -6 },
+          { yPercent: 6, ease: 'none',
             scrollTrigger: {
               trigger: img.closest('.couple-card'),
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 1.5,
-            },
-          }
+              start: 'top bottom', end: 'bottom top', scrub: 1.5,
+            } }
         )
       })
 
-      // ── Info text: stagger reveal per baris ──
-      sectionRef.current.querySelectorAll('.couple-info').forEach(info => {
-        gsap.fromTo(Array.from(info.children),
-          { opacity: 0, y: 24 },
-          {
-            opacity: 1, y: 0,
-            stagger: 0.12,
-            duration: 0.8,
-            ease: 'power2.out',
-            scrollTrigger: { trigger: info, start: 'top 92%', once: true },
-          }
-        )
-      })
-
-      // ── Gold shimmer sweep on cards ──
+      // Gold shimmer sweep
       sectionRef.current.querySelectorAll('.couple-shimmer').forEach((el, i) => {
         gsap.fromTo(el,
-          { x: '-100%' },
-          {
-            x: '200%',
-            duration: 1.2,
-            ease: 'power2.inOut',
-            delay: 0.8 + i * 0.15,
-            scrollTrigger: { trigger: el.closest('.couple-card'), start: 'top 85%', once: true },
-          }
+          { x: '-110%' },
+          { x: '210%', duration: 1.4, ease: 'power2.inOut',
+            delay: 0.9 + i * 0.15,
+            scrollTrigger: { trigger: el.closest('.couple-card'), start: 'top 85%', once: true } }
         )
       })
 
@@ -153,158 +112,161 @@ export default function Couple() {
     >
       <div style={{ position: 'relative', zIndex: 1 }}>
 
-        {/* Header */}
+        {/* ── Header ── */}
         <div className="couple-header" style={{ textAlign: 'center' }}>
-          <SplitTextReveal 
-            type="fade" 
-            className="section-subtitle"
-            style={{ display: 'block' }}
-          >
+          <SplitTextReveal type="fade" className="section-subtitle" style={{ display: 'block' }}>
             Bismillahirrahmanirrahim
           </SplitTextReveal>
-          
-          <SplitTextReveal 
-            type="slide" 
-            className="section-title"
-            style={{ display: 'block' }}
-          >
+          <SplitTextReveal type="slide" className="section-title" style={{ display: 'block' }}>
             Dua Hati, Satu Janji
           </SplitTextReveal>
-          
-          <div className="gold-divider" data-pin-animate="scale" />
-          
-          <SplitTextReveal 
-            type="blur" 
-            stagger={0.02}
+          <div className="gold-divider" />
+          <SplitTextReveal
+            type="blur" stagger={0.018}
             style={{
-              fontSize: '0.8rem', 
-              color: 'var(--color-text-muted)',
-              lineHeight: 1.9, 
-              textAlign: 'center', 
-              marginTop: 'var(--space-4)',
-              maxWidth: 480, 
-              margin: 'var(--space-4) auto 0',
               display: 'block',
+              fontSize: '0.95rem',
+              color: 'var(--color-text-muted)',
+              lineHeight: 2,
+              maxWidth: 460,
+              margin: 'var(--space-4) auto 0',
             }}
           >
             Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral kami.
           </SplitTextReveal>
         </div>
 
-        {/* Cards */}
+        {/* ── Portrait cards ── */}
         <div className="couple-cards" style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr',
-          gap: 'var(--space-4)',
+          gap: 'clamp(12px, 3vw, 28px)',
           marginTop: 'var(--space-10)',
+          alignItems: 'start',
         }}>
           {COUPLE.map((p, i) => (
             <div
               key={i}
-              className="couple-card magnetic-target"
-              data-magnetic
+              className="couple-card"
               onMouseEnter={() => handleEnter(i)}
               onMouseLeave={() => handleLeave(i)}
               onTouchStart={() => handleEnter(i)}
               onTouchEnd={() => handleLeave(i)}
               style={{
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 8px 25px rgba(212,175,55,0.1)',
-                border: '1px solid rgba(212,175,55,0.3)',
-                background: 'var(--color-bg-soft)',
-                willChange: 'transform',
                 position: 'relative',
-                cursor: 'none',
-                transition: 'all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+                /* Elegant oval/arch top — portrait shape */
+                borderRadius: '999px 999px 40px 40px',
+                overflow: 'hidden',
+                /* Tall portrait ratio */
+                aspectRatio: '2/3',
+                boxShadow: '0 24px 64px rgba(0,0,0,0.18), 0 6px 20px rgba(212,175,55,0.12)',
+                border: '1px solid rgba(212,175,55,0.25)',
+                cursor: 'default',
+                willChange: 'transform',
               }}
             >
               {/* Photo */}
-              <div data-clip="up" data-parallax="0.2" style={{ 
-                aspectRatio: p.aspectRatio, 
-                overflow: 'hidden', 
-                position: 'relative' 
-              }}>
-                <img
-                  ref={el => photoRefs.current[i] = el}
-                  className="couple-photo"
-                  src={p.src}
-                  alt={p.alt}
-                  style={{
-                    width: '100%', height: '100%',
-                    objectFit: 'cover', objectPosition: p.objectPosition,
-                    display: 'block', willChange: 'transform',
-                    transformOrigin: 'center center',
-                    filter: 'contrast(1.1) saturate(1.1)',
-                  }}
-                />
-                
-                {/* Gold shimmer sweep */}
-                <div className="couple-shimmer" style={{
+              <img
+                ref={el => photoRefs.current[i] = el}
+                className="couple-photo"
+                src={p.src}
+                alt={p.alt}
+                style={{
                   position: 'absolute', inset: 0,
-                  background: 'linear-gradient(105deg, transparent 40%, rgba(212,175,55,0.25) 50%, transparent 60%)',
-                  pointerEvents: 'none', zIndex: 1,
+                  width: '100%', height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: p.objectPosition,
+                  willChange: 'transform',
+                  transformOrigin: 'center center',
+                }}
+              />
+
+              {/* Gold shimmer sweep */}
+              <div className="couple-shimmer" style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(110deg, transparent 38%, rgba(212,175,55,0.22) 50%, transparent 62%)',
+                pointerEvents: 'none', zIndex: 2,
+              }} />
+
+              {/* Permanent soft gradient at bottom — always readable */}
+              <div style={{
+                position: 'absolute', inset: 0,
+                background: 'linear-gradient(to top, rgba(15,10,5,0.88) 0%, rgba(15,10,5,0.45) 38%, transparent 65%)',
+                zIndex: 3,
+                pointerEvents: 'none',
+              }} />
+
+              {/* Hover deepening overlay */}
+              <div
+                ref={el => overlayRefs.current[i] = el}
+                style={{
+                  position: 'absolute', inset: 0,
+                  background: 'linear-gradient(to top, rgba(15,10,5,0.55) 0%, rgba(15,10,5,0.2) 60%, transparent 100%)',
+                  opacity: 0,
+                  zIndex: 4,
+                  pointerEvents: 'none',
+                }}
+              />
+
+              {/* Info — always visible, floats over photo */}
+              <div
+                ref={el => detailRefs.current[i] = el}
+                style={{
+                  position: 'absolute',
+                  bottom: 0, left: 0, right: 0,
+                  padding: 'clamp(16px, 4vw, 28px)',
+                  zIndex: 5,
+                  textAlign: 'center',
+                }}
+              >
+                {/* Label */}
+                <p className="detail-line" style={{
+                  fontSize: '0.6rem',
+                  letterSpacing: '0.28em',
+                  textTransform: 'uppercase',
+                  color: 'var(--color-gold-light)',
+                  marginBottom: 6,
+                  fontWeight: 600,
+                }}>
+                  {p.label}
+                </p>
+
+                {/* Gold thin line */}
+                <div className="detail-line" style={{
+                  width: 32, height: 1,
+                  background: 'var(--color-gold-gradient)',
+                  margin: '0 auto 10px',
+                  borderRadius: '1px',
+                  opacity: 0.8,
                 }} />
 
-                {/* Hover overlay — slides up from bottom */}
-                <div
-                  ref={el => overlayRefs.current[i] = el}
-                  style={{
-                    position: 'absolute', inset: 0,
-                    background: 'linear-gradient(to top, rgba(26,18,9,0.95) 0%, rgba(26,18,9,0.7) 60%, transparent 100%)',
-                    transform: 'translateY(100%)',
-                    display: 'flex', alignItems: 'flex-end',
-                    padding: '24px 20px',
-                    zIndex: 2,
-                  }}
-                >
-                  <div ref={el => overlayTextRefs.current[i] = el}>
-                    <p style={{
-                      fontSize: '0.55rem', letterSpacing: '0.2em', textTransform: 'uppercase',
-                      color: 'var(--color-gold)', marginBottom: 6, opacity: 0,
-                    }}>{p.label}</p>
-                    <p style={{
-                      fontFamily: 'var(--font-heading)', fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
-                      color: '#fff', lineHeight: 1.2, marginBottom: 8, opacity: 0,
-                    }}>{p.name}</p>
-                    <p style={{
-                      fontSize: '0.7rem', color: 'rgba(255,255,255,0.8)',
-                      lineHeight: 1.6, whiteSpace: 'pre-line', opacity: 0,
-                    }}>{p.subtitle}</p>
-                    {/* Gold line accent */}
-                    <div style={{
-                      width: 40, height: 2, marginTop: 12,
-                      background: 'var(--color-gold-gradient)', opacity: 0,
-                      borderRadius: '1px',
-                    }} />
-                  </div>
-                </div>
-              </div>
-
-              {/* Info below photo — visible when not hovered */}
-              <div className="couple-info" style={{
-                padding: 'var(--space-4) var(--space-4) var(--space-5)',
-                transition: 'opacity 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                opacity: hovered === i ? 0.3 : 1,
-              }}>
-                <p style={{
-                  fontSize: '0.55rem', letterSpacing: '0.18em',
-                  textTransform: 'uppercase', color: 'var(--color-gold)',
-                  marginBottom: 'var(--space-1)',
-                }}>{p.label}</p>
-                <p style={{
+                {/* Name */}
+                <p className="detail-line" style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(1rem, 2.5vw, 1.2rem)',
-                  lineHeight: 1.2, marginBottom: 'var(--space-2)',
-                }}>{p.name}</p>
-                <p style={{
-                  fontSize: '0.7rem', color: 'var(--color-text-muted)',
-                  lineHeight: 1.6, whiteSpace: 'pre-line',
-                }}>{p.subtitle}</p>
+                  fontSize: 'clamp(1.15rem, 3.5vw, 1.55rem)',
+                  color: '#fff',
+                  lineHeight: 1.15,
+                  marginBottom: 8,
+                  fontWeight: 400,
+                  textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+                }}>
+                  {p.name}
+                </p>
+
+                {/* Subtitle */}
+                <p className="detail-line" style={{
+                  fontSize: 'clamp(0.72rem, 1.8vw, 0.82rem)',
+                  color: 'rgba(255,255,255,0.78)',
+                  lineHeight: 1.75,
+                  whiteSpace: 'pre-line',
+                }}>
+                  {p.subtitle}
+                </p>
               </div>
             </div>
           ))}
         </div>
+
       </div>
     </section>
   )
