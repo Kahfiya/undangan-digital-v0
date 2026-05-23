@@ -182,7 +182,7 @@ export default function Footer() {
               value={inputName}
               onChange={e => setInputName(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && doShare()}
-              placeholder="Contoh: Budi Santoso"
+              placeholder="Contoh: Kahfiya Nur Gunami"
               style={{
                 width: '100%', padding: '10px 14px',
                 border: '1px solid rgba(212,175,55,0.5)',

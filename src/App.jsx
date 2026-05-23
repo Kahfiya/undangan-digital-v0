@@ -27,7 +27,7 @@ gsap.registerPlugin(ScrollTrigger)
 export default function App() {
   const [phase, setPhase] = useState('envelope')
   useClipReveal(phase === 'open')
-  useAutoScroll(phase === 'open', 3000, 0.6)
+  useAutoScroll(phase === 'open', 3000, 1)
 
   useEffect(() => {
     if (phase !== 'open') return
