@@ -55,7 +55,7 @@ export default function App() {
         <main>
           <Hero />
 
-          {/* Light wrapper: Couple + Gallery */}
+          {/* Dark wrapper: Couple + Gallery */}
           <div style={{
             position: 'relative',
             backgroundImage: 'url(/backgrounds/Background2.jpg)',
@@ -65,7 +65,7 @@ export default function App() {
           }}>
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'rgba(255,255,255,0.85)',
+              background: 'rgba(12,12,12,0.88)',
               pointerEvents: 'none', zIndex: 0,
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
@@ -74,7 +74,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Light wrapper: RSVP → Footer */}
+          {/* Dark wrapper: RSVP → Footer */}
           <div style={{
             position: 'relative',
             backgroundImage: 'url(/backgrounds/Background2.jpg)',
@@ -84,7 +84,7 @@ export default function App() {
           }}>
             <div style={{
               position: 'absolute', inset: 0,
-              background: 'rgba(255,255,255,0.85)',
+              background: 'rgba(12,12,12,0.88)',
               pointerEvents: 'none', zIndex: 0,
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>

@@ -1,34 +1,33 @@
-/* ── Theme Variables — White & Blue Luxury with Gold Accents ── */
+/* ── Theme Variables — Premium Black & White ── */
 :root {
-  --color-bg: #ffffff;
-  --color-bg-soft: #f7f9fc;
-  --color-bg-dark: #0a1628;
-  --color-bg-navy: #0d1f3c;
+  --color-bg: #000000;
+  --color-bg-soft: #0c0c0c;
+  --color-bg-dark: #000000;
+  --color-bg-navy: #080808;
 
-  /* Blue Palette */
-  --color-blue: #1e5fa8;
-  --color-blue-light: #4a8fd4;
-  --color-blue-pale: #d6e8f7;
-  --color-blue-dark: #0d3a6e;
-  --color-blue-accent: #2979c8;
-  --color-blue-gradient: linear-gradient(135deg, #1e5fa8, #4a8fd4, #0d3a6e);
-  --color-blue-glow: rgba(30, 95, 168, 0.35);
+  /* B&W Color Palette */
+  --color-blue: #ffffff;
+  --color-blue-light: #e5e5e5;
+  --color-blue-pale: #1f1f1f;
+  --color-blue-dark: #000000;
+  --color-blue-accent: #ffffff;
+  --color-blue-gradient: linear-gradient(135deg, #ffffff, #a3a3a3, #1f1f1f);
+  --color-blue-glow: rgba(255, 255, 255, 0.15);
 
-  /* Gold Palette */
-  --color-gold: #d4af37;
-  --color-gold-light: #f3e5ab;
-  --color-gold-dark: #aa7c11;
-  --color-gold-gradient: linear-gradient(135deg, #d4af37, #aa7c11);
+  /* Silver/White Accents (replacing Gold) */
+  --color-gold: #ffffff;
+  --color-gold-light: #ffffff;
+  --color-gold-dark: #737373;
+  --color-gold-gradient: linear-gradient(135deg, #ffffff, #737373);
 
-  /* Silver/Pearl accents for luxury feel */
-  --color-silver: #c0cfe0;
-  --color-pearl: #eef4fb;
-  --color-navy-glass: rgba(13, 31, 60, 0.85);
+  --color-silver: #a3a3a3;
+  --color-pearl: #121212;
+  --color-navy-glass: rgba(12, 12, 12, 0.85);
 
-  --color-text: #0d1f3c;
-  --color-text-muted: #4a6080;
+  --color-text: #ffffff;
+  --color-text-muted: #a3a3a3;
   --color-text-light: #ffffff;
-  --color-overlay: rgba(10, 22, 40, 0.5);
+  --color-overlay: rgba(0, 0, 0, 0.7);
 
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
@@ -50,9 +49,9 @@
   --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --shadow-blue: 0 4px 24px rgba(30, 95, 168, 0.25);
-  --shadow-card: 0 2px 20px rgba(13, 31, 60, 0.08);
-  --shadow-glass: 0 8px 32px rgba(30, 95, 168, 0.12);
+  --shadow-blue: 0 4px 24px rgba(255, 255, 255, 0.1);
+  --shadow-card: 0 2px 20px rgba(0, 0, 0, 0.6);
+  --shadow-glass: 0 8px 32px rgba(255, 255, 255, 0.05);
 
   --transition-fast: 150ms ease;
   --transition-smooth: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -166,9 +165,9 @@ a { text-decoration: none; color: inherit; }
   min-height: 48px;
   padding: 0 var(--space-8);
   background: var(--color-blue-gradient);
-  color: #ffffff;
+  color: #000000;
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 600;
   font-size: 0.875rem;
   letter-spacing: 0.1em;
   border-radius: var(--radius-full);
@@ -179,7 +178,7 @@ a { text-decoration: none; color: inherit; }
 
 .btn-gold:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 12px rgba(30, 95, 168, 0.2);
+  box-shadow: 0 2px 12px rgba(255, 255, 255, 0.1);
 }
 
 .btn-outline {
@@ -202,7 +201,7 @@ a { text-decoration: none; color: inherit; }
 
 .btn-outline:active {
   background: var(--color-blue);
-  color: #ffffff;
+  color: #000000;
 }
 
 /* ── Floral ornament (reusable) ── */
@@ -211,7 +210,7 @@ a { text-decoration: none; color: inherit; }
   width: 120px;
   height: auto;
   margin: 0 auto;
-  opacity: 0.35;
+  opacity: 0.15;
 }
 
 /* Couple text readability on mobile */
@@ -229,15 +228,15 @@ a { text-decoration: none; color: inherit; }
 
 /* ── Glassmorphism card ── */
 .glass-card {
-  background: rgba(255, 255, 255, 0.92);
+  background: rgba(12, 12, 12, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(30, 95, 168, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow: var(--shadow-glass);
 }
 
 /* ── Watermark / subtle pattern ── */
 .section-bg-dots {
-  background-image: radial-gradient(circle, rgba(30,95,168,0.06) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px);
   background-size: 24px 24px;
 }
