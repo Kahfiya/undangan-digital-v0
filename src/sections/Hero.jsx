@@ -114,36 +114,20 @@ export default function Hero() {
         perspective: 1200,
       }}
     >
-      {/* Video — compressed untuk mobile, original untuk desktop */}
-      <video
+      {/* Full Screen Photo Background with parallax scale */}
+      <div
         className="hero-video"
-        autoPlay muted loop playsInline
-        aria-hidden="true"
-        poster="/backgrounds/Background.jpg"
         data-parallax="0.3"
-        ref={el => {
-          if (!el) return
-          // Pilih source berdasarkan lebar layar — media attribute tidak support di video
-          const isMobile = window.innerWidth <= 768
-          el.src = isMobile ? '/hero/Hero-bg2-mobile.mp4' : '/hero/Hero-bg2.mp4'
-        }}
         style={{
           position: 'absolute', inset: 0,
           width: '100%', height: '100%',
-          objectFit: 'cover', opacity: 0.6,
+          backgroundImage: 'url(/gallery/Albums3.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.5,
           willChange: 'transform', transformOrigin: 'center center',
         }}
       />
-
-      {/* Fallback background image — tampil jika video gagal load */}
-      <div aria-hidden="true" data-parallax="0.2" style={{
-        position: 'absolute', inset: 0,
-        backgroundImage: 'url(/backgrounds/Background.jpg)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        opacity: 0.4,
-        zIndex: -1,
-      }} />
 
       {/* Dynamic overlay with gradient animation */}
       <div aria-hidden="true" style={{

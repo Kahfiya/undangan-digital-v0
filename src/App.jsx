@@ -18,7 +18,7 @@ import { useCoreVerification } from './hooks/useCoreVerification'
 
 import Hero from './sections/Hero'
 import Couple from './sections/Couple'
-import HorizontalGallery from './sections/HorizontalGallery'
+import Gallery from './sections/Gallery'
 import RSVP from './sections/RSVP'
 import Ucapan from './sections/Ucapan'
 import Maps from './sections/Maps'
@@ -70,7 +70,7 @@ export default function App() {
             }} />
             <div style={{ position: 'relative', zIndex: 1 }}>
               <Couple />
-              <HorizontalGallery />
+              <Gallery />
             </div>
           </div>
 

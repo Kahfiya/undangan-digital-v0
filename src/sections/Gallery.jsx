@@ -7,6 +7,8 @@ const PHOTOS = [
   '/gallery/Albums2.jpg',
   '/gallery/Albums3.jpg',
   '/gallery/Albums4.jpg',
+  '/gallery/Albums5.jpg',
+  '/gallery/Albums6.jpg',
 ]
 
 export default function Gallery() {
@@ -37,8 +39,8 @@ export default function Gallery() {
   return (
     <section ref={sectionRef} className="section" id="gallery">
       <div className="gallery-header" style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-        <p className="section-subtitle">Our Moments</p>
-        <h2 className="section-title">Galeri Foto</h2>
+        <p className="section-subtitle">Momen Indah</p>
+        <h2 className="section-title">Album Foto</h2>
         <div className="gold-divider" />
       </div>
 
@@ -60,7 +62,7 @@ export default function Gallery() {
               overflow: 'hidden',
               cursor: 'pointer',
               aspectRatio: '1',
-              background: 'linear-gradient(135deg, #f5e6c0, #e8cc6a)',
+              background: '#222222',
               WebkitTapHighlightColor: 'transparent',
               transition: 'transform var(--transition-fast)',
             }}

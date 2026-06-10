@@ -61,7 +61,15 @@ function FallingPetals() {
 export default function EnvelopeGate({ onOpen }) {
   const guestName = new URLSearchParams(window.location.search).get('to') || ''
   const [visible, setVisible] = useState(true)
+  const [slideIdx, setSlideIdx] = useState(0)
   const btnRef = useRef(null)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSlideIdx(prev => (prev === 0 ? 1 : 0))
+    }, 4500)
+    return () => clearInterval(interval)
+  }, [])
 
   useEffect(() => {
     const btn = btnRef.current
@@ -89,21 +97,27 @@ export default function EnvelopeGate({ onOpen }) {
           transition={{ duration: 0.65, ease: 'easeInOut' }}
           style={{ position: 'fixed', inset: 0, zIndex: 9999, overflowY: 'auto', overflowX: 'hidden', background: '#f0f5fa' }}
         >
-          {/* Background — video desktop, image mobile */}
-          {typeof window !== 'undefined' && window.innerWidth > 768 ? (
-            <video
-              autoPlay muted loop playsInline
-              style={{ position: 'fixed', inset: 0, zIndex: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-              src="/backgrounds/Background EnvelopeGate.mp4"
-            />
-          ) : (
-            <div style={{
-              position: 'fixed', inset: 0, zIndex: 0,
-              backgroundImage: 'url(/backgrounds/Background2.jpg)',
-              backgroundSize: 'cover', backgroundPosition: 'center',
-            }} />
-          )}
-          <div style={{ position: 'fixed', inset: 0, background: 'rgba(240,245,250,0.45)', zIndex: 0 }} />
+          {/* Background Slideshow with Ken Burns effect */}
+          <div style={{ position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden', background: '#000000' }}>
+            {['/gallery/Albums1.jpg', '/gallery/Albums2.jpg'].map((src, idx) => (
+              <div
+                key={idx}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  backgroundImage: `url(${src})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  opacity: slideIdx === idx ? 1 : 0,
+                  transition: 'opacity 2000ms ease-in-out, transform 8000ms ease-out',
+                  transform: slideIdx === idx ? 'scale(1.12)' : 'scale(1.0)',
+                  willChange: 'transform, opacity',
+                }}
+              />
+            ))}
+          </div>
+          {/* Dark overlay for B&W theme readability */}
+          <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 0 }} />
 
           {/* Bunga jatuh */}
           <FallingPetals />
