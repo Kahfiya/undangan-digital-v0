@@ -17,21 +17,26 @@ export function useAutoScroll(active, delay = 3000, speed = 0.6) {
     const stopHandler = () => {
       stoppedRef.current = true
       cancelAnimationFrame(rafRef.current)
-      window.removeEventListener('touchstart', stopHandler)
+      window.removeEventListener('touchmove', stopHandler)
       window.removeEventListener('wheel', stopHandler)
     }
 
     const timer = setTimeout(() => {
       if (stoppedRef.current) return
 
-      window.addEventListener('touchstart', stopHandler, { passive: true })
+      window.addEventListener('touchmove', stopHandler, { passive: true })
       window.addEventListener('wheel', stopHandler, { passive: true })
 
       const tick = () => {
         if (stoppedRef.current) return
         const lenis = window.__lenis
         const maxScroll = document.body.scrollHeight - window.innerHeight
-        if (window.scrollY >= maxScroll - 2) return // sudah di bawah
+        
+        // Only trigger end of page stop if the page height is fully loaded (> 500px scrollable area)
+        if (maxScroll > 500 && window.scrollY >= maxScroll - 10) {
+          stopHandler()
+          return
+        }
 
         if (lenis) {
           lenis.scrollTo(window.scrollY + speed, { immediate: true })
@@ -47,7 +52,7 @@ export function useAutoScroll(active, delay = 3000, speed = 0.6) {
     return () => {
       clearTimeout(timer)
       cancelAnimationFrame(rafRef.current)
-      window.removeEventListener('touchstart', stopHandler)
+      window.removeEventListener('touchmove', stopHandler)
       window.removeEventListener('wheel', stopHandler)
     }
   }, [active, delay, speed])
