@@ -108,137 +108,110 @@ export default function Couple() {
             minHeight: '100svh',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            padding: 'var(--space-8) var(--space-6) calc(var(--space-8) + var(--nav-height))',
+            justifyContent: 'flex-end', // Align text at the bottom
+            padding: 'var(--space-8) var(--space-6) calc(var(--space-12) + var(--nav-height))',
             overflow: 'hidden',
           }}
         >
-          {/* Subtle floral background layer */}
+          {/* Full Screen Photo Background */}
+          <img
+            src={p.src}
+            alt={p.alt}
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: p.imgPos,
+              zIndex: 0,
+            }}
+          />
+
+          {/* Smooth Dark Gradient Overlay for text readability */}
           <div style={{
             position: 'absolute',
             inset: 0,
-            background: 'radial-gradient(circle at center, rgba(30,95,168,0.03) 0%, transparent 70%)',
+            background: 'linear-gradient(to top, rgba(13,20,35,0.92) 0%, rgba(13,20,35,0.45) 45%, rgba(13,20,35,0.15) 80%, transparent 100%)',
             pointerEvents: 'none',
+            zIndex: 1,
           }} />
 
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 'var(--space-6)',
-            width: '100%',
-            maxWidth: 400,
-            zIndex: 2,
-          }}>
-            {/* Image frame */}
-            <div className="mempelai-img-wrap" style={{ position: 'relative', width: '80%', aspectRatio: '3/4' }}>
-              {/* Outer gold border frame */}
-              <div style={{
-                position: 'absolute', inset: -6,
-                borderRadius: 'calc(var(--radius-lg) + 6px)',
-                border: '1px solid rgba(212,175,55,0.35)',
-                pointerEvents: 'none', zIndex: 2,
-              }} />
+          {/* Info details aligned at the bottom left */}
+          <div 
+            className="mempelai-info-wrap" 
+            style={{ 
+              position: 'relative',
+              zIndex: 2, 
+              textAlign: 'left', 
+              width: '100%', 
+              maxWidth: 480,
+              alignSelf: 'flex-start',
+            }}
+          >
+            <p style={{
+              fontSize: '0.75rem', 
+              letterSpacing: '0.2em',
+              textTransform: 'uppercase',
+              color: 'var(--color-gold-light)', 
+              fontWeight: 600,
+              marginBottom: 'var(--space-2)',
+              fontFamily: 'var(--font-body)',
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            }}>{p.label}</p>
 
-              {/* Inner card container */}
-              <div style={{
-                position: 'relative',
-                width: '100%',
-                height: '100%',
-                borderRadius: 'var(--radius-lg)',
-                overflow: 'hidden',
-                boxShadow: '0 20px 60px rgba(13,31,60,0.15), 0 4px 16px rgba(212,175,55,0.12)',
-                border: '1px solid rgba(212,175,55,0.4)',
-              }}>
-                <img
-                  src={p.src}
-                  alt={p.alt}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: p.imgPos,
-                  }}
-                />
-              </div>
+            <h3 style={{
+              fontFamily: 'var(--font-heading)',
+              fontSize: 'clamp(2rem, 8vw, 3rem)',
+              fontWeight: 400, 
+              color: '#ffffff',
+              marginBottom: 'var(--space-3)',
+              lineHeight: 1.15,
+              textShadow: '0 2px 8px rgba(0,0,0,0.6)',
+            }}>{p.name}</h3>
 
-              {/* Gold corner ornaments */}
-              <div style={{ position: 'absolute', top: -2, left: -2, zIndex: 3 }}>
-                <GoldCorner size={28} rotate={0} />
-              </div>
-              <div style={{ position: 'absolute', top: -2, right: -2, zIndex: 3 }}>
-                <GoldCorner size={28} rotate={90} />
-              </div>
-              <div style={{ position: 'absolute', bottom: -2, left: -2, zIndex: 3 }}>
-                <GoldCorner size={28} rotate={270} />
-              </div>
-              <div style={{ position: 'absolute', bottom: -2, right: -2, zIndex: 3 }}>
-                <GoldCorner size={28} rotate={180} />
-              </div>
-            </div>
+            <p style={{
+              fontSize: '0.875rem', 
+              color: 'rgba(255,255,255,0.85)',
+              lineHeight: 1.65, 
+              letterSpacing: '0.01em',
+              marginBottom: 'var(--space-5)',
+              textShadow: '0 2px 4px rgba(0,0,0,0.5)',
+            }}>{p.subtitle}</p>
 
-            {/* Info details */}
-            <div className="mempelai-info-wrap" style={{ textAlign: 'center', width: '100%' }}>
-              <div style={{
-                width: 40, height: 1,
-                background: 'var(--color-gold-gradient)',
-                margin: '0 auto var(--space-3)',
-                borderRadius: '1px',
-              }} />
-
-              <p style={{
-                fontSize: '0.65rem', letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: 'var(--color-blue)', fontWeight: 700,
-                marginBottom: 'var(--space-2)',
-              }}>{p.label}</p>
-
-              <h3 style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(1.4rem, 4vw, 1.8rem)',
-                fontWeight: 400, color: 'var(--color-text)',
-                marginBottom: 'var(--space-3)',
-                lineHeight: 1.2,
-              }}>{p.name}</h3>
-
-              <p style={{
-                fontSize: '0.8rem', color: 'var(--color-text-muted)',
-                lineHeight: 1.75, letterSpacing: '0.01em',
-                marginBottom: 'var(--space-4)',
-                padding: '0 var(--space-4)'
-              }}>{p.subtitle}</p>
-
-              {/* Instagram Button */}
-              {p.instagram && (
-                <a
-                  href={`https://instagram.com/${p.instagram.replace('@', '')}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-outline"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: 'var(--space-2)',
-                    minHeight: 38,
-                    padding: '0 var(--space-4)',
-                    fontSize: '0.75rem',
-                    border: '1px solid rgba(30, 95, 168, 0.35)',
-                    color: 'var(--color-blue)',
-                    background: 'rgba(255,255,255,0.6)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                  }}
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-                  </svg>
-                  Instagram
-                </a>
-              )}
-            </div>
+            {/* Instagram Button — Frosted Glass Style */}
+            {p.instagram && (
+              <a
+                href={`https://instagram.com/${p.instagram.replace('@', '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-outline"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 'var(--space-2)',
+                  minHeight: 42,
+                  padding: '0 var(--space-5)',
+                  fontSize: '0.75rem',
+                  border: '1px solid rgba(255, 255, 255, 0.25)',
+                  color: '#ffffff',
+                  background: 'rgba(255,255,255,0.08)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  borderRadius: 'var(--radius-sm)',
+                  letterSpacing: '0.05em',
+                  transition: 'all 0.3s ease',
+                  boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+                }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+                Instagram
+              </a>
+            )}
           </div>
         </section>
       ))}
