@@ -84,7 +84,7 @@ export default function BottomNav() {
   const scrollTo = (id) => {
     const el = document.getElementById(id)
     if (!el) return
-    if (window.__lenis) window.__lenis.scrollTo(el, { offset: 0, duration: 1.6, easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)) })
+    if (window.__lenis) window.__lenis.scrollTo(el, { offset: 0, duration: 0.8, easing: (t) => (t === 1 ? 1 : 1 - Math.pow(2, -10 * t)) })
     else el.scrollIntoView({ behavior: 'smooth' })
   }
 
@@ -97,10 +97,10 @@ export default function BottomNav() {
         left: 0,
         right: 0,
         zIndex: 1000,
-        background: 'rgba(255,255,255,0.92)',
+        background: 'rgba(0,0,0,0.85)', // Dark background
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        borderTop: '1px solid rgba(212,175,55,0.2)',
+        borderTop: '1px solid rgba(255,255,255,0.1)',
         display: 'flex',
         justifyContent: 'space-around',
         alignItems: 'center',

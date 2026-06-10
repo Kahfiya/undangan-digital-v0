@@ -34,7 +34,7 @@ export default function Gift() {
     <section ref={sectionRef} className="section" id="gift" style={{ position: 'relative', overflow: 'hidden', paddingBottom: 'var(--space-12)' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-          <p className="section-subtitle">Hadiah Pernikahan</p>
+          <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Hadiah Pernikahan</p>
           <h2 className="section-title">Amplop Digital</h2>
           <div className="gold-divider" />
           <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-4)', lineHeight: 1.7 }}>
@@ -50,8 +50,8 @@ export default function Gift() {
                 padding: 'var(--space-5) var(--space-6)',
                 background: 'var(--color-bg-soft)',
                 borderRadius: 'var(--radius-lg)',
-                border: '1px solid rgba(212,175,55,0.2)',
-                boxShadow: 'var(--shadow-card)',
+                border: '1px solid rgba(255,255,255,0.15)',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 'var(--space-4)' }}>
@@ -146,9 +146,9 @@ export default function Gift() {
         <div style={{
           marginTop: 'var(--space-8)',
           padding: 'var(--space-6)',
-          background: 'rgba(212,175,55,0.06)',
+          background: 'rgba(255,255,255,0.03)',
           borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(212,175,55,0.15)',
+          border: '1px solid rgba(255,255,255,0.1)',
           textAlign: 'center',
         }}>
           <p style={{

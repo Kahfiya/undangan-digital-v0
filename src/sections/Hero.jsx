@@ -1,100 +1,34 @@
 import { useEffect, useRef } from 'react'
+import { motion } from 'framer-motion'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import FloralSVG from '../components/FloralSVG'
-import FloatingOrnaments from '../components/FloatingOrnaments'
 import SplitTextReveal from '../components/SplitTextReveal'
 
 gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
   const sectionRef  = useRef(null)
-  const floralTopRef = useRef(null)
-  const floralBotRef = useRef(null)
-  const contentRef  = useRef(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-
-      // ── World-class cinematic entrance ──
-      const tl = gsap.timeline({ delay: 0.3 })
-
-      // 1. Container fade in with scale
-      tl.fromTo(sectionRef.current,
-        { opacity: 0, scale: 1.05 },
-        { opacity: 1, scale: 1, duration: 1.2, ease: 'power3.out' }
-      )
-
-      // ── Advanced scroll effects ──
-      
-      // Video scale with perspective
-      gsap.to('.hero-video', {
-        scale: 1.25,
-        rotationX: 2,
+      // Background parallax
+      gsap.to('.hero-bg', {
+        y: '20%',
         ease: 'none',
         scrollTrigger: {
           trigger: sectionRef.current,
           start: 'top top',
           end: 'bottom top',
-          scrub: 1.5,
-        },
+          scrub: true
+        }
       })
 
-      // Content parallax with 3D transform
-      gsap.to(contentRef.current, {
-        y: -120,
-        opacity: 0,
-        rotationX: 15,
-        scale: 0.95,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '50% top',
-          scrub: 1.5,
-        },
-      })
-
-      // Multi-layer floral parallax
-      gsap.to(floralTopRef.current, {
-        y: -160,
-        x: -40,
-        rotation: -15,
-        scale: 1.15,
-        scrollTrigger: { 
-          trigger: sectionRef.current, 
-          start: 'top top', 
-          end: 'bottom top', 
-          scrub: 2 
-        },
-      })
-      
-      gsap.to(floralBotRef.current, {
-        y: 160,
-        x: 40,
-        rotation: 15,
-        scale: 1.15,
-        scrollTrigger: { 
-          trigger: sectionRef.current, 
-          start: 'top top', 
-          end: 'bottom top', 
-          scrub: 2 
-        },
-      })
-
-      // Floating animation for ornaments
-      gsap.to('.floating-ornament', {
-        y: '+=15',
-        rotation: '+=5',
-        duration: 4,
-        ease: 'sine.inOut',
-        repeat: -1,
-        yoyo: true,
-        stagger: 0.5
-      })
-
+      // Reveal elements
+      gsap.fromTo('.hero-content > *',
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, stagger: 0.2, duration: 1.5, ease: 'power3.out' }
+      )
     }, sectionRef)
-
     return () => ctx.revert()
   }, [])
 
@@ -104,165 +38,93 @@ export default function Hero() {
       id="hero"
       style={{
         position: 'relative',
-        minHeight: '100svh',
+        height: '100vh',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        background: 'var(--color-bg-dark)',
-        perspective: 1200,
+        background: '#000000',
+        textAlign: 'center',
+        color: '#FFFFFF'
       }}
     >
-      {/* Full Screen Photo Background with parallax scale */}
-      <div
-        className="hero-video"
-        data-parallax="0.3"
-        style={{
+      {/* Background with Parallax and Overlay */}
+      <div className="hero-bg" style={{ position: 'absolute', inset: '-20% 0', zIndex: 0 }}>
+        <div style={{
           position: 'absolute', inset: 0,
-          width: '100%', height: '100%',
           backgroundImage: 'url(/gallery/Albums3.jpg)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          opacity: 0.5,
-          willChange: 'transform', transformOrigin: 'center center',
-        }}
-      />
-
-      {/* Dynamic overlay with gradient animation */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', inset: 0,
-        background: `
-          linear-gradient(45deg, rgba(26,18,9,0.8) 0%, rgba(26,18,9,0.4) 50%, rgba(26,18,9,0.9) 100%),
-          radial-gradient(circle at 30% 70%, rgba(212,175,55,0.1) 0%, transparent 50%)
-        `,
-        animation: 'gradientShift 8s ease-in-out infinite',
-      }} />
-
-      {/* Floating ornaments with parallax */}
-      <div data-parallax="0.4" data-float>
-        <FloatingOrnaments triggerRef={sectionRef} />
+          filter: 'brightness(0.6)'
+        }} />
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: 'rgba(0, 0, 0, 0.4)'
+        }} />
       </div>
 
+      {/* Content */}
+      <div className="hero-content" style={{ position: 'relative', zIndex: 2, padding: '0 2rem' }}>
+        <p style={{
+          fontFamily: "'Lora', serif",
+          fontSize: '14px',
+          letterSpacing: '0.4em',
+          textTransform: 'uppercase',
+          marginBottom: '1.5rem',
+          opacity: 0.9
+        }}>The Wedding of</p>
 
-
-      {/* Content with magnetic effects */}
-      <div ref={contentRef} data-magnetic style={{
-        position: 'relative', zIndex: 1,
-        textAlign: 'center', padding: '0 var(--space-6)',
-      }}>
-        {/* Eyebrow with SplitTextReveal */}
-        <SplitTextReveal 
-          type="fade" 
-          stagger={0.05}
-          style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.7rem',
-            letterSpacing: '0.35em',
-            textTransform: 'uppercase',
-            color: 'var(--color-gold-light)',
-            marginBottom: 'var(--space-5)',
-            display: 'block',
-          }}
-        >
-          Pernikahan Suci
-        </SplitTextReveal>
-
-        {/* Names with enhanced split text */}
         <h1 style={{
-          fontFamily: 'var(--font-heading)',
-          fontSize: 'clamp(2.75rem, 12vw, 5.5rem)',
-          lineHeight: 1.05,
-          color: '#ffffff',
+          fontFamily: "'Sacramento', cursive",
+          fontSize: 'clamp(3.5rem, 15vw, 6rem)',
           fontWeight: 400,
-          margin: 0,
-        }}>
-          <SplitTextReveal 
-            type="slide" 
-            stagger={0.035}
-            style={{ display: 'block' }}
-          >
-            M. Riyan
-          </SplitTextReveal>
-          
-          {/* Ampersand */}
-          <span style={{
-            display: 'block',
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(1.5rem, 6vw, 3rem)',
-            color: 'var(--color-gold-light)',
-            fontStyle: 'italic',
-            lineHeight: 1.2,
-            margin: '0.2em 0',
-          }}>&amp;</span>
-          
-          <SplitTextReveal 
-            type="slide" 
-            stagger={0.03}
-            style={{
-              display: 'block',
-              color: 'var(--color-gold-light)',
-              fontStyle: 'italic',
-            }}
-          >
-            Siti Arbayah
-          </SplitTextReveal>
-        </h1>
+          lineHeight: 1.1,
+          margin: '0 0 2rem',
+          textShadow: '2px 4px 10px rgba(0,0,0,0.5)'
+        }}>Riyan & Arbayah</h1>
 
-        {/* Divider with glow effect */}
         <div style={{
-          width: 72, height: 2,
-          background: 'var(--color-gold-gradient)',
-          margin: 'var(--space-6) auto',
-          boxShadow: '0 0 20px rgba(212,175,55,0.5)',
-          borderRadius: '1px',
+          width: '60px',
+          height: '1.5px',
+          background: '#FFFFFF',
+          margin: '0 auto 2.5rem',
+          opacity: 0.8
         }} />
 
-        {/* Date with floating animation */}
-        <SplitTextReveal 
-          type="wave" 
-          stagger={0.02}
+        <p style={{
+          fontFamily: "'Lora', serif",
+          fontSize: '18px',
+          letterSpacing: '0.15em',
+          fontWeight: 400
+        }}>05 . 07 . 2026</p>
+      </div>
+
+      {/* Scroll Indicator - 1:1 Lavicia */}
+      <div style={{
+        position: 'absolute',
+        bottom: '2.5rem',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        zIndex: 3
+      }}>
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           style={{
-            fontFamily: 'var(--font-body)',
-            fontSize: '0.8rem',
-            letterSpacing: '0.25em',
-            color: 'rgba(255,255,255,0.9)',
-            textTransform: 'uppercase',
-            display: 'block',
+            width: '1px',
+            height: '60px',
+            background: 'linear-gradient(to bottom, #FFFFFF, transparent)'
           }}
-        >
-          Minggu, 05 Juli 2026
-        </SplitTextReveal>
+        />
       </div>
 
-      {/* Gold Floral Ornaments - Parallax Left & Right */}
-      <div ref={floralTopRef} aria-hidden="true" style={{
-        position: 'absolute', top: -10, left: -40,
-        width: 'clamp(140px, 35vw, 240px)', zIndex: 3, willChange: 'transform',
-      }}>
-        <img src="/backgrounds/Bunga1.png" alt="Ornamen Emas Kiri" style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))' }} />
+      {/* Floating Floral Ornaments */}
+      <div style={{ position: 'absolute', top: '10%', left: '5%', width: '100px', opacity: 0.5 }}>
+        <img src="/backgrounds/Bunga1.png" alt="" style={{ width: '100%' }} />
       </div>
-
-      <div ref={floralBotRef} aria-hidden="true" style={{
-        position: 'absolute', bottom: 40, right: -40,
-        width: 'clamp(120px, 30vw, 200px)', zIndex: 3, willChange: 'transform',
-      }}>
-        <img src="/backgrounds/Bunga3.png" alt="Ornamen Emas Kanan" style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))' }} />
+      <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: '120px', opacity: 0.5, transform: 'rotate(150deg)' }}>
+        <img src="/backgrounds/Bunga1.png" alt="" style={{ width: '100%' }} />
       </div>
-
-      {/* Enhanced fade to next section */}
-      <div aria-hidden="true" style={{
-        position: 'absolute', bottom: 0, left: 0, right: 0, height: 160,
-        background: 'linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.1) 30%, #ffffff 100%)',
-        zIndex: 2, pointerEvents: 'none',
-      }} />
-
-      <style jsx>{`
-        @keyframes gradientShift {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.8; }
-        }
-      `}</style>
     </section>
   )
 }

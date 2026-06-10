@@ -41,7 +41,7 @@ export default function Maps() {
 
   const iconStyle = {
     width: 36, height: 36, borderRadius: '50%',
-    background: 'rgba(212,175,55,0.15)',
+    background: 'rgba(255,255,255,0.1)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   }
 
@@ -49,7 +49,7 @@ export default function Maps() {
     <section ref={sectionRef} className="section" id="maps" style={{ position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div className="maps-header" style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-        <p className="section-subtitle">Lokasi Acara</p>
+        <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Lokasi Acara</p>
         <h2 className="section-title">Venue</h2>
         <div className="gold-divider" />
       </div>
@@ -59,16 +59,16 @@ export default function Maps() {
           padding: 'var(--space-6)',
           background: 'var(--color-bg-soft)',
           borderRadius: 'var(--radius-lg)',
-          border: '1px solid rgba(212,175,55,0.2)',
-          boxShadow: 'var(--shadow-card)',
+          border: '1px solid rgba(255,255,255,0.15)',
+          boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
         }}>
           {/* Resepsi */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
               <div style={iconStyle}>{iconHome}</div>
               <div>
-                <p style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-gold)' }}>Resepsi</p>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem' }}>Minggu, 05 Juli 2026</p>
+                <p style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', fontWeight: 600 }}>Resepsi</p>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: 'var(--color-text)' }}>Minggu, 05 Juli 2026</p>
               </div>
             </div>
             <p style={{ fontSize: '0.85rem', fontWeight: 500, paddingLeft: 48, marginTop: 'var(--space-1)' }}>

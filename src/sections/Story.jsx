@@ -63,7 +63,7 @@ export default function Story() {
     <section ref={sectionRef} className="section" id="story">
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div className="story-header" style={{ textAlign: 'center', marginBottom: 'var(--space-10)' }}>
-          <p className="section-subtitle">Perjalanan Kami</p>
+          <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Perjalanan Kami</p>
           <h2 className="section-title">Kisah Cinta Kami</h2>
           <div className="gold-divider" />
         </div>
@@ -88,16 +88,17 @@ export default function Story() {
                 flex: 1,
                 textAlign: i % 2 === 0 ? 'right' : 'left',
                 padding: 'var(--space-4)',
-                background: 'rgba(255,255,255,0.92)',
+                background: 'rgba(255,255,255,0.05)', // Dark transparent
                 borderRadius: 'var(--radius-md)',
-                border: '1px solid rgba(212,175,55,0.15)',
+                border: '1px solid rgba(255,255,255,0.15)',
                 boxShadow: 'var(--shadow-card)',
+                backdropFilter: 'blur(10px)',
               }}>
                 <p style={{ fontSize: '0.65rem', letterSpacing: '0.2em', color: 'var(--color-gold)', textTransform: 'uppercase', marginBottom: 'var(--space-1)' }}>{item.year}</p>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', marginBottom: 'var(--space-1)' }}>{item.title}</h3>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: '#fff', marginBottom: 'var(--space-1)' }}>{item.title}</h3>
                 <p style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', lineHeight: 1.6 }}>{item.desc}</p>
               </div>
-              <div aria-hidden="true" className="story-dot" style={{ width: 12, height: 12, borderRadius: '50%', background: 'var(--color-gold)', boxShadow: '0 0 0 4px rgba(212,175,55,0.2)', flexShrink: 0, zIndex: 1 }} />
+              <div aria-hidden="true" className="story-dot" style={{ width: 12, height: 12, borderRadius: '50%', background: '#FFFFFF', boxShadow: '0 0 0 4px rgba(255,255,255,0.1)', flexShrink: 0, zIndex: 1 }} />
               <div style={{ flex: 1 }} />
             </div>
           ))}

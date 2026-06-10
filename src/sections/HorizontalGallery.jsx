@@ -91,7 +91,7 @@ export default function HorizontalGallery() {
     <section
       ref={sectionRef}
       id="horizontal-gallery"
-      style={{ position: 'relative', overflow: 'hidden' }}
+      style={{ position: 'relative', overflow: 'hidden', background: 'var(--color-bg)' }}
     >
       {/* Header */}
       <div className="hg-header" style={{
@@ -106,50 +106,31 @@ export default function HorizontalGallery() {
             fontSize: '1.5rem', 
             letterSpacing: '0.4em',
             textTransform: 'uppercase', 
-            color: 'var(--color-gold)',
+            color: 'var(--color-gold-dark)',
             marginBottom: 'var(--space-3)',
             display: 'block',
+            fontWeight: 600,
           }}
         >
-          Album
+          Gallery
         </SplitTextReveal>
         
-        <div className="hg-divider" data-pin-animate="scale" style={{
-          width: 56, height: 2,
-          background: 'var(--color-gold-gradient)',
-          margin: 'var(--space-5) auto 0',
-          borderRadius: '1px',
-          boxShadow: '0 0 15px rgba(212,175,55,0.4)',
-        }} />
+        <div className="gold-divider" style={{ margin: 'var(--space-5) auto 0' }} />
       </div>
 
-      {/* ── Masonry 2-col ── */}
+      {/* ── Vertical Stack ── */}
       <div style={{
         position: 'relative', zIndex: 2,
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 'clamp(8px, 1.5vw, 20px)',
-        padding: '0 clamp(12px, 3vw, 48px) clamp(56px, 9vw, 100px)',
-        maxWidth: 1200,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 'var(--space-8)',
+        padding: '0 1.5rem 6rem',
+        maxWidth: '600px',
         margin: '0 auto',
       }}>
-        {/* Col 1 */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(8px, 1.5vw, 20px)' }}>
-          {col1.map((slide, i) => (
-            <Card key={i} slide={slide} index={i} />
-          ))}
-        </div>
-
-        {/* Col 2 — offset */}
-        <div style={{
-          display: 'flex', flexDirection: 'column',
-          gap: 'clamp(8px, 1.5vw, 20px)',
-          marginTop: 'clamp(28px, 5vw, 56px)',
-        }}>
-          {col2.map((slide, i) => (
-            <Card key={i} slide={slide} index={i + 2} />
-          ))}
-        </div>
+        {SLIDES.map((slide, i) => (
+          <Card key={i} slide={slide} index={i} />
+        ))}
       </div>
     </section>
   )
@@ -167,7 +148,7 @@ function Card({ slide, index }) {
       gsap.to(card, {
         y: -8,
         scale: 1.02,
-        boxShadow: '0 25px 80px rgba(0,0,0,0.6), 0 10px 30px rgba(212,175,55,0.2)',
+        boxShadow: '0 25px 80px rgba(212,175,55,0.1), 0 10px 30px rgba(212,175,55,0.05)',
         duration: 0.6,
         ease: 'power3.out'
       })
@@ -183,7 +164,7 @@ function Card({ slide, index }) {
       gsap.to(card, {
         y: 0,
         scale: 1,
-        boxShadow: '0 12px 48px rgba(0,0,0,0.5)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
         duration: 0.6,
         ease: 'power3.out'
       })
@@ -207,16 +188,15 @@ function Card({ slide, index }) {
   return (
     <div 
       ref={cardRef}
-      className="hg-card magnetic-target" 
-      data-magnetic
+      className="hg-card" 
       style={{
         position: 'relative',
         borderRadius: 'var(--radius-lg)',
         overflow: 'hidden',
-        boxShadow: '0 12px 48px rgba(0,0,0,0.5)',
-        border: '1px solid rgba(212,175,55,0.2)',
+        boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+        border: '1px solid rgba(212,175,55,0.1)',
         willChange: 'transform',
-        cursor: 'none',
+        background: '#fff',
         transition: 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
       }}
     >
@@ -225,51 +205,44 @@ function Card({ slide, index }) {
         src={slide.src}
         alt={slide.caption}
         loading="lazy"
-        data-parallax="0.1"
         style={{
           width: '100%',
           height: 'auto',
           display: 'block',
           willChange: 'transform',
-          filter: 'contrast(1.05) saturate(1.1)',
+          filter: 'brightness(102%) contrast(102%)',
         }}
       />
       
-      {/* Enhanced gradient */}
+      {/* Enhanced light gradient */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.2) 40%, transparent 70%)',
+        background: 'linear-gradient(to top, rgba(252,252,252,0.8) 0%, rgba(252,252,252,0.2) 40%, transparent 70%)',
         pointerEvents: 'none',
       }} />
       
       {/* Caption */}
       <div className="hg-caption" style={{
         position: 'absolute',
-        bottom: 'var(--space-5)',
-        left: 'var(--space-5)',
+        bottom: 'var(--space-4)',
+        left: 'var(--space-4)',
       }}>
-        <SplitTextReveal 
-          type="slide" 
-          stagger={0.03}
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(0.9rem, 1.5vw, 1.1rem)',
-            color: '#fff', 
-            fontStyle: 'italic',
-            marginBottom: 8,
-            textShadow: '0 2px 12px rgba(0,0,0,0.6)',
-            display: 'block',
-          }}
-        >
+        <p style={{
+          fontFamily: 'var(--font-heading)',
+          fontSize: '0.85rem',
+          color: 'var(--color-text)', 
+          fontStyle: 'italic',
+          marginBottom: 4,
+          display: 'block',
+        }}>
           {slide.caption}
-        </SplitTextReveal>
+        </p>
         
         <div style={{ 
-          width: 32, 
-          height: 2, 
+          width: 24, 
+          height: 1.5, 
           background: 'var(--color-gold)',
           borderRadius: '1px',
-          boxShadow: '0 0 10px rgba(212,175,55,0.5)',
         }} />
       </div>
     </div>

@@ -119,89 +119,73 @@ export default function AudioPlayer({ visible = false }) {
         {/* Expanded card — shown only when paused */}
         {!playing && (
           <div style={{
-            background: 'rgba(15,10,5,0.92)',
+            background: 'rgba(255,255,255,0.9)',
             backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(212,175,55,0.35)',
+            border: '1px solid var(--color-gold-light)',
             borderRadius: 16,
-            padding: '14px 16px',
+            padding: '12px 14px',
             display: 'flex',
             alignItems: 'center',
-            gap: 12,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-            minWidth: 200,
+            gap: 10,
+            boxShadow: '0 15px 45px rgba(212,175,55,0.12)',
+            minWidth: 180,
           }}>
             {/* Vinyl disc */}
             <div ref={discRef} style={{
-              width: 52, height: 52, borderRadius: '50%',
+              width: 48, height: 48, borderRadius: '50%',
               flexShrink: 0, position: 'relative',
-              background: '#111',
-              boxShadow: '0 0 0 2px rgba(212,175,55,0.4), 0 4px 12px rgba(0,0,0,0.6)',
+              background: '#FFFFFF',
+              boxShadow: '0 0 0 2px var(--color-gold-light), 0 4px 12px rgba(0,0,0,0.05)',
               overflow: 'hidden',
             }}>
-              {/* Vinyl grooves */}
-              <div style={{
-                position: 'absolute', inset: 0, borderRadius: '50%',
-                background: 'repeating-radial-gradient(circle, #1a1a1a 0px, #111 2px, #1a1a1a 4px)',
-              }} />
               {/* Cover art center */}
               <div style={{
                 position: 'absolute',
-                top: '50%', left: '50%',
-                transform: 'translate(-50%,-50%)',
-                width: 28, height: 28, borderRadius: '50%',
-                overflow: 'hidden',
-                border: '1px solid rgba(212,175,55,0.5)',
+                top: 0, left: 0,
+                width: '100%', height: '100%',
               }}>
                 <img src={track.cover} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
               </div>
-              {/* Center hole */}
-              <div style={{
-                position: 'absolute', top: '50%', left: '50%',
-                transform: 'translate(-50%,-50%)',
-                width: 6, height: 6, borderRadius: '50%',
-                background: '#111',
-                border: '1px solid rgba(212,175,55,0.4)',
-              }} />
             </div>
 
             {/* Song info */}
             <div style={{ flex: 1, minWidth: 0 }}>
               <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.8rem',
+                fontSize: '0.75rem',
                 fontWeight: 600,
-                color: '#fff',
+                color: 'var(--color-text)',
                 whiteSpace: 'nowrap',
                 overflow: 'hidden',
                 textOverflow: 'ellipsis',
-                lineHeight: 1.3,
+                lineHeight: 1.2,
               }}>{track.title}</p>
               <p style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '0.7rem',
-                color: 'var(--color-gold-light)',
-                lineHeight: 1.3,
+                fontSize: '0.65rem',
+                color: 'var(--color-gold-dark)',
+                lineHeight: 1.2,
               }}>{track.artist}</p>
             </div>
 
             {/* Mute */}
             <button onClick={toggleMute} aria-label={muted ? 'Aktifkan suara' : 'Matikan suara'} style={{
-              width: 30, height: 30, borderRadius: '50%', border: 'none', cursor: 'pointer',
-              background: 'rgba(255,255,255,0.08)',
+              width: 28, height: 28, borderRadius: '50%', border: 'none', cursor: 'pointer',
+              background: 'rgba(212,175,55,0.05)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              color: muted ? 'rgba(255,255,255,0.4)' : 'var(--color-gold)',
+              color: muted ? 'var(--color-text-muted)' : 'var(--color-gold-dark)',
               flexShrink: 0,
             }}>
               {muted ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                  <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
-                  <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="23" y1="9" x2="17" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="17" y1="9" x2="23" y2="15" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-                  <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                  <path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               )}
             </button>
@@ -216,21 +200,21 @@ export default function AudioPlayer({ visible = false }) {
             width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer',
             background: 'var(--color-gold-gradient)',
             boxShadow: playing && !muted
-              ? '0 0 0 6px rgba(212,175,55,0.2), 0 4px 16px rgba(212,175,55,0.4)'
-              : '0 4px 16px rgba(212,175,55,0.3)',
+              ? '0 0 0 6px rgba(212,175,55,0.15), 0 10px 25px rgba(212,175,55,0.3)'
+              : '0 8px 20px rgba(0,0,0,0.06)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'box-shadow 0.3s',
+            transition: 'all 0.3s ease',
             WebkitTapHighlightColor: 'transparent',
           }}
         >
           {playing ? (
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <rect x="6" y="4" width="4" height="16" rx="1" fill="#1a1209"/>
-              <rect x="14" y="4" width="4" height="16" rx="1" fill="#1a1209"/>
+              <rect x="6" y="4" width="4" height="16" rx="1" fill="#FFFFFF"/>
+              <rect x="14" y="4" width="4" height="16" rx="1" fill="#FFFFFF"/>
             </svg>
           ) : (
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-              <path d="M8 5l11 7-11 7V5z" fill="#1a1209"/>
+              <path d="M8 5l11 7-11 7V5z" fill="#FFFFFF"/>
             </svg>
           )}
         </button>

@@ -1,22 +1,17 @@
 # Kiro AI Project Instructions: Digital Wedding Invitation "Marbas" Project
 
-## 1. Role & Identity
-- You are an expert Frontend Developer specializing in High-End UI/UX and GSAP animations.
-- Your design language: Minimalist, Luxury, "White & Gold" aesthetic, and highly performant mobile-first architecture.
-- Your code must be modular, clean, and optimized for mobile devices.
+## 0. Single Source of Truth (SSOT)
+- **REFERENSI UTAMA:** Patuhi semua aturan dan struktur dalam [SSOT.md](./SSOT.md).
+- **BAHASA:** Gunakan Bahasa Indonesia untuk semua interaksi dan dokumentasi.
 
-## 1b. UI/UX Standard (WAJIB di semua task frontend)
-- Ikuti **UI UX Pro Max Skill** dari https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
-- Rules yang selalu berlaku:
-  - **Icons:** Gunakan SVG/Phosphor — JANGAN emoji sebagai ikon struktural
-  - **Touch targets:** Minimum 44×44px untuk semua elemen interaktif
-  - **Spacing:** Sistem 4/8px rhythm — jangan nilai arbitrary
-  - **Color tokens:** Gunakan CSS variables — JANGAN hardcode hex di komponen
-  - **Interaction timing:** Micro-interaction 150–300ms, easing natural
-  - **Contrast:** Text ≥4.5:1, secondary ≥3:1 (WCAG)
-  - **Layout:** Scroll content tidak boleh tertutup fixed/sticky bars
-  - **Accessibility:** Semua ikon/gambar punya aria-label, form punya label
-- Jalankan Pre-Delivery Checklist (`.kiro/ui-ux-pro-max.md`) sebelum setiap deliverable
+## 1. Role & Identity
+- Anda adalah Senior Frontend Developer spesialis High-End UI/UX dan GSAP.
+- Standar Kualitas: Minimalist, Luxury, "White & Gold", Mobile-First.
+
+## 1b. Aturan Wajib (Mandatory)
+- Ikuti **UI UX Pro Max Skill**.
+- Gunakan Bahasa Indonesia dalam setiap laporan perubahan.
+- Jangan merusak flow bisnis yang sudah berjalan.
 
 ## 2. Technical Stack & Rules
 - **GSAP (GreenSock):** Must be used for all scroll-triggered animations. Utilize `ScrollTrigger`, `ScrollSmoother`, and `Timeline`.

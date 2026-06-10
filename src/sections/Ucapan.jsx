@@ -206,7 +206,8 @@ export default function Ucapan() {
       <div style={{ textAlign: 'center', marginBottom: 'var(--space-10)' }}>
         <p style={{
           fontSize: '0.65rem', letterSpacing: '0.4em', textTransform: 'uppercase',
-          color: 'var(--color-gold)', marginBottom: 'var(--space-3)',
+          color: 'var(--color-gold-dark)', marginBottom: 'var(--space-3)',
+          fontWeight: 600,
         }}>DOA &amp; UCAPAN</p>
         <h2 ref={titleRef} style={{
           fontFamily: 'var(--font-heading)',
@@ -214,19 +215,18 @@ export default function Ucapan() {
           color: 'var(--color-text)', fontWeight: 400, lineHeight: 1.1,
         }}>Kirim Ucapan</h2>
         <div ref={lineRef} style={{
-          width: 56, height: 1, margin: 'var(--space-4) auto 0',
+          width: 56, height: 1.5, margin: 'var(--space-4) auto 0',
           background: 'var(--color-gold-gradient)',
           transformOrigin: 'left center',
         }} />
       </div>
 
-      {/* Two-column layout */}
+      {/* Single column layout for Form only */}
       <div style={{
-        maxWidth: 1100, margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-        gap: 'var(--space-8)',
-        alignItems: 'start',
+        maxWidth: 600, margin: '0 auto',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
       }}>
 
         {/* ── Form ── */}
@@ -243,7 +243,7 @@ export default function Ucapan() {
                 style={{
                   width: '100%', padding: '14px 18px',
                   background: 'var(--color-bg-soft)',
-                  border: '1px solid rgba(212,175,55,0.3)',
+                  border: '1px solid rgba(255,255,255,0.15)',
                   borderRadius: 12, color: 'var(--color-text)',
                   fontFamily: 'var(--font-body)', fontSize: '0.9rem',
                   outline: 'none', transition: 'border-color 0.3s, box-shadow 0.3s',
@@ -251,11 +251,11 @@ export default function Ucapan() {
                 }}
                 onFocus={e => {
                   e.target.style.borderColor = 'var(--color-gold)'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(245,200,66,0.12)'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(255,255,255,0.05)'
                   anime({ targets: e.target, scale: [1, 1.01], duration: 200, easing: 'easeOutQuad' })
                 }}
                 onBlur={e => {
-                  e.target.style.borderColor = 'rgba(245,200,66,0.2)'
+                  e.target.style.borderColor = 'rgba(255,255,255,0.1)'
                   e.target.style.boxShadow = 'none'
                 }}
               />
@@ -272,7 +272,7 @@ export default function Ucapan() {
                 style={{
                   width: '100%', padding: '14px 18px',
                   background: 'var(--color-bg-soft)',
-                  border: '1px solid rgba(212,175,55,0.3)',
+                  border: '1px solid rgba(255,255,255,0.15)',
                   borderRadius: 12, color: 'var(--color-text)',
                   fontFamily: 'var(--font-body)', fontSize: '0.9rem',
                   outline: 'none', resize: 'none',
@@ -281,10 +281,10 @@ export default function Ucapan() {
                 }}
                 onFocus={e => {
                   e.target.style.borderColor = 'var(--color-gold)'
-                  e.target.style.boxShadow = '0 0 0 3px rgba(245,200,66,0.12)'
+                  e.target.style.boxShadow = '0 0 0 3px rgba(255,255,255,0.05)'
                 }}
                 onBlur={e => {
-                  e.target.style.borderColor = 'rgba(245,200,66,0.2)'
+                  e.target.style.borderColor = 'rgba(255,255,255,0.1)'
                   e.target.style.boxShadow = 'none'
                 }}
               />
@@ -301,76 +301,26 @@ export default function Ucapan() {
                 padding: '15px 24px',
                 background: 'var(--color-gold-gradient)',
                 border: 'none', borderRadius: 12,
-                color: '#1a1209', fontFamily: 'var(--font-body)',
+                color: '#000000', fontFamily: 'var(--font-body)',
                 fontSize: '0.85rem', fontWeight: 700,
                 letterSpacing: '0.15em', textTransform: 'uppercase',
                 cursor: 'pointer',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                 transition: 'box-shadow 0.3s',
-                boxShadow: '0 4px 20px rgba(245,200,66,0.25)',
+                boxShadow: '0 4px 20px rgba(255,255,255,0.1)',
               }}
               onMouseEnter={e => {
-                e.currentTarget.style.boxShadow = '0 6px 30px rgba(245,200,66,0.45)'
+                e.currentTarget.style.boxShadow = '0 6px 30px rgba(255,255,255,0.2)'
                 anime({ targets: e.currentTarget, scale: 1.03, duration: 200, easing: 'easeOutQuad' })
               }}
               onMouseLeave={e => {
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(245,200,66,0.25)'
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(255,255,255,0.1)'
                 anime({ targets: e.currentTarget, scale: 1, duration: 200, easing: 'easeOutQuad' })
               }}
             >
               {submitted ? '✓ Terkirim!' : <>Kirim Ucapan <span>✨</span></>}
             </button>
           </form>
-        </div>
-
-        {/* ── Live Feed ── */}
-        <div ref={feedRef} style={{ opacity: 0 }}>
-          <div style={{
-            maxHeight: 420, overflowY: 'auto',
-            display: 'flex', flexDirection: 'column', gap: 'var(--space-3)',
-            paddingRight: 4,
-            scrollbarWidth: 'thin',
-            scrollbarColor: 'rgba(245,200,66,0.3) transparent',
-          }}>
-            {ucapan.map((item) => (
-              <div key={item.id} className="uc-card" style={{
-                background: 'var(--color-bg-soft)',
-                border: '1px solid rgba(212,175,55,0.2)',
-                borderRadius: 14, padding: '16px 18px',
-                boxShadow: 'var(--shadow-card)',
-              }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 10 }}>
-                  <div style={{
-                    width: 38, height: 38, borderRadius: '50%',
-                    background: getColor(item.name),
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontFamily: 'var(--font-heading)', fontSize: '0.85rem',
-                    color: '#fff', fontWeight: 600, flexShrink: 0,
-                    border: '1.5px solid rgba(245,200,66,0.3)',
-                  }}>
-                    {getInitials(item.name)}
-                  </div>
-                  <div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: '0.85rem', color: 'var(--color-gold)', margin: 0 }}>
-                      {item.name}
-                    </p>
-                    <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', margin: 0 }}>
-                      {timeAgo(item.created_at)}
-                    </p>
-                  </div>
-                </div>
-                <p style={{
-                  fontFamily: 'var(--font-body)', fontSize: '0.85rem',
-                  color: 'var(--color-text)', lineHeight: 1.7, margin: 0,
-                }}>
-                  {item.message}
-                </p>
-              </div>
-            ))}
-          </div>
-          <p style={{ textAlign: 'center', fontSize: '0.7rem', color: 'var(--color-text-muted)', marginTop: 12 }}>
-            {ucapan.length} ucapan telah dikirim
-          </p>
         </div>
       </div>
     </section>

@@ -39,15 +39,15 @@ export default function Gallery() {
   return (
     <section ref={sectionRef} className="section" id="gallery">
       <div className="gallery-header" style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-        <p className="section-subtitle">Momen Indah</p>
+        <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Momen Indah</p>
         <h2 className="section-title">Album Foto</h2>
         <div className="gold-divider" />
       </div>
 
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(2, 1fr)',
-        gap: 'var(--space-3)',
+        gridTemplateColumns: '1fr', // Changed to single column
+        gap: 'var(--space-6)',     // Increased gap for better breathing room
       }}>
         {PHOTOS.map((src, i) => (
           <button
@@ -58,13 +58,14 @@ export default function Gallery() {
             style={{
               padding: 0,
               border: 'none',
-              borderRadius: 'var(--radius-md)',
+              borderRadius: 'var(--radius-lg)', // Increased radius for luxury feel
               overflow: 'hidden',
               cursor: 'pointer',
-              aspectRatio: '1',
-              background: '#222222',
+              aspectRatio: '4/5', // Portrait aspect ratio often used in luxury invites
+              background: 'var(--color-bg-dark)',
               WebkitTapHighlightColor: 'transparent',
               transition: 'transform var(--transition-fast)',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
             }}
             onTouchStart={e => e.currentTarget.style.transform = 'scale(0.97)'}
             onTouchEnd={e => e.currentTarget.style.transform = 'scale(1)'}

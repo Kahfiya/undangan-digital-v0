@@ -89,7 +89,7 @@ export default function Footer() {
         <FloralSVG size={80} opacity={0.3} />
 
         <div>
-          <p className="section-subtitle">Menuju Hari Bahagia</p>
+          <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Menuju Hari Bahagia</p>
           <h2 className="section-title">Hitung Mundur</h2>
           <div className="gold-divider" />
         </div>
@@ -105,7 +105,7 @@ export default function Footer() {
           {countUnit(seconds, 'Detik')}
         </div>
 
-        <div style={{ padding: 'var(--space-6)', background: 'var(--color-bg-soft)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(212,175,55,0.15)' }}>
+        <div style={{ padding: 'var(--space-6)', background: 'var(--color-bg-soft)', borderRadius: 'var(--radius-lg)', border: '1px solid rgba(212,175,55,0.15)', boxShadow: '0 10px 30px rgba(212,175,55,0.05)' }}>
           {/* Teks Arab */}
           <p style={{
             fontFamily: "'Amiri', 'Traditional Arabic', serif",

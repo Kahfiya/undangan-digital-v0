@@ -9,7 +9,6 @@ import LoadingScreen from './components/LoadingScreen'
 import AudioPlayer from './components/AudioPlayer'
 import BottomNav from './components/BottomNav'
 import FallingPetals from './components/FallingPetals'
-import BirdContainer from './components/BirdContainer'
 import MagneticCursor from './components/MagneticCursor'
 import MicroInteractions from './components/MicroInteractions'
 import ScrollProgress from './components/ScrollProgress'
@@ -31,7 +30,7 @@ export default function App() {
   useCoreVerification()
   const [phase, setPhase] = useState('envelope')
   useClipReveal(phase === 'open')
-  useAutoScroll(phase === 'open', 3000, 0.6)
+  useAutoScroll(phase === 'open', 3000, 1.2)
 
   useEffect(() => {
     if (phase !== 'open') return
@@ -45,7 +44,7 @@ export default function App() {
       <CoreVerification />
       <MagneticCursor />
 
-      {/* EnvelopeGate — wekita.id style cover page */}
+      {/* EnvelopeGate — 1:1 Lavicia style cover page */}
       {phase === 'envelope' && (
         <EnvelopeGate onOpen={() => setPhase('open')} />
       )}
@@ -55,39 +54,26 @@ export default function App() {
         <main>
           <Hero />
 
-          {/* Dark wrapper: Couple + Gallery */}
+          {/* Wrapper with Background Image (Like Couple Section) */}
           <div style={{
             position: 'relative',
-            backgroundImage: 'url(/backgrounds/Background2.jpg)',
-            backgroundAttachment: 'fixed',
+            backgroundImage: 'url(/backgrounds/Background.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            backgroundAttachment: 'fixed',
+            backgroundRepeat: 'no-repeat',
           }}>
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'rgba(12,12,12,0.88)',
-              pointerEvents: 'none', zIndex: 0,
+            {/* Dark Overlay for Readability */}
+            <div style={{ 
+              position: 'absolute', 
+              inset: 0, 
+              background: 'rgba(0, 0, 0, 0.75)', 
+              zIndex: 0 
             }} />
+            
             <div style={{ position: 'relative', zIndex: 1 }}>
               <Couple />
               <Gallery />
-            </div>
-          </div>
-
-          {/* Dark wrapper: RSVP → Footer */}
-          <div style={{
-            position: 'relative',
-            backgroundImage: 'url(/backgrounds/Background2.jpg)',
-            backgroundAttachment: 'fixed',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-          }}>
-            <div style={{
-              position: 'absolute', inset: 0,
-              background: 'rgba(12,12,12,0.88)',
-              pointerEvents: 'none', zIndex: 0,
-            }} />
-            <div style={{ position: 'relative', zIndex: 1 }}>
               <RSVP />
               <Ucapan />
               <Maps />
@@ -105,7 +91,6 @@ export default function App() {
           <FallingPetals />
           <MicroInteractions />
           <ScrollProgress />
-          <BirdContainer count={3} />
         </>
       )}
     </>

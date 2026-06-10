@@ -31,7 +31,7 @@ export default function RSVP() {
     width: '100%',
     minHeight: 48,
     padding: 'var(--space-3) var(--space-4)',
-    border: '1px solid rgba(212,175,55,0.3)',
+    border: '1px solid rgba(255,255,255,0.15)',
     borderRadius: 'var(--radius-sm)',
     background: 'var(--color-bg-soft)',
     fontFamily: 'var(--font-body)',
@@ -45,7 +45,7 @@ export default function RSVP() {
     <section ref={sectionRef} className="section" id="rsvp" style={{ position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
-        <p className="section-subtitle">Konfirmasi Kehadiran</p>
+        <p className="section-subtitle" style={{ color: 'var(--color-gold-dark)' }}>Konfirmasi Kehadiran</p>
         <h2 className="section-title">Konfirmasi</h2>
         <div className="gold-divider" />
         <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-4)', lineHeight: 1.7 }}>
@@ -67,7 +67,7 @@ export default function RSVP() {
             onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
             style={inputStyle}
             onFocus={e => e.target.style.borderColor = 'var(--color-gold)'}
-            onBlur={e => e.target.style.borderColor = 'rgba(212,175,55,0.3)'}
+            onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.15)'}
           />
         </div>
 
@@ -79,10 +79,10 @@ export default function RSVP() {
             id="rsvp-attend"
             value={form.attend}
             onChange={e => setForm(f => ({ ...f, attend: e.target.value }))}
-            style={{ ...inputStyle, appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
+            style={{ ...inputStyle, appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
           >
-            <option value="hadir">Insya Allah Hadir</option>
-            <option value="tidak">Mohon Maaf, Tidak Hadir</option>
+            <option value="hadir" style={{ background: '#000' }}>Insya Allah Hadir</option>
+            <option value="tidak" style={{ background: '#000' }}>Mohon Maaf, Tidak Hadir</option>
           </select>
         </div>
 
@@ -95,9 +95,9 @@ export default function RSVP() {
               id="rsvp-guests"
               value={form.guests}
               onChange={e => setForm(f => ({ ...f, guests: e.target.value }))}
-              style={{ ...inputStyle, appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23d4af37' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
+              style={{ ...inputStyle, appearance: 'none', backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23ffffff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`, backgroundRepeat: 'no-repeat', backgroundPosition: 'right 16px center' }}
             >
-              {[1,2,3,4,5].map(n => <option key={n} value={n}>{n} orang</option>)}
+              {[1,2,3,4,5].map(n => <option key={n} value={n} style={{ background: '#000' }}>{n} orang</option>)}
             </select>
           </div>
         )}

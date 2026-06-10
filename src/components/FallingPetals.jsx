@@ -1,15 +1,17 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
+const COLORS = ['#FFFFFF', '#FDFCF0', '#F1E5AC', '#D4AF37', '#F9F4E3']
+
 // Petal shapes — variety untuk visual interest
 const SHAPES = [
   // Teardrop
-  (op) => `<path d="M9 0 C14 5, 18 11, 9 22 C0 11, 4 5, 9 0Z" fill="white" opacity="${op}"/>
+  (op, color) => `<path d="M9 0 C14 5, 18 11, 9 22 C0 11, 4 5, 9 0Z" fill="${color}" opacity="${op}"/>
             <path d="M9 3 C9 3 9 16 9 20" stroke="rgba(255,255,255,0.3)" stroke-width="0.5"/>`,
   // Round petal
-  (op) => `<ellipse cx="9" cy="11" rx="7" ry="10" fill="white" opacity="${op}"/>`,
+  (op, color) => `<ellipse cx="9" cy="11" rx="7" ry="10" fill="${color}" opacity="${op}"/>`,
   // Thin petal
-  (op) => `<path d="M9 0 C11 6, 12 14, 9 22 C6 14, 7 6, 9 0Z" fill="white" opacity="${op}"/>`,
+  (op, color) => `<path d="M9 0 C11 6, 12 14, 9 22 C6 14, 7 6, 9 0Z" fill="${color}" opacity="${op}"/>`,
 ]
 
 const PETAL_COUNT = 22
@@ -81,6 +83,7 @@ export default function FallingPetals() {
     >
       {Array.from({ length: PETAL_COUNT }, (_, i) => {
         const shape = SHAPES[i % SHAPES.length]
+        const color = COLORS[i % COLORS.length]
         const op = (0.55 + (i % 4) * 0.1).toFixed(2)
         return (
           <svg
@@ -90,7 +93,7 @@ export default function FallingPetals() {
             viewBox="0 0 18 22"
             fill="none"
             style={{ position: 'absolute', top: 0, willChange: 'transform' }}
-            dangerouslySetInnerHTML={{ __html: shape(op) }}
+            dangerouslySetInnerHTML={{ __html: shape(op, color) }}
           />
         )
       })}
