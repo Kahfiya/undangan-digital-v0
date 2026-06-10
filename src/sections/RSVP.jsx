@@ -46,7 +46,7 @@ export default function RSVP() {
       <div style={{ position: 'relative', zIndex: 1 }}>
       <div style={{ textAlign: 'center', marginBottom: 'var(--space-8)' }}>
         <p className="section-subtitle">Konfirmasi Kehadiran</p>
-        <h2 className="section-title">RSVP</h2>
+        <h2 className="section-title">Konfirmasi</h2>
         <div className="gold-divider" />
         <p style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', marginTop: 'var(--space-4)', lineHeight: 1.7 }}>
           Mohon konfirmasi kehadiran Anda paling lambat <strong>28 Juni 2026</strong>

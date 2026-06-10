@@ -63,7 +63,7 @@ export default function Story() {
     <section ref={sectionRef} className="section" id="story">
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div className="story-header" style={{ textAlign: 'center', marginBottom: 'var(--space-10)' }}>
-          <p className="section-subtitle">Our Journey</p>
+          <p className="section-subtitle">Perjalanan Kami</p>
           <h2 className="section-title">Kisah Cinta Kami</h2>
           <div className="gold-divider" />
         </div>

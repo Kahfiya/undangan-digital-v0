@@ -116,11 +116,11 @@ export default function Footer() {
             direction: 'rtl',
             marginBottom: 'var(--space-4)',
           }}>
-            وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً
+            وَمِنْ آيَاتِهِ أَنْ خَلَقَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَاجًا لِّتَسْكُنُوا إِلَيْهَا وَجَعَلَ بَيْنَكُم مَّوَدَّةً وَرَحْمَةً ۚ إِنَّ فِي ذَٰلِكَ لَآيَاتٍ لِّقَوْمٍ يَتَفَكَّرُونَ
           </p>
           <div style={{ width: 40, height: 1, background: 'var(--color-gold)', opacity: 0.4, margin: '0 auto var(--space-4)' }} />
           <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', fontStyle: 'italic', lineHeight: 1.7, color: 'var(--color-text-muted)' }}>
-            "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu istri-istri dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya."
+            "Dan di antara tanda-tanda (kebesaran)-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang. Sungguh, pada yang demikian itu benar-benar terdapat tanda-tanda (kebesaran Allah) bagi kaum yang berpikir."
           </p>
           <p style={{ fontSize: '0.7rem', color: 'var(--color-gold)', marginTop: 'var(--space-3)', letterSpacing: '0.1em' }}>
             — QS. Ar-Rum: 21
@@ -145,7 +145,7 @@ export default function Footer() {
         </button>
 
         <p style={{ fontSize: '0.7rem', color: 'var(--color-text-muted)', paddingBottom: 'var(--space-4)' }}>
-          Made with ♥ · M. Riyan & Siti Arbayah 2026
+          Dibuat dengan ♥ · M. Riyan & Siti Arbayah 2026
         </p>
       </div>
 

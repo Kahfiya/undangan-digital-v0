@@ -3,6 +3,12 @@ import gsap from 'gsap'
 
 const PLAYLIST = [
   {
+    src: '/audio/Ari Lasso - Cinta Terakhir.mp3',
+    cover: '/audio/ari_lasso_cover.jpeg',
+    title: 'Cinta Terakhir',
+    artist: 'Ari Lasso',
+  },
+  {
     src: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.mp3',
     cover: '/audio/SpotiDown.App - Beautiful In White - Shane Filan.jpeg',
     title: 'Beautiful In White',
@@ -18,7 +24,6 @@ export default function AudioPlayer({ visible = false }) {
   const [trackIdx, setTrackIdx] = useState(0)
   const [playing, setPlaying] = useState(false)
   const [muted, setMuted] = useState(false)
-  const [expanded, setExpanded] = useState(false)
 
   const track = PLAYLIST[trackIdx]
   const trackIdxRef = useRef(trackIdx)
@@ -36,15 +41,30 @@ export default function AudioPlayer({ visible = false }) {
     return () => audio.removeEventListener('ended', onEnded)
   }, [trackIdx])
 
+  // Sync playing state with actual audio element
+  useEffect(() => {
+    const audio = audioRef.current
+    if (!audio) return
+    if (playing) {
+      audio.play().catch(() => setPlaying(false))
+    } else {
+      audio.pause()
+    }
+  }, [playing])
+
   // Load new track when trackIdx changes (skip on mount, handled by visible effect)
   const mountedRef = useRef(false)
   useEffect(() => {
-    if (!mountedRef.current) { mountedRef.current = true; return }
+    if (!mountedRef.current) {
+      mountedRef.current = true
+      return
+    }
     const audio = audioRef.current
     if (!audio) return
-    audio.src = PLAYLIST[trackIdx].src
     audio.load()
-    audio.play().then(() => setPlaying(true)).catch(() => {})
+    if (playing) {
+      audio.play().catch(() => setPlaying(false))
+    }
   }, [trackIdx])
 
   useEffect(() => {
@@ -53,7 +73,7 @@ export default function AudioPlayer({ visible = false }) {
       { opacity: 0, scale: 0.7, y: 20 },
       { opacity: 1, scale: 1, y: 0, duration: 0.6, ease: 'back.out(1.7)', delay: 1 }
     )
-    audioRef.current?.play().then(() => setPlaying(true)).catch(() => {})
+    setPlaying(true)
   }, [visible])
 
   // Spin disc when playing
@@ -70,10 +90,7 @@ export default function AudioPlayer({ visible = false }) {
   }, [playing, muted])
 
   const togglePlay = () => {
-    const a = audioRef.current
-    if (!a) return
-    if (playing) { a.pause(); setPlaying(false) }
-    else { a.play().then(() => setPlaying(true)).catch(() => {}) }
+    setPlaying(prev => !prev)
   }
 
   const toggleMute = () => {
@@ -86,7 +103,7 @@ export default function AudioPlayer({ visible = false }) {
 
   return (
     <>
-      <audio ref={audioRef} src={PLAYLIST[0].src} preload="auto" loop />
+      <audio ref={audioRef} src={PLAYLIST[trackIdx].src} preload="auto" />
 
       <div ref={wrapRef} style={{
         position: 'fixed',
@@ -99,8 +116,8 @@ export default function AudioPlayer({ visible = false }) {
         alignItems: 'flex-end',
         gap: 'var(--space-2)',
       }}>
-        {/* Expanded card */}
-        {expanded && (
+        {/* Expanded card — shown only when paused */}
+        {!playing && (
           <div style={{
             background: 'rgba(15,10,5,0.92)',
             backdropFilter: 'blur(16px)',
@@ -193,7 +210,7 @@ export default function AudioPlayer({ visible = false }) {
 
         {/* Main play button */}
         <button
-          onClick={() => { togglePlay(); setExpanded(true) }}
+          onClick={togglePlay}
           aria-label={playing ? 'Pause musik' : 'Play musik'}
           style={{
             width: 48, height: 48, borderRadius: '50%', border: 'none', cursor: 'pointer',

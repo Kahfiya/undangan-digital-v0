@@ -57,9 +57,10 @@ export default function Hero() {
 
       // Multi-layer floral parallax
       gsap.to(floralTopRef.current, {
-        y: -120,
-        rotation: 10,
-        scale: 1.1,
+        y: -160,
+        x: -40,
+        rotation: -15,
+        scale: 1.15,
         scrollTrigger: { 
           trigger: sectionRef.current, 
           start: 'top top', 
@@ -69,9 +70,10 @@ export default function Hero() {
       })
       
       gsap.to(floralBotRef.current, {
-        y: 120,
-        rotation: -10,
-        scale: 1.1,
+        y: 160,
+        x: 40,
+        rotation: 15,
+        scale: 1.15,
         scrollTrigger: { 
           trigger: sectionRef.current, 
           start: 'top top', 
@@ -158,13 +160,7 @@ export default function Hero() {
         <FloatingOrnaments triggerRef={sectionRef} />
       </div>
 
-      {/* Floral top with enhanced parallax */}
-      <div ref={floralTopRef} aria-hidden="true" data-parallax="0.6" style={{
-        position: 'absolute', top: -20, left: '50%',
-        transform: 'translateX(-50%)', willChange: 'transform',
-      }}>
-        <FloralSVG size={160} opacity={0.25} />
-      </div>
+
 
       {/* Content with magnetic effects */}
       <div ref={contentRef} data-magnetic style={{
@@ -185,7 +181,7 @@ export default function Hero() {
             display: 'block',
           }}
         >
-          The Wedding of
+          Pernikahan Suci
         </SplitTextReveal>
 
         {/* Names with enhanced split text */}
@@ -255,12 +251,19 @@ export default function Hero() {
         </SplitTextReveal>
       </div>
 
-      {/* Floral bottom with enhanced parallax */}
-      <div ref={floralBotRef} aria-hidden="true" data-parallax="0.8" data-float style={{
-        position: 'absolute', bottom: 60, left: '50%',
-        transform: 'translateX(-50%)', willChange: 'transform',
+      {/* Gold Floral Ornaments - Parallax Left & Right */}
+      <div ref={floralTopRef} aria-hidden="true" style={{
+        position: 'absolute', top: -10, left: -40,
+        width: 'clamp(140px, 35vw, 240px)', zIndex: 3, willChange: 'transform',
       }}>
-        <FloralSVG size={100} opacity={0.2} />
+        <img src="/backgrounds/Bunga1.png" alt="Ornamen Emas Kiri" style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))' }} />
+      </div>
+
+      <div ref={floralBotRef} aria-hidden="true" style={{
+        position: 'absolute', bottom: 40, right: -40,
+        width: 'clamp(120px, 30vw, 200px)', zIndex: 3, willChange: 'transform',
+      }}>
+        <img src="/backgrounds/Bunga3.png" alt="Ornamen Emas Kanan" style={{ width: '100%', height: 'auto', filter: 'drop-shadow(0 4px 15px rgba(0,0,0,0.15))' }} />
       </div>
 
       {/* Enhanced fade to next section */}

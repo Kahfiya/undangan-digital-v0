@@ -12,7 +12,8 @@ const COUPLE = [
     alt: 'Mempelai Pria',
     label: 'Mempelai Pria',
     name: 'M. Riyan',
-    subtitle: 'Putra ke-3 dari\nBpk. Saiful & Ibu Maimunah',
+    subtitle: 'Putra dan anak ke tiga dari pasangan bpk SAIFUL dan ibu MAIMUNAH',
+    instagram: '',
     imgPos: 'center top',
   },
   {
@@ -21,23 +22,23 @@ const COUPLE = [
     alt: 'Mempelai Wanita',
     label: 'Mempelai Wanita',
     name: 'Siti Arbayah',
-    subtitle: 'Putri ke-2 dari\nBpk. H. Nordin & Ibu Hj. Siti Asyiah',
+    subtitle: 'Putri dan anak ke dua dari pasangan bpk H NORDIN dan ibu HJ SITI ASYIAH',
+    instagram: '',
     imgPos: 'center top',
   },
 ]
 
-/* ── Gold corner ornament ── */
 function GoldCorner({ size = 36, rotate = 0 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 36 36" fill="none"
       aria-hidden="true"
       style={{ display: 'block', transform: `rotate(${rotate}deg)` }}
     >
-      <path d="M2 34 L2 2 L34 2" stroke="#d4a843" strokeWidth="1.5"
+      <path d="M2 34 L2 2 L34 2" stroke="var(--color-gold)" strokeWidth="1.5"
         fill="none" strokeLinecap="round" strokeLinejoin="round" opacity="0.8"/>
-      <circle cx="2" cy="2" r="2.5" fill="#d4a843" opacity="0.7"/>
-      <circle cx="34" cy="2" r="1.5" fill="#d4a843" opacity="0.5"/>
-      <circle cx="2" cy="34" r="1.5" fill="#d4a843" opacity="0.5"/>
+      <circle cx="2" cy="2" r="2.5" fill="var(--color-gold)" opacity="0.7"/>
+      <circle cx="34" cy="2" r="1.5" fill="var(--color-gold)" opacity="0.5"/>
+      <circle cx="2" cy="34" r="1.5" fill="var(--color-gold)" opacity="0.5"/>
     </svg>
   )
 }
@@ -54,32 +55,22 @@ export default function Couple() {
           scrollTrigger: { trigger: '.couple-header', start: 'top 82%', once: true } }
       )
 
-      // Cards — left from left, right from right
-      gsap.fromTo('.couple-card-left',
-        { opacity: 0, x: -60, rotation: -4 },
-        { opacity: 1, x: 0, rotation: 0, duration: 1.2, ease: 'power4.out',
-          scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
-      )
-      gsap.fromTo('.couple-card-right',
-        { opacity: 0, x: 60, rotation: 4 },
-        { opacity: 1, x: 0, rotation: 0, duration: 1.2, ease: 'power4.out', delay: 0.1,
-          scrollTrigger: { trigger: '.couple-cards', start: 'top 80%', once: true } }
-      )
+      // Section animations per mempelai card
+      COUPLE.forEach((p) => {
+        const trigger = `.mempelai-${p.id}`
+        
+        // Image slide zoom reveal
+        gsap.fromTo(`${trigger} .mempelai-img-wrap`,
+          { opacity: 0, scale: 0.9, y: 50 },
+          { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power4.out',
+            scrollTrigger: { trigger: trigger, start: 'top 75%', once: true } }
+        )
 
-      // Info text stagger
-      gsap.fromTo('.couple-info',
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, stagger: 0.15, duration: 0.8, ease: 'power3.out', delay: 0.4,
-          scrollTrigger: { trigger: '.couple-cards', start: 'top 78%', once: true } }
-      )
-
-      // Gold shimmer on cards
-      sectionRef.current.querySelectorAll('.card-shimmer').forEach((el, i) => {
-        gsap.fromTo(el,
-          { x: '-110%' },
-          { x: '210%', duration: 1.4, ease: 'power2.inOut',
-            delay: 0.8 + i * 0.2,
-            scrollTrigger: { trigger: el.closest('.couple-card-wrap'), start: 'top 85%', once: true } }
+        // Text content slides in left/right
+        gsap.fromTo(`${trigger} .mempelai-info-wrap > *`,
+          { opacity: 0, x: p.id === 'pria' ? -40 : 40 },
+          { opacity: 1, x: 0, stagger: 0.12, duration: 1, ease: 'power3.out',
+            scrollTrigger: { trigger: trigger, start: 'top 70%', once: true } }
         )
       })
 
@@ -87,60 +78,61 @@ export default function Couple() {
     return () => ctx.revert()
   }, [])
 
-  const handleEnter = (e) => {
-    const card = e.currentTarget.querySelector('.couple-card-img')
-    gsap.to(card, { scale: 1.06, duration: 0.7, ease: 'power2.out' })
-    gsap.to(e.currentTarget.querySelector('.card-overlay'), { opacity: 1, duration: 0.4 })
-  }
-  const handleLeave = (e) => {
-    const card = e.currentTarget.querySelector('.couple-card-img')
-    gsap.to(card, { scale: 1, duration: 0.6, ease: 'power2.inOut' })
-    gsap.to(e.currentTarget.querySelector('.card-overlay'), { opacity: 0, duration: 0.4 })
-  }
-
   return (
-    <section ref={sectionRef} className="section" id="couple" style={{ position: 'relative' }}>
-
-      {/* Header */}
-      <div className="couple-header" style={{ textAlign: 'center' }}>
+    <div ref={sectionRef} id="couple" style={{ position: 'relative' }}>
+      {/* Intro Header */}
+      <div className="couple-header" style={{ textAlign: 'center', padding: 'var(--space-16) var(--space-6) var(--space-8)' }}>
         <SplitTextReveal type="fade" className="section-subtitle" style={{ display: 'block' }}>
           Bismillahirrahmanirrahim
         </SplitTextReveal>
         <SplitTextReveal type="slide" className="section-title" style={{ display: 'block' }}>
           Dua Hati, Satu Janji
         </SplitTextReveal>
-        <div className="gold-divider" />
+        <div className="blue-divider" />
         <SplitTextReveal type="blur" stagger={0.018} style={{
           display: 'block', fontSize: '0.95rem',
           color: 'var(--color-text-muted)', lineHeight: 2,
           maxWidth: 460, margin: 'var(--space-4) auto 0',
         }}>
-          Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral kami.
+          Dengan memohon rahmat dan ridho Allah SWT, kami mengundang Anda untuk menyaksikan momen sakral pernikahan kami.
         </SplitTextReveal>
       </div>
 
-      {/* Cards */}
-      <div className="couple-cards" style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
-        gap: 'clamp(16px, 4vw, 32px)',
-        marginTop: 'var(--space-10)',
-        alignItems: 'start',
-      }}>
-        {COUPLE.map((p, i) => (
-          <div key={p.id} className={`couple-card-wrap couple-card-${i === 0 ? 'left' : 'right'}`}
-            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 'var(--space-5)' }}
-          >
-            {/* ── Photo card with gold frame ── */}
-            <div
-              onMouseEnter={handleEnter}
-              onMouseLeave={handleLeave}
-              style={{
-                position: 'relative',
-                width: '100%',
-                cursor: 'default',
-              }}
-            >
+      {/* Mempelai Sections (Full-screen 100vh per mempelai) */}
+      {COUPLE.map((p) => (
+        <section
+          key={p.id}
+          className={`mempelai-${p.id}`}
+          style={{
+            position: 'relative',
+            minHeight: '100svh',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            padding: 'var(--space-8) var(--space-6) calc(var(--space-8) + var(--nav-height))',
+            overflow: 'hidden',
+          }}
+        >
+          {/* Subtle floral background layer */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'radial-gradient(circle at center, rgba(30,95,168,0.03) 0%, transparent 70%)',
+            pointerEvents: 'none',
+          }} />
+
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 'var(--space-6)',
+            width: '100%',
+            maxWidth: 400,
+            zIndex: 2,
+          }}>
+            {/* Image frame */}
+            <div className="mempelai-img-wrap" style={{ position: 'relative', width: '80%', aspectRatio: '3/4' }}>
               {/* Outer gold border frame */}
               <div style={{
                 position: 'absolute', inset: -6,
@@ -149,37 +141,26 @@ export default function Couple() {
                 pointerEvents: 'none', zIndex: 2,
               }} />
 
-              {/* Inner card */}
+              {/* Inner card container */}
               <div style={{
                 position: 'relative',
-                aspectRatio: '3/4',
+                width: '100%',
+                height: '100%',
                 borderRadius: 'var(--radius-lg)',
                 overflow: 'hidden',
-                boxShadow: '0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(212,175,55,0.12)',
+                boxShadow: '0 20px 60px rgba(13,31,60,0.15), 0 4px 16px rgba(212,175,55,0.12)',
                 border: '1px solid rgba(212,175,55,0.4)',
               }}>
-                {/* Photo */}
-                <div className="couple-card-img" style={{
-                  width: '100%', height: '100%',
-                  backgroundImage: `url(${p.src})`,
-                  backgroundSize: 'cover',
-                  backgroundPosition: p.imgPos,
-                  willChange: 'transform',
-                }} />
-
-                {/* Gold shimmer sweep */}
-                <div className="card-shimmer" style={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(110deg, transparent 38%, rgba(212,175,55,0.2) 50%, transparent 62%)',
-                  pointerEvents: 'none', zIndex: 1,
-                }} />
-
-                {/* Hover overlay */}
-                <div className="card-overlay" style={{
-                  position: 'absolute', inset: 0,
-                  background: 'linear-gradient(to top, rgba(26,18,9,0.7) 0%, transparent 55%)',
-                  opacity: 0, zIndex: 2, pointerEvents: 'none',
-                }} />
+                <img
+                  src={p.src}
+                  alt={p.alt}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    objectPosition: p.imgPos,
+                  }}
+                />
               </div>
 
               {/* Gold corner ornaments */}
@@ -197,9 +178,8 @@ export default function Couple() {
               </div>
             </div>
 
-            {/* ── Info below card ── */}
-            <div className="couple-info" style={{ textAlign: 'center', width: '100%' }}>
-              {/* Gold line top */}
+            {/* Info details */}
+            <div className="mempelai-info-wrap" style={{ textAlign: 'center', width: '100%' }}>
               <div style={{
                 width: 40, height: 1,
                 background: 'var(--color-gold-gradient)',
@@ -208,30 +188,60 @@ export default function Couple() {
               }} />
 
               <p style={{
-                fontSize: '0.62rem', letterSpacing: '0.22em',
+                fontSize: '0.65rem', letterSpacing: '0.22em',
                 textTransform: 'uppercase',
-                color: 'var(--color-gold-dark)', fontWeight: 700,
+                color: 'var(--color-blue)', fontWeight: 700,
                 marginBottom: 'var(--space-2)',
               }}>{p.label}</p>
 
               <h3 style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(1.15rem, 3vw, 1.5rem)',
+                fontSize: 'clamp(1.4rem, 4vw, 1.8rem)',
                 fontWeight: 400, color: 'var(--color-text)',
                 marginBottom: 'var(--space-3)',
                 lineHeight: 1.2,
               }}>{p.name}</h3>
 
-              {p.subtitle.split('\n').map((line, j) => (
-                <p key={j} style={{
-                  fontSize: '0.78rem', color: 'var(--color-text-muted)',
-                  lineHeight: 1.75, letterSpacing: '0.01em',
-                }}>{line}</p>
-              ))}
+              <p style={{
+                fontSize: '0.8rem', color: 'var(--color-text-muted)',
+                lineHeight: 1.75, letterSpacing: '0.01em',
+                marginBottom: 'var(--space-4)',
+                padding: '0 var(--space-4)'
+              }}>{p.subtitle}</p>
+
+              {/* Instagram Button */}
+              {p.instagram && (
+                <a
+                  href={`https://instagram.com/${p.instagram.replace('@', '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-outline"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 'var(--space-2)',
+                    minHeight: 38,
+                    padding: '0 var(--space-4)',
+                    fontSize: '0.75rem',
+                    border: '1px solid rgba(30, 95, 168, 0.35)',
+                    color: 'var(--color-blue)',
+                    background: 'rgba(255,255,255,0.6)',
+                    backdropFilter: 'blur(8px)',
+                    WebkitBackdropFilter: 'blur(8px)',
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                  </svg>
+                  Instagram
+                </a>
+              )}
             </div>
           </div>
-        ))}
-      </div>
-    </section>
+        </section>
+      ))}
+    </div>
   )
 }

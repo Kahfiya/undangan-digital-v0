@@ -111,7 +111,7 @@ export default function HorizontalGallery() {
             display: 'block',
           }}
         >
-          Albums
+          Album
         </SplitTextReveal>
         
         <div className="hg-divider" data-pin-animate="scale" style={{

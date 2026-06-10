@@ -9,9 +9,12 @@ import LoadingScreen from './components/LoadingScreen'
 import AudioPlayer from './components/AudioPlayer'
 import BottomNav from './components/BottomNav'
 import FallingPetals from './components/FallingPetals'
+import BirdContainer from './components/BirdContainer'
 import MagneticCursor from './components/MagneticCursor'
 import MicroInteractions from './components/MicroInteractions'
 import ScrollProgress from './components/ScrollProgress'
+import CoreVerification from './components/CoreVerification'
+import { useCoreVerification } from './hooks/useCoreVerification'
 
 import Hero from './sections/Hero'
 import Couple from './sections/Couple'
@@ -25,9 +28,10 @@ import Footer from './sections/Footer'
 gsap.registerPlugin(ScrollTrigger)
 
 export default function App() {
+  useCoreVerification()
   const [phase, setPhase] = useState('envelope')
   useClipReveal(phase === 'open')
-  useAutoScroll(phase === 'open', 3000, 2)
+  useAutoScroll(phase === 'open', 3000, 0.6)
 
   useEffect(() => {
     if (phase !== 'open') return
@@ -38,6 +42,7 @@ export default function App() {
 
   return (
     <>
+      <CoreVerification />
       <MagneticCursor />
 
       {/* EnvelopeGate — wekita.id style cover page */}
@@ -100,6 +105,7 @@ export default function App() {
           <FallingPetals />
           <MicroInteractions />
           <ScrollProgress />
+          <BirdContainer count={3} />
         </>
       )}
     </>

@@ -13,7 +13,6 @@ export function useAutoScroll(active, delay = 3000, speed = 0.6) {
 
   useEffect(() => {
     if (!active) return
-    if (window.innerWidth > 768) return // desktop skip
 
     const stopHandler = () => {
       stoppedRef.current = true

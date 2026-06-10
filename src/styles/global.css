@@ -1,16 +1,34 @@
-/* ── Theme Variables ── */
+/* ── Theme Variables — White & Blue Luxury with Gold Accents ── */
 :root {
   --color-bg: #ffffff;
-  --color-bg-soft: #fcfcfc;
-  --color-bg-dark: #1a1209;
-  --color-gold: #f5c842;
-  --color-gold-light: #fad96a;
-  --color-gold-dark: #d4a017;
-  --color-gold-gradient: linear-gradient(135deg, #f5c842, #fad96a, #d4a017);
-  --color-text: #1a1a1a;
-  --color-text-muted: #4a4a4a;
+  --color-bg-soft: #f7f9fc;
+  --color-bg-dark: #0a1628;
+  --color-bg-navy: #0d1f3c;
+
+  /* Blue Palette */
+  --color-blue: #1e5fa8;
+  --color-blue-light: #4a8fd4;
+  --color-blue-pale: #d6e8f7;
+  --color-blue-dark: #0d3a6e;
+  --color-blue-accent: #2979c8;
+  --color-blue-gradient: linear-gradient(135deg, #1e5fa8, #4a8fd4, #0d3a6e);
+  --color-blue-glow: rgba(30, 95, 168, 0.35);
+
+  /* Gold Palette */
+  --color-gold: #d4af37;
+  --color-gold-light: #f3e5ab;
+  --color-gold-dark: #aa7c11;
+  --color-gold-gradient: linear-gradient(135deg, #d4af37, #aa7c11);
+
+  /* Silver/Pearl accents for luxury feel */
+  --color-silver: #c0cfe0;
+  --color-pearl: #eef4fb;
+  --color-navy-glass: rgba(13, 31, 60, 0.85);
+
+  --color-text: #0d1f3c;
+  --color-text-muted: #4a6080;
   --color-text-light: #ffffff;
-  --color-overlay: rgba(0, 0, 0, 0.45);
+  --color-overlay: rgba(10, 22, 40, 0.5);
 
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Montserrat', sans-serif;
@@ -32,8 +50,9 @@
   --radius-lg: 24px;
   --radius-full: 9999px;
 
-  --shadow-gold: 0 4px 24px rgba(212, 175, 55, 0.25);
-  --shadow-card: 0 2px 16px rgba(0, 0, 0, 0.08);
+  --shadow-blue: 0 4px 24px rgba(30, 95, 168, 0.25);
+  --shadow-card: 0 2px 20px rgba(13, 31, 60, 0.08);
+  --shadow-glass: 0 8px 32px rgba(30, 95, 168, 0.12);
 
   --transition-fast: 150ms ease;
   --transition-smooth: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -73,7 +92,7 @@ button {
 a { text-decoration: none; color: inherit; }
 
 /* ── Utility ── */
-.gold-text { color: var(--color-gold); }
+.blue-text { color: var(--color-blue); }
 
 .section {
   padding: var(--space-20) var(--space-6);
@@ -113,18 +132,29 @@ a { text-decoration: none; color: inherit; }
   font-size: 0.8rem;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-gold-dark);
+  color: var(--color-blue-accent);
   text-align: center;
   margin-bottom: var(--space-4);
   font-weight: 600;
 }
 
+.blue-divider {
+  width: 48px;
+  height: 2px;
+  background: var(--color-blue-gradient);
+  margin: var(--space-4) auto;
+  border-radius: 1px;
+  box-shadow: 0 0 12px var(--color-blue-glow);
+}
+
+/* Keep gold-divider class as alias */
 .gold-divider {
   width: 48px;
   height: 2px;
-  background: var(--color-gold-gradient);
+  background: var(--color-blue-gradient);
   margin: var(--space-4) auto;
   border-radius: 1px;
+  box-shadow: 0 0 12px var(--color-blue-glow);
 }
 
 /* ── Button ── */
@@ -135,21 +165,21 @@ a { text-decoration: none; color: inherit; }
   gap: var(--space-2);
   min-height: 48px;
   padding: 0 var(--space-8);
-  background: var(--color-gold-gradient);
-  color: var(--color-bg-dark);
+  background: var(--color-blue-gradient);
+  color: #ffffff;
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.875rem;
   letter-spacing: 0.1em;
   border-radius: var(--radius-full);
-  box-shadow: var(--shadow-gold);
+  box-shadow: var(--shadow-blue);
   transition: transform var(--transition-fast), box-shadow var(--transition-fast);
   -webkit-tap-highlight-color: transparent;
 }
 
 .btn-gold:active {
   transform: scale(0.97);
-  box-shadow: 0 2px 12px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 12px rgba(30, 95, 168, 0.2);
 }
 
 .btn-outline {
@@ -159,8 +189,8 @@ a { text-decoration: none; color: inherit; }
   gap: var(--space-2);
   min-height: 48px;
   padding: 0 var(--space-8);
-  border: 1px solid var(--color-gold);
-  color: var(--color-gold);
+  border: 1px solid var(--color-blue);
+  color: var(--color-blue);
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 0.875rem;
@@ -171,8 +201,8 @@ a { text-decoration: none; color: inherit; }
 }
 
 .btn-outline:active {
-  background: var(--color-gold);
-  color: var(--color-bg-dark);
+  background: var(--color-blue);
+  color: #ffffff;
 }
 
 /* ── Floral ornament (reusable) ── */
@@ -195,4 +225,19 @@ a { text-decoration: none; color: inherit; }
   .detail-line {
     text-shadow: 0 1px 8px rgba(0,0,0,0.9);
   }
+}
+
+/* ── Glassmorphism card ── */
+.glass-card {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(30, 95, 168, 0.15);
+  box-shadow: var(--shadow-glass);
+}
+
+/* ── Watermark / subtle pattern ── */
+.section-bg-dots {
+  background-image: radial-gradient(circle, rgba(30,95,168,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
