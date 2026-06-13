@@ -12,7 +12,7 @@ const COUPLE = [
     label: 'The Groom',
     name: 'M. Riyan',
     subtitle: 'Putra dari pasangan bpk SAIFUL dan ibu MAIMUNAH',
-    instagram: 'riyan',
+    instagram: '',
     imgPos: 'center 20%',
   },
   {
@@ -22,7 +22,7 @@ const COUPLE = [
     label: 'The Bride',
     name: 'Siti Arbayah',
     subtitle: 'Putri dari pasangan bpk H NORDIN dan ibu HJ SITI ASYIAH',
-    instagram: 'arbayah',
+    instagram: '',
     imgPos: 'center 20%',
   },
 ]
