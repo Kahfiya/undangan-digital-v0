@@ -62,6 +62,31 @@ export default function Maps() {
           border: '1px solid rgba(255,255,255,0.15)',
           boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
         }}>
+          {/* Akad Nikah */}
+          <div style={{ marginBottom: 'var(--space-5)' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>
+              <div style={iconStyle}>{iconStar}</div>
+              <div>
+                <p style={{ fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--color-gold-dark)', fontWeight: 600 }}>Akad Nikah</p>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: '1rem', color: 'var(--color-text)' }}>Kamis, 02 Juli 2026</p>
+              </div>
+            </div>
+            <p style={{ fontSize: '0.85rem', fontWeight: 500, paddingLeft: 48, marginTop: 'var(--space-1)' }}>
+              Komplek Nusantara Griya Permai Blok E
+            </p>
+            <p style={{ fontSize: '0.78rem', color: 'var(--color-text-muted)', paddingLeft: 48, lineHeight: 1.6 }}>
+              Jl. Kuranji, Rt/Rw 049/005<br />
+              Kel. Guntung Manggis, Kec. Landasan Ulin Timur<br />
+              Kota Banjarbaru
+            </p>
+          </div>
+
+          <div style={{ 
+            height: '1px', 
+            background: 'rgba(212, 175, 55, 0.2)', 
+            margin: 'var(--space-5) 0 var(--space-5) 48px' 
+          }} />
+
           {/* Resepsi */}
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-3)', marginBottom: 'var(--space-3)' }}>

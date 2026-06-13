@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 
 export default function EnvelopeGate({ onOpen }) {
-  const guestName = new URLSearchParams(window.location.search).get('to') || 'Tamu'
   const [visible, setVisible] = useState(true)
 
   const handleOpen = () => {
@@ -83,11 +82,13 @@ export default function EnvelopeGate({ onOpen }) {
                 fontSize: '55px', 
                 fontWeight: 400,
                 margin: '0.5rem 0 1.5rem',
-                lineHeight: 1.2,
+                lineHeight: 1.1,
                 textShadow: '2px 2px 4px rgba(0,0,0,0.3)'
               }}
             >
-              Riyan & Arbayah
+              Riyan
+              <span style={{ display: 'block', fontSize: '38px', margin: '0.2rem 0' }}>&amp;</span>
+              Arbayah
             </motion.h1>
 
             {/* You're invited label */}
@@ -107,34 +108,6 @@ export default function EnvelopeGate({ onOpen }) {
               You're invited to our wedding ceremony
             </motion.p>
 
-            {/* Guest Label Box - Presisi 1:1 */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1, delay: 0.9 }}
-              style={{
-                background: 'rgba(255, 255, 255, 0.1)',
-                backdropFilter: 'blur(4px)',
-                padding: '1.5rem 2rem',
-                borderRadius: '8px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                marginBottom: '2.5rem',
-                width: '80%',
-              }}
-            >
-              <p style={{ 
-                fontFamily: "'Lora', serif", 
-                fontSize: '16px', 
-                marginBottom: '0.5rem',
-                opacity: 0.8
-              }}>Dear,</p>
-              <h2 style={{ 
-                fontFamily: "'Lora', serif", 
-                fontSize: '20px', 
-                fontWeight: 600,
-                margin: 0
-              }}>{guestName}</h2>
-            </motion.div>
 
             {/* Tombol Open - Putih Bulat Presisi */}
             <motion.button

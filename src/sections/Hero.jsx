@@ -81,7 +81,11 @@ export default function Hero() {
           lineHeight: 1.1,
           margin: '0 0 2rem',
           textShadow: '2px 4px 10px rgba(0,0,0,0.5)'
-        }}>Riyan & Arbayah</h1>
+        }}>
+          Riyan
+          <span style={{ display: 'block', fontSize: 'clamp(2.5rem, 10vw, 4rem)', margin: '0.2rem 0' }}>&amp;</span>
+          Arbayah
+        </h1>
 
         <div style={{
           width: '60px',
