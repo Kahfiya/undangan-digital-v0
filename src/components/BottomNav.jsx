@@ -21,13 +21,23 @@ const NAV_ITEMS = [
     ),
   },
   {
-    id: 'horizontal-gallery',
+    id: 'gallery',
     label: 'Galeri',
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="1.5"/>
         <circle cx="8.5" cy="8.5" r="1.5" stroke="currentColor" strokeWidth="1.5"/>
         <polyline points="21 15 16 10 5 21" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    ),
+  },
+  {
+    id: 'maps',
+    label: 'Lokasi',
+    icon: (
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
       </svg>
     ),
   },
@@ -47,16 +57,6 @@ const NAV_ITEMS = [
     icon: (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-      </svg>
-    ),
-  },
-  {
-    id: 'maps',
-    label: 'Lokasi',
-    icon: (
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-        <circle cx="12" cy="9" r="2.5" stroke="currentColor" strokeWidth="1.5"/>
       </svg>
     ),
   },

@@ -74,9 +74,9 @@ export default function App() {
             <div style={{ position: 'relative', zIndex: 1 }}>
               <Couple />
               <Gallery />
+              <Maps />
               <RSVP />
               <Ucapan />
-              <Maps />
               <Gift />
               <Footer />
             </div>
